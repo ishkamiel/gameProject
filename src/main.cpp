@@ -1,4 +1,6 @@
 #include <iostream>
+#include "Renderer.h";
+#include "EventManager.h";
 
 int main() 
 {

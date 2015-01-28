@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+
+build
+.ycm_extra_conf.pyc

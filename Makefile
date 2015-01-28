@@ -1,7 +1,7 @@
 
 RM = /bin/rm
 CC = /usr/bin/g++
-CC_FLAGS = -std=c++11 -g -Wall
+CC_FLAGS = -std=c++11 -g -Wall -lGL -lGLU -lglut 
 LD_FLAGS = 
 
 CPP_FILES = $(wildcard src/*.cpp)
