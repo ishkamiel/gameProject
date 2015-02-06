@@ -1,11 +1,14 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <GL/glew.h>
-#include <GL/freeglut.h>
+//#include "Renderer.h"
 
-#include <Renderer.h>
+//#include <GL/freeglut.h>
+//#include <GL/glew.h>
+//
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include <string.h>
 
+
+/*
 pdGame::Renderer::Renderer(int width, int height)
 {
 
@@ -31,6 +34,7 @@ namespace pdGame
         }
 
         /*
+         * */
 
 #define WINDOW_TITLE_PREFIX "Chapter 1"
 
