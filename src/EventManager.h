@@ -11,7 +11,6 @@ namespace pdGame
     class EventManagerImpl;
     std::shared_ptr<EventManager> getEventManager();
 
-
     class EventManager
     {
         public:

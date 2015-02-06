@@ -1,7 +1,10 @@
-#include "EventManager.h";
+#include "Logger.h"
+#include "EventManager.h"
 #include <iostream>
+
+using pdGame::log;
 
 int main() 
 {
-    std::cout << "Hello World!\n";
+    log("Hello World!\n");
 }

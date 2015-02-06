@@ -4,7 +4,7 @@
 
 namespace pdGame 
 {
-    class EventManagerImpp;
+    class EventManagerImpl;
 
     std::shared_ptr<EventManager> em = nullptr;
 
@@ -26,15 +26,39 @@ namespace pdGame
             void fireEvent(std::string event_name);
     };
 
-    EventManager::EventManager() : impl( new EventManagerImpl )
+    EventManager::EventManager() : impl( new EventManagerImpl)
     {}
 
     bool EventManager::addListener(std::string event_name, std::function<void()> listener)
     {
         return impl->addListener(event_name, listener);
     }
-    //bool removeListener(std::string event_name, std::function listener);
-    //void fireEvent(std::string event_name);
+
+    bool EventManager::removeListener(std::string event_name, std::function<void()> listener) 
+    {
+        return impl->removeListener(event_name, listener);
+    }
+
+    void EventManager::fireEvent(std::string event_name) 
+    {
+        impl->fireEvent(event_name);
+    }
+
+    EventManagerImpl::EventManagerImpl() {}
+
+    bool EventManagerImpl::addListener(std::string event_name, std::function<void()> listener)
+    {
+        return true;
+    }
+
+    bool EventManagerImpl::removeListener(std::string event_name, std::function<void()> listener) 
+    {
+        return true;
+    }
+
+    void EventManagerImpl::fireEvent(std::string event_name) 
+    {
+    }
 }
 
 

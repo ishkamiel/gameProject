@@ -33,8 +33,6 @@ namespace pdGame
             }
         }
 
-        /*
-         * */
 
 #define WINDOW_TITLE_PREFIX "Chapter 1"
 
