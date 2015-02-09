@@ -6,5 +6,5 @@ using pdGame::log;
 
 int main() 
 {
-    log("Hello World!\n");
+    log(pdGame::LogLevel.info, "Hello World!\n");
 }
