@@ -6,7 +6,7 @@ LD_FLAGS =
 
 CPP_FILES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 #//OBJ_FILES = $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
-OBJ_FILES = $(subst src/ obj/ $(CPP_FILES:.cpp=.l))
+OBJ_FILES = $(subst src/, obj/, $(CPP_FILES:.cpp=.o))
 
 default: build
 
@@ -14,7 +14,8 @@ build: $(OBJ_FILES)
 	$(CC) $(LD_FLAGS) -o $@ $^
 
 obj/%.o: src/%.cpp
-	mkdir -p obj
+	#mkdir -p obj
+	mkdir -p $(dir $@)
 	$(CC) $(CC_FLAGS) -o $@ -c $<
 
 clean:

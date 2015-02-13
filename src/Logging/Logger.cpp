@@ -1,8 +1,19 @@
 #include "Logger.h"
 
 #include <iostream>
+#include <assert.h>
 
 namespace pdLogger {
+    Logger::Logger(Writer& w, Formatter& f)
+        : formatter(f), writer(w) {}
+
+    Logger::~Logger() {}
+
+    void Logger::log(LogLevel l, std::string s)
+    {
+        writer.log(formatter.format(l, s));
+    }
+
     class StreamWriter : public Writer {
         public: 
             StreamWriter(std::ostream& out = std::cerr);
@@ -18,7 +29,9 @@ namespace pdLogger {
             ~BasicFormatter();
             std::string format(LogLevel, std::string) override;
     };
+}
 
+namespace pdLogger {
     void log(LogLevel l, std::string s)
     {
         static StreamWriter w {};
@@ -26,6 +39,10 @@ namespace pdLogger {
         static Logger logger { w, f };
         logger.log(l, s);
     }
+
+    Writer::~Writer() {}
+
+    Formatter::~Formatter() {}
 
     /*
      * ConsoleLogger
@@ -49,17 +66,20 @@ namespace pdLogger {
 
     BasicFormatter::~BasicFormatter() {};
 
-    inline std::string format(LogLevel l, std::string s)
+    inline std::string BasicFormatter::format(LogLevel l, std::string s)
     {
         switch (l) {
-            case error:
+            case LogLevel::error:
                 return PREFIX_ERROR + s;
-            case warn:
+            case LogLevel::warn:
                 return PREFIX_WARN + s;
-            case info:
+            case LogLevel::info:
                 return PREFIX_INFO + s;
-            case debug:
+            case LogLevel::debug:
                 return PREFIX_DEBUG + s;
+            default:
+                assert(false && "reached end of exhausted enum switch");
+                return "";
         }
     }
 }

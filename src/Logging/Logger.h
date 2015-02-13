@@ -36,21 +36,12 @@ namespace pdLogger {
         public: 
             Logger(Writer& w, Formatter& f);
             ~Logger();
-            inline void log(LogLevel, std::string);
+            void log(LogLevel, std::string);
         private:
             Formatter& formatter;
             Writer& writer;
     };
 
-    Logger::Logger(Writer& w, Formatter& f)
-        : formatter(f), writer(w) {}
-
-    Logger::~Logger() {}
-
-    inline void Logger::log(LogLevel l, std::string s)
-    {
-        writer.log(formatter.format(l, s));
-    }
 }
 
 #endif
