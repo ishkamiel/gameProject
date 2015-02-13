@@ -42,14 +42,6 @@ namespace pdLogger {
             Logger();
             Logger(WriterPtr w, FormatterPtr f);
             ~Logger();
-
-            /*
-            inline void log(LogLevel, const std::string&);
-            inline void error(const std::string&);
-            inline void warn(const std::string&);
-            inline void info(const std::string&);
-            inline void debug(const std::string&);
-            */
             
             template<typename... Targs> 
             inline void log(LogLevel, const std::string&, Targs... args);
@@ -69,44 +61,43 @@ namespace pdLogger {
             FormatterPtr formatter;
             WriterPtr writer;
 
-            template<typename... Targs> 
-            inline std::string printfParser(const std::string&, Targs...);
+            inline void parseF(std::string&);
+
+            template<typename T, typename... Targs>
+            inline void parseF(std::string&, T a, Targs...);
+
+            template<typename T, typename... Targs> 
+            inline std::string getParsedF(const std::string&, T a, Targs...);
     };
 
-    /*
-    */
 
-    /*
-    inline void Logger::log(LogLevel l, const std::string& s)
+    inline void printfParser(std::string) {}
+
+    template<typename T, typename... Targs>
+    inline void parsef(std::string& s, T value, Targs... args)
     {
-        writer->log(formatter->format(l, s));
+        auto pos = s.find("%") + 1;
+        
+        while(pos < s.length()) {
+            switch (s.at(pos)) 
+            {
+                case('%'):
+                    pos = s.find("%", pos) + 1;
+                case('d'):
+                    s.replace(pos-1, 2, value);
+                    parsef(s, args...);
+                default:
+                    return;
+            }
+        }
     }
 
-    inline void Logger::error(const std::string& s)
+    template<typename T, typename... Targs> 
+    inline std::string getParsedF(const std::string& s, Targs... args)
     {
-        log(LogLevel::error, s);
-    }
-
-    inline void Logger::warn(const std::string& s)
-    {
-        log(LogLevel::warn, s);
-    }
-
-    inline void Logger::info(const std::string& s)
-    {
-        log(LogLevel::info, s);
-    }
-
-    inline void Logger::debug(const std::string& s)
-    {
-        log(LogLevel::debug, s);
-    }
-    */
-
-    template<typename... Targs> 
-    inline std::string printfParser(std::string&, Targs...)
-    {
-
+        std::string retval {s};
+        parsef(retval, args...);
+        return retval;
     }
 
     template<typename... Targs> 
