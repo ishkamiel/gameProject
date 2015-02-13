@@ -8,7 +8,10 @@ CPP_FILES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 #//OBJ_FILES = $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 OBJ_FILES = $(subst src/, obj/, $(CPP_FILES:.cpp=.o))
 
-default: build
+default: test
+
+test: build
+	valgrind -q --leak-check=yes ./build
 
 build: $(OBJ_FILES)
 	$(CC) $(LD_FLAGS) -o $@ $^
