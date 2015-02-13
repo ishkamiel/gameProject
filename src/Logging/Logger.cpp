@@ -4,45 +4,53 @@
 #include <assert.h>
 
 namespace pdLogger {
-    Logger::Logger(Writer& w, Formatter& f)
-        : formatter(f), writer(w) {}
+    /*
+     * Declarations
+     */
 
-    Logger::~Logger() {}
-
-    void Logger::log(LogLevel l, std::string s)
-    {
-        writer.log(formatter.format(l, s));
-    }
-
-    class StreamWriter : public Writer {
+    class StreamWriter : public Logger::Writer {
         public: 
             StreamWriter(std::ostream& out = std::cerr);
             ~StreamWriter();
-            inline void log(std::string) override;
+            inline void log(const std::string&) override;
         private:
             std::ostream& outStream;
     };
 
-    class BasicFormatter : public Formatter {
+    class BasicFormatter : public Logger::Formatter {
         public:
             BasicFormatter();
             ~BasicFormatter();
-            std::string format(LogLevel, std::string) override;
+            std::string format(LogLevel, const std::string&) override;
     };
-}
 
-namespace pdLogger {
-    void log(LogLevel l, std::string s)
+    /*
+     * Definitions
+     */
+
+    Logger::Logger(WriterPtr w, FormatterPtr f)
+        : formatter(f), writer(w) {}
+
+    Logger::Logger()
+        : formatter(new BasicFormatter()), writer(new StreamWriter()) {}
+
+    Logger::~Logger() {}
+
+
+    const std::string PREFIX_ERROR = "[!!]> ";
+    const std::string PREFIX_WARN = "[--]> ";
+    const std::string PREFIX_INFO = "[__]> ";
+    const std::string PREFIX_DEBUG = "[..]> ";
+
+    LoggerPtr getLogger()
     {
-        static StreamWriter w {};
-        static BasicFormatter f {};
-        static Logger logger { w, f };
-        logger.log(l, s);
+        static LoggerPtr logger { new Logger() };
+        return logger;
     }
 
-    Writer::~Writer() {}
+    Logger::Writer::~Writer() {}
 
-    Formatter::~Formatter() {}
+    Logger::Formatter::~Formatter() {}
 
     /*
      * ConsoleLogger
@@ -53,7 +61,7 @@ namespace pdLogger {
 
     StreamWriter::~StreamWriter() {}
 
-    inline void StreamWriter::log(std::string s)
+    inline void StreamWriter::log(const std::string& s)
     {
         outStream << s;
     }
@@ -66,7 +74,7 @@ namespace pdLogger {
 
     BasicFormatter::~BasicFormatter() {};
 
-    inline std::string BasicFormatter::format(LogLevel l, std::string s)
+    inline std::string BasicFormatter::format(LogLevel l, const std::string& s)
     {
         switch (l) {
             case LogLevel::error:
