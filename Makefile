@@ -10,7 +10,7 @@ OBJ_FILES = $(subst src/, obj/, $(CPP_FILES:.cpp=.o))
 
 default: test
 
-test: build
+test: clean  build
 	valgrind -q --leak-check=yes ./build
 
 build: $(OBJ_FILES)
