@@ -1,10 +1,12 @@
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include "EventManager.h"
 #include <iostream>
 
-using pdGame::log;
+using pdLogger::log;
+//using namespace pdLogger;
+using pdLogger::LogLevel;
 
 int main() 
 {
-    log(pdGame::LogLevel.info, "Hello World!\n");
+    log(LogLevel::info, "Hello World!\n");
 }

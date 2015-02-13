@@ -4,8 +4,9 @@ CC = /usr/bin/g++
 CC_FLAGS = -std=c++11 -g -Wall -lGL -lGLU -lglut 
 LD_FLAGS = 
 
-CPP_FILES = $(wildcard src/*.cpp)
-OBJ_FILES = $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
+CPP_FILES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+#//OBJ_FILES = $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
+OBJ_FILES = $(subst src/ obj/ $(CPP_FILES:.cpp=.l))
 
 default: build
 
