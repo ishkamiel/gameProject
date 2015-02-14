@@ -61,49 +61,20 @@ namespace pdLogger {
             FormatterPtr formatter;
             WriterPtr writer;
 
-            inline void parseF(std::string&);
-
-            template<typename T, typename... Targs>
-            inline void parseF(std::string&, T a, Targs...);
-
-            template<typename T, typename... Targs> 
-            inline std::string getParsedF(const std::string&, T a, Targs...);
     };
 
+    /**************************
+     *
+     * DEFINITIONS
+     *
+     **************************/
 
-    inline void printfParser(std::string) {}
 
-    template<typename T, typename... Targs>
-    inline void parsef(std::string& s, T value, Targs... args)
-    {
-        auto pos = s.find("%") + 1;
-        
-        while(pos < s.length()) {
-            switch (s.at(pos)) 
-            {
-                case('%'):
-                    pos = s.find("%", pos) + 1;
-                case('d'):
-                    s.replace(pos-1, 2, value);
-                    parsef(s, args...);
-                default:
-                    return;
-            }
-        }
-    }
-
-    template<typename T, typename... Targs> 
-    inline std::string getParsedF(const std::string& s, Targs... args)
-    {
-        std::string retval {s};
-        parsef(retval, args...);
-        return retval;
-    }
 
     template<typename... Targs> 
     inline void Logger::log(LogLevel l, const std::string& s, Targs... args)
     {
-        writer->log(formatter->format(l, printfParser(s, args...)));
+        writer->log(formatter->format(l, getSubstitutedString(s, args...)));
     }
 
     template<typename... Targs> 
