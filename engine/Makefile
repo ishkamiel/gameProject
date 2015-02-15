@@ -10,7 +10,7 @@ CC_FLAGS = -std=c++11 -g -Wall
 LD_FLAGS = 
 
 CPP_DIR = src
-OBJ_DIR = obj
+OBJ_DIR = build/obj
 CPP_FILES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJ_FILES = $(subst src/, obj/, $(CPP_FILES:.cpp=.o))
 
@@ -18,13 +18,13 @@ OBJ_FILES = $(subst src/, obj/, $(CPP_FILES:.cpp=.o))
 # Test config
 ########################
 
-T_BIN = run_tests
+T_BIN = build/run_tests
 
 T_CC_FLAGS = $(CC_FLAGS) 
 T_LD_FLAGS = $(LD_FLAGS) -Wl,--no-as-needed -lcppunit
 
 T_CPP_DIR = test
-T_OBJ_DIR = ojb_t
+T_OBJ_DIR = build/ojb_t
 T_CPP_FILES = $(wildcard $(T_CPP_DIR)/*.cpp) $(wildcard $(T_CPP_DIR)/*/*.cpp)
 T_OBJ_FILES = $(subst $(T_CPP_DIR)/, $(T_OBJ_DIR)/, $(T_CPP_FILES:.cpp=.o))
 	
