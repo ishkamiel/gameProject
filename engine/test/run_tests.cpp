@@ -1,6 +1,12 @@
-#include <iostream>
+
+#include "utils/Strings_test.h"
+
+#include <cppunit/ui/text/TestRunner.h>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	CppUnit::TextUi::TestRunner runner;
+	runner.addTest( StringsTests::suite() );
+	runner.run();
+	return (0);
 } 

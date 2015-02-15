@@ -9,52 +9,154 @@
 #define STRINGS_H_
 
 #include <string>
+#include <sstream>
+#include <iostream>
 
 namespace pdUtils
 {
-	inline void
-	formatString(std::string&)
-	{
-	}
+	typedef unsigned int string_pos;
 
+	/**
+	 *
+	 * @param
+	 * @return
+	 */
+	template<typename T>
+		inline std::string
+		stringify(const T&);
+
+	/**
+	 *
+	 * @param
+	 * @return
+	 */
+	inline std::string&
+	formatString(std::string&);
+
+	/**
+	 *
+	 * @param
+	 * @param
+	 * @param
+	 * @return
+	 */
 	template<typename T, typename ... Targs>
-		inline void
-		formatString(std::string& s, T value, Targs ... args)
-		{
-			auto pos = s.find ("%") + 1;
+		inline std::string&
+		formatString(std::string&, T, Targs...);
 
-			while (pos < s.length ())
-			{
-				switch (s.at (pos))
-				{
-					case ('%'):
-						pos = s.find ("%", pos) + 1;
-						break;
-					case ('d'):
-						s.replace (pos - 1, 2, value);
-						parsef (s, args...);
-						break;
-					default:
-						return;
-				}
-			}
-		}
-
+	/**
+	 *
+	 * @param
+	 * @return
+	 */
 	inline std::string
-	getFormatedString(const std::string& s)
-	{
-		std::string retval { s };
-		return (s);
-	}
+	getFormatedString(const std::string&);
 
+	/**
+	 *
+	 * @param
+	 * @param
+	 * @param
+	 * @return
+	 */
 	template<typename T, typename ... Targs>
 		inline std::string
-		getFormatedString(const std::string& s, T a, Targs ... args)
-		{
-			std::string retval { s };
-			substituteArgs (retval, a, args...);
-			return (retval);
-		}
+		getFormatedString(const std::string&, T, Targs ...);
+
+	static inline std::string&
+	p_formatString(string_pos, std::string&);
+
+	template<typename T, typename ... Targs>
+		static inline std::string&
+		p_formatString(string_pos, std::string&, T, Targs...);
 }
+
+/*
+ * Definitions for template functions
+ */
+
+template<typename T>
+	inline std::string
+	pdUtils::stringify(const T& value)
+	{
+		std::stringstream ss;
+		std::string retval;
+		ss << value;
+		ss >> retval;
+		return (retval);
+	}
+
+inline std::string&
+pdUtils::formatString(std::string& s)
+{
+	return (p_formatString(0, s));
+}
+
+template<typename T, typename ... Targs>
+	inline std::string&
+	pdUtils::formatString(std::string& s, T value, Targs ... args)
+	{
+		return (p_formatString(0, s));
+	}
+
+inline std::string
+pdUtils::getFormatedString(const std::string& s)
+{
+	std::string retval { s };
+	formatString(retval);
+	return (s);
+}
+
+template<typename T, typename ... Targs>
+	inline std::string
+	pdUtils::getFormatedString(const std::string& s, T a, Targs ... args)
+	{
+		std::string retval { s };
+		formatString(retval, a, args...);
+		return (retval);
+	}
+
+inline std::string&
+pdUtils::p_formatString(string_pos start, std::string& s)
+{
+	auto pos = s.find("%%", start);
+
+	if (pos != std::string::npos)
+	{
+		s.replace(pos, 1, "");
+		p_formatString(pos + 1, s);
+	}
+
+	return (s);
+}
+
+template<typename T, typename ... Targs>
+	inline std::string&
+	pdUtils::p_formatString(string_pos start, std::string& s, T v, Targs ... args)
+	{
+		auto pos = s.find("%", start);
+
+		if (pos != std::string::npos && pos < s.length() - 1)
+		{
+			++pos;
+			switch (s.at(pos))
+			{
+				case ('%'):
+					s.replace(pos, 1, "");
+					p_formatString(pos, s, args...);
+					break;
+				case ('d'):
+				case ('i'):
+				case ('f'):
+					std::string r = p_stringify(v);
+					s.replace(pos - 1, 2, r, 0, std::string::npos);
+					p_formatString(pos + r.length(), s, args...);
+					break;
+				default:
+					p_formatString(pos, s, args...);
+			}
+		}
+		return (s);
+	}
 
 #endif

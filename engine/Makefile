@@ -36,19 +36,10 @@ T_OBJ_FILES = $(subst $(T_CPP_DIR)/, $(T_OBJ_DIR)/, $(T_CPP_FILES:.cpp=.o))
 
 default: test
 
-all: build build_test
+all: clean build build_test
 
 clean:
 	$(RM) -rf $(T_OBJ_DIR) $(OBJ_DIR) $(T_BIN)
-
-#debug_makefile:
-	#@echo -------------Build stuff
-	#@echo CPP_FILES: $(CPP_FILES)
-	#@echo OBJ_FILES: $(OBJ_FILES)
-	#@echo 
-	#@echo -------------Testing stuff
-	#@echo T_CPP_FILES: $(T_CPP_FILES)
-	#@echo T_OBJ_FILES: $(T_OBJ_FILES)
 
 ########################
 # Build targets

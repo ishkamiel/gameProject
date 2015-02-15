@@ -8,11 +8,12 @@
 
 #include <string>
 
-class TestStrings : public CppUnit::TestFixture  
+class StringsTests : public CppUnit::TestFixture
 {
-    CPPUNIT_TEST_SUITE(TestStrings);
+    CPPUNIT_TEST_SUITE(StringsTests);
     CPPUNIT_TEST(test_getFormatedString);
     CPPUNIT_TEST(test_formatString);
+    CPPUNIT_TEST(test_formatStringComplex);
     CPPUNIT_TEST_SUITE_END();
 
     public:
@@ -22,8 +23,10 @@ class TestStrings : public CppUnit::TestFixture
     protected:
         void test_getFormatedString();
         void test_formatString();
+        void test_formatStringComplex();
 
     private:
+        void checkStrings(const std::string&, const std::string&);
         const std::string c_simpleString = "All Your Base Are Belong to Us";
         std::string simpleString;
 };
