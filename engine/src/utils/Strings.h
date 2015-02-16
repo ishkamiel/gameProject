@@ -41,8 +41,8 @@ namespace pdUtils
 	 * @return
 	 */
 	template<typename T, typename ... Targs>
-		inline std::string&
-		formatString(std::string&, T, Targs...);
+    inline std::string&
+    formatString(std::string&, T, Targs...);
 
 	/**
 	 *
@@ -63,17 +63,17 @@ namespace pdUtils
     inline std::string
     getFormatedString(const std::string&, T, Targs ...);
 
-    enum class Trim 
+    enum class TrimOption 
     {
         defaultTrim,
-        endOnNewLine
+        endOnNewline
     };
 
     std::string 
-    getTrimmed(std::string, Trim = Trim::defaultTrim);
+    getTrimmed(std::string, TrimOption = TrimOption::defaultTrim);
 
     std::string& 
-    trim(std::string&, Trim = Trim::defaultTrim);
+    trim(std::string&, TrimOption = TrimOption::defaultTrim);
 }
 
 #include "Strings_templ.h"

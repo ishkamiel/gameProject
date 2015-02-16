@@ -54,6 +54,26 @@ void StringsTests::test_trim()
     checkStrings("", pdUtils::trim(tmp));
     checkStrings("", pdUtils::getTrimmed(tmp));
     checkStrings("", pdUtils::getTrimmed(""));
+    checkStrings("space", pdUtils::getTrimmed("space "));
+    checkStrings("newline", pdUtils::getTrimmed("newline\n"));
+    checkStrings("tab", pdUtils::getTrimmed("tab\t"));
+    checkStrings("Hello World!", pdUtils::getTrimmed("Hello World!  \t  \n  "));
+    checkStrings("Hello World!\n\tagain", pdUtils::getTrimmed("Hello World!\n\tagain  \t  \n  "));
+    checkStrings("Hello World!\n\tagain", pdUtils::trim(tmp = "Hello World!\n\tagain  \t  \n  "));
+}
+
+void StringsTests::test_trimNewline()
+{
+    std::string tmp { "" };
+    checkStrings("\n", pdUtils::trim(tmp, pdUtils::TrimOption::endOnNewline));
+    checkStrings("\n", pdUtils::getTrimmed(tmp, pdUtils::TrimOption::endOnNewline));
+    checkStrings("\n", pdUtils::getTrimmed("", pdUtils::TrimOption::endOnNewline));
+    checkStrings("Hello World!\n\tagain\n", 
+            pdUtils::getTrimmed("Hello World!\n\tagain  \t  \n  ",
+                pdUtils::TrimOption::endOnNewline));
+    checkStrings("Hello World!\n\tagain\n", 
+            pdUtils::trim(tmp = "Hello World!\n\tagain  \t  \n  ",
+                pdUtils::TrimOption::endOnNewline));
 }
 
 
