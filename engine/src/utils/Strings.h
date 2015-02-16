@@ -60,15 +60,21 @@ namespace pdUtils
 	 * @return
 	 */
 	template<typename T, typename ... Targs>
-		inline std::string
-		getFormatedString(const std::string&, T, Targs ...);
+    inline std::string
+    getFormatedString(const std::string&, T, Targs ...);
+
+    std::string 
+    getTrimmed(std::string);
+
+    std::string& 
+    trim(std::string&);
 
 	static inline std::string&
 	p_formatString(string_pos, std::string&);
 
 	template<typename T, typename ... Targs>
-		static inline std::string&
-		p_formatString(string_pos, std::string&, T, Targs...);
+    static inline std::string&
+    p_formatString(string_pos, std::string&, T, Targs...);
 }
 
 /*

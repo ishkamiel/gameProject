@@ -48,6 +48,14 @@ void StringsTests::test_getFormatedString()
 	checkStrings("abc", pdUtils::getFormatedString("%c%c%c" , 'a', 'b', 'c'));
 }
 
+void StringsTests::test_trim()
+{
+    std::string tmp { "" };
+    checkStrings("", pdUtils::trim(tmp));
+    checkStrings("", pdUtils::getTrimmed(tmp));
+    checkStrings("", pdUtils::getTrimmed(""));
+}
+
 
 void StringsTests::test_formatString()
 {

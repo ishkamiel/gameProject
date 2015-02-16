@@ -7,4 +7,12 @@
 
 #include "Strings.h"
 
+std::string pdUtils::getTrimmed(std::string s)
+{
+    return (s);
+}
 
+std::string& pdUtils::trim(std::string& s)
+{
+    return (s);
+}

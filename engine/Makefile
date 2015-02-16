@@ -62,7 +62,7 @@ $(T_OBJ_DIR)/%.o: $(T_CPP_DIR)/%.cpp
 	mkdir -p $(dir $@)
 	$(CC) $(T_CC_FLAGS) -o $@ -c $<
 
-build_test: $(T_OBJ_FILES)
+build_test: $(OBJ_FILES) $(T_OBJ_FILES)
 	$(CC) $(T_LD_FLAGS) -o $(T_BIN) $^
 	#$(CC) $(TEST_LD_FLAGS) -o $@ $^
 

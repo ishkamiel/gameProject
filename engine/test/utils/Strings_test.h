@@ -14,6 +14,7 @@ class StringsTests : public CppUnit::TestFixture
     CPPUNIT_TEST(test_getFormatedString);
     CPPUNIT_TEST(test_formatString);
     CPPUNIT_TEST(test_formatStringComplex);
+    CPPUNIT_TEST(test_trim);
     CPPUNIT_TEST_SUITE_END();
 
     public:
@@ -24,6 +25,7 @@ class StringsTests : public CppUnit::TestFixture
         void test_getFormatedString();
         void test_formatString();
         void test_formatStringComplex();
+        void test_trim();
 
     private:
         void checkStrings(const std::string&, const std::string&);
