@@ -1,5 +1,5 @@
-#ifndef _STRINGS_TEMPL_H_
-#define _STRINGS_TEMPL_H_
+#ifndef STRINGS_TEMPLATES_H_
+#define STRINGS_TEMPLATES_H_
 
 #include "Strings.h"
 

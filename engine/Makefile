@@ -69,7 +69,9 @@ $(OBJ_DIR)/%.o: $(CPP_DIR)/%.cpp
 # Demo
 ########################
 
-demo: build $(D_OBJ_FILES)
+demo: build_demo
+
+build_demo: $(OBJ_FILES) $(D_OBJ_FILES)
 	$(CC) $(D_LD_FLAGS) -o $(D_BIN) $^
 
 $(D_OBJ_DIR)/%.o: $(D_CPP_DIR)/%.cpp

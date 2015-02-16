@@ -7,30 +7,6 @@
 #include <ctime>
 
 namespace pdLogger {
-    /*
-     * Declarations
-     */
-
-    class StreamWriter : public Logger::Writer {
-        public: 
-            StreamWriter(std::ostream& out = std::cerr);
-            ~StreamWriter();
-            inline void log(const std::string&) override;
-        private:
-            std::ostream& outStream;
-    };
-
-    class BasicFormatter : public Logger::Formatter {
-        public:
-            BasicFormatter();
-            ~BasicFormatter();
-            std::string format(LogLevel, const std::string&) override;
-    };
-
-    /*
-     * Definitions
-     */
-
     Logger::Logger(WriterPtr w, FormatterPtr f)
         : formatter(f), writer(w) {}
 
@@ -51,9 +27,9 @@ namespace pdLogger {
         return logger;
     }
 
-    Logger::Writer::~Writer() {}
+    Writer::~Writer() {}
 
-    Logger::Formatter::~Formatter() {}
+    Formatter::~Formatter() {}
 
     /*
      * ConsoleLogger
@@ -86,21 +62,29 @@ namespace pdLogger {
 
         switch (l) {
             case LogLevel::error:
-                return (PREFIX_ERROR +
-                        std::asctime(std::localtime(&timeNow)) +
-                        getTrimmed(s, TrimOption::endOnNewline));
+                return (
+                        getTrimmed(std::asctime(std::localtime(&timeNow))) +
+                        PREFIX_ERROR +
+                        getTrimmed(s, TrimOption::endOnNewline)
+                        );
             case LogLevel::warn:
-                return (PREFIX_WARN +
-                        std::asctime(std::localtime(&timeNow)) +
-                        getTrimmed(s, TrimOption::endOnNewline));
+                return (
+                        getTrimmed(std::asctime(std::localtime(&timeNow))) +
+                        PREFIX_WARN +
+                        getTrimmed(s, TrimOption::endOnNewline)
+                        );
             case LogLevel::info:
-                return (PREFIX_INFO +
-                        std::asctime(std::localtime(&timeNow)) +
-                        getTrimmed(s, TrimOption::endOnNewline));
+                return (
+                        getTrimmed(std::asctime(std::localtime(&timeNow))) +
+                        PREFIX_INFO +
+                        getTrimmed(s, TrimOption::endOnNewline)
+                        );
             case LogLevel::debug:
-                return (PREFIX_DEBUG +
-                        std::asctime(std::localtime(&timeNow)) +
-                        getTrimmed(s, TrimOption::endOnNewline));
+                return (
+                        getTrimmed(std::asctime(std::localtime(&timeNow))) +
+                        PREFIX_DEBUG +
+                        getTrimmed(s, TrimOption::endOnNewline)
+                        );
         }
         assert(false && "reached end of exhausted enum switch");
         return "";

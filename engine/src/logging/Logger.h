@@ -1,103 +1,106 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+/*
+ * Logger.h
+ *
+ *  Created on: Feb 10, 2015
+ *      Author: ishkamiel
+ */
+#ifndef LOGGER_H_
+#define LOGGER_H_
+
+#include "../utils/Strings.h"
 
 #include <iostream> 
 #include <cstdarg> 
 #include <memory>
 
-namespace pdLogger {
-    class Logger;
+namespace pdLogger
+{
+	class Logger;
+	class Writer;
+	class Formatter;
 
-    enum class LogLevel {
-        error,
-        warn,
-        info,
-        debug
-    };
+	enum class LogLevel
+	{
+		error, warn, info, debug
+	};
 
-    typedef std::shared_ptr<Logger> LoggerPtr;
+	typedef std::shared_ptr<Writer> WriterPtr;
+	typedef std::shared_ptr<Formatter> FormatterPtr;
+	typedef std::shared_ptr<Logger> LoggerPtr;
 
-    LoggerPtr getLogger();
-    
-    class Logger {
-        public: 
-            class Writer;
-            class Formatter;
+	LoggerPtr
+	getLogger();
 
-            typedef std::shared_ptr<Writer> WriterPtr;
-            typedef std::shared_ptr<Formatter> FormatterPtr;
+	class Writer
+	{
+		public:
+			virtual
+			~Writer() =0;
+			virtual void
+			log(const std::string&) =0;
+	};
 
-            class Writer {
-                public:
-                    virtual ~Writer() =0;
-                    virtual void log(const std::string&) =0;
-            };
+	class Formatter
+	{
+		public:
+			virtual
+			~Formatter() =0;
+			virtual std::string
+			format(LogLevel, const std::string&) =0;
+	};
 
-            class Formatter {
-                public:
-                    virtual ~Formatter() =0;
-                    virtual std::string format(LogLevel, const std::string&) =0;
-            };
+	class StreamWriter : public Writer
+	{
+		public:
+			StreamWriter(std::ostream& out = std::cerr);
+			~StreamWriter();
+			inline void
+			log(const std::string&) override;
+		private:
+			std::ostream& outStream;
+	};
 
-            Logger();
-            Logger(WriterPtr w, FormatterPtr f);
-            ~Logger();
-            
-            template<typename... Targs> 
-            inline void log(LogLevel, const std::string&, Targs... args);
+	class BasicFormatter : public Formatter
+	{
+		public:
+			BasicFormatter();
+			~BasicFormatter();
+			std::string
+			format(LogLevel, const std::string&) override;
+	};
 
-            template<typename... Targs> 
-            inline void error(const std::string&, Targs... args);
+	class Logger
+	{
+		public:
+			Logger();
+			Logger(WriterPtr w, FormatterPtr f);
+			~Logger();
 
-            template<typename... Targs> 
-            inline void warn(const std::string&, Targs... args);
+			template<typename ... Targs>
+				inline void
+				log(LogLevel, const std::string&, Targs ... args);
 
-            template<typename... Targs> 
-            inline void info(const std::string&, Targs... args);
+			template<typename ... Targs>
+				inline void
+				error(const std::string&, Targs ... args);
 
-            template<typename... Targs> 
-            inline void debug(const std::string&, Targs... args);
-        private:
-            FormatterPtr formatter;
-            WriterPtr writer;
+			template<typename ... Targs>
+				inline void
+				warn(const std::string&, Targs ... args);
 
-    };
+			template<typename ... Targs>
+				inline void
+				info(const std::string&, Targs ... args);
 
-    /**************************
-     *
-     * DEFINITIONS
-     *
-     **************************/
-
-    template<typename... Targs> 
-    inline void Logger::log(LogLevel l, const std::string& s, Targs... args)
-    {
-        writer->log(formatter->format(l, getSubstitutedString(s, args...)));
-    }
-
-    template<typename... Targs> 
-    inline void Logger::error(const std::string& s, Targs... args)
-    {
-        log(LogLevel::error, s, args...);
-    }
-
-    template<typename... Targs> 
-    inline void Logger::warn(const std::string& s, Targs... args)
-    {
-        log(LogLevel::warn, s, args...);
-    }
-
-    template<typename... Targs> 
-    inline void Logger::info(const std::string& s, Targs... args)
-    {
-        log(LogLevel::info, s, args...);
-    }
-
-    template<typename... Targs> 
-    inline void Logger::debug(const std::string& s, Targs... args)
-    {
-        log(LogLevel::debug, s, args...);
-    }
+			template<typename ... Targs>
+				inline void
+				debug(const std::string&, Targs ... args);
+		private:
+			FormatterPtr formatter;
+			WriterPtr writer;
+	};
 }
+
+#include "Logger_templates.h"
 
 #endif
