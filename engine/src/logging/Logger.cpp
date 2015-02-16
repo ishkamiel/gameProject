@@ -1,7 +1,10 @@
 #include "Logger.h"
 
+#include "../utils/Strings.h"
+
 #include <iostream>
 #include <assert.h>
+#include <ctime>
 
 namespace pdLogger {
     /*
@@ -76,18 +79,30 @@ namespace pdLogger {
 
     inline std::string BasicFormatter::format(LogLevel l, const std::string& s)
     {
+        using pdUtils::getTrimmed;
+        using pdUtils::TrimOption;
+        
+        auto timeNow = std::time(nullptr);
+
         switch (l) {
             case LogLevel::error:
-                return PREFIX_ERROR + s;
+                return (PREFIX_ERROR +
+                        std::asctime(std::localtime(&timeNow)) +
+                        getTrimmed(s, TrimOption::endOnNewline));
             case LogLevel::warn:
-                return PREFIX_WARN + s;
+                return (PREFIX_WARN +
+                        std::asctime(std::localtime(&timeNow)) +
+                        getTrimmed(s, TrimOption::endOnNewline));
             case LogLevel::info:
-                return PREFIX_INFO + s;
+                return (PREFIX_INFO +
+                        std::asctime(std::localtime(&timeNow)) +
+                        getTrimmed(s, TrimOption::endOnNewline));
             case LogLevel::debug:
-                return PREFIX_DEBUG + s;
-            default:
-                assert(false && "reached end of exhausted enum switch");
-                return "";
+                return (PREFIX_DEBUG +
+                        std::asctime(std::localtime(&timeNow)) +
+                        getTrimmed(s, TrimOption::endOnNewline));
         }
+        assert(false && "reached end of exhausted enum switch");
+        return "";
     }
 }

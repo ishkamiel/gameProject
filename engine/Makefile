@@ -17,6 +17,19 @@ CPP_FILES = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJ_FILES = $(subst src/, $(OBJ_DIR)/, $(CPP_FILES:.cpp=.o))
 
 ########################
+# Demo config
+########################
+D_BIN = $(BUILD_DIR)/run_demo
+
+D_CC_FLAGS = $(CC_FLAGS) 
+D_LD_FLAGS = $(LD_FLAGS)
+
+D_CPP_DIR = demo
+D_OBJ_DIR = $(BUILD_DIR)/obj_d
+D_CPP_FILES = $(wildcard $(D_CPP_DIR)/*.cpp) $(wildcard $(D_CPP_DIR)/*/*.cpp)
+D_OBJ_FILES = $(subst $(D_CPP_DIR)/, $(D_OBJ_DIR)/, $(D_CPP_FILES:.cpp=.o))
+
+########################
 # Test config
 ########################
 
@@ -36,13 +49,13 @@ T_OBJ_FILES = $(subst $(T_CPP_DIR)/, $(T_OBJ_DIR)/, $(T_CPP_FILES:.cpp=.o))
 
 default: test
 
-all: clean build build_test
+all: build demo build_test 
 
 clean:
 	$(RM) -rf $(T_OBJ_DIR) $(OBJ_DIR) $(T_BIN)
 
 ########################
-# Build targets
+# Build
 ########################
 
 build: $(OBJ_FILES)
@@ -51,8 +64,20 @@ $(OBJ_DIR)/%.o: $(CPP_DIR)/%.cpp
 	mkdir -p $(dir $@)
 	$(CC) $(CC_FLAGS) -o $@ -c $<
 
+
 ########################
-# Testings targets
+# Demo
+########################
+
+demo: build $(D_OBJ_FILES)
+	$(CC) $(D_LD_FLAGS) -o $(D_BIN) $^
+
+$(D_OBJ_DIR)/%.o: $(D_CPP_DIR)/%.cpp
+	mkdir -p $(dir $@)
+	$(CC) $(D_CC_FLAGS) -o $@ -c $<
+
+########################
+# Testis
 ########################
 
 test: build build_test
@@ -64,5 +89,4 @@ $(T_OBJ_DIR)/%.o: $(T_CPP_DIR)/%.cpp
 
 build_test: $(OBJ_FILES) $(T_OBJ_FILES)
 	$(CC) $(T_LD_FLAGS) -o $(T_BIN) $^
-	#$(CC) $(TEST_LD_FLAGS) -o $@ $^
 

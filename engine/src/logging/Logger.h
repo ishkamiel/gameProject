@@ -69,8 +69,6 @@ namespace pdLogger {
      *
      **************************/
 
-
-
     template<typename... Targs> 
     inline void Logger::log(LogLevel l, const std::string& s, Targs... args)
     {
