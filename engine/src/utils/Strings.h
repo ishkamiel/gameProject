@@ -63,11 +63,17 @@ namespace pdUtils
     inline std::string
     getFormatedString(const std::string&, T, Targs ...);
 
+    enum class Trim 
+    {
+        defaultTrim,
+        endOnNewLine
+    };
+
     std::string 
-    getTrimmed(std::string);
+    getTrimmed(std::string, Trim = Trim::defaultTrim);
 
     std::string& 
-    trim(std::string&);
+    trim(std::string&, Trim = Trim::defaultTrim);
 
 	static inline std::string&
 	p_formatString(string_pos, std::string&);
