@@ -27,6 +27,13 @@ class StringsTests : public CppUnit::TestFixture
 
     private:
         void checkStrings(const std::string&, const std::string&);
+
+        void testFormaters(std::string, std::string);
+
+        template<typename ... Targs>
+        void testFormaters(std::string, std::string, Targs... args);
+
+
         const std::string c_simpleString = "All Your Base Are Belong to Us";
         std::string simpleString;
 };

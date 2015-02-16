@@ -76,15 +76,15 @@ namespace pdUtils
  */
 
 template<typename T>
-	inline std::string
-	pdUtils::stringify(const T& value)
-	{
-		std::stringstream ss;
-		std::string retval;
-		ss << value;
-		ss >> retval;
-		return (retval);
-	}
+inline std::string
+pdUtils::stringify(const T& value)
+{
+    std::stringstream ss;
+    std::string retval;
+    ss << value;
+    ss >> retval;
+    return (retval);
+}
 
 inline std::string&
 pdUtils::formatString(std::string& s)
@@ -93,28 +93,28 @@ pdUtils::formatString(std::string& s)
 }
 
 template<typename T, typename ... Targs>
-	inline std::string&
-	pdUtils::formatString(std::string& s, T value, Targs ... args)
-	{
-		return (p_formatString(0, s));
-	}
+inline std::string&
+pdUtils::formatString(std::string& s, T value, Targs ... args)
+{
+    return (p_formatString(0, s, value, args...));
+}
 
 inline std::string
 pdUtils::getFormatedString(const std::string& s)
 {
 	std::string retval { s };
 	formatString(retval);
-	return (s);
+	return (retval);
 }
 
 template<typename T, typename ... Targs>
-	inline std::string
-	pdUtils::getFormatedString(const std::string& s, T a, Targs ... args)
-	{
-		std::string retval { s };
-		formatString(retval, a, args...);
-		return (retval);
-	}
+inline std::string
+pdUtils::getFormatedString(const std::string& s, T a, Targs ... args)
+{
+    std::string retval { s };
+    formatString(retval, a, args...);
+    return (retval);
+}
 
 inline std::string&
 pdUtils::p_formatString(string_pos start, std::string& s)
@@ -131,32 +131,39 @@ pdUtils::p_formatString(string_pos start, std::string& s)
 }
 
 template<typename T, typename ... Targs>
-	inline std::string&
-	pdUtils::p_formatString(string_pos start, std::string& s, T v, Targs ... args)
-	{
-		auto pos = s.find("%", start);
+inline std::string&
+pdUtils::p_formatString(string_pos start, std::string& s, T v, Targs ... args)
+{
+    auto pos = s.find("%", start);
 
-		if (pos != std::string::npos && pos < s.length() - 1)
-		{
-			++pos;
-			switch (s.at(pos))
-			{
-				case ('%'):
-					s.replace(pos, 1, "");
-					p_formatString(pos, s, args...);
-					break;
-				case ('d'):
-				case ('i'):
-				case ('f'):
-					std::string r = p_stringify(v);
-					s.replace(pos - 1, 2, r, 0, std::string::npos);
-					p_formatString(pos + r.length(), s, args...);
-					break;
-				default:
-					p_formatString(pos, s, args...);
-			}
-		}
-		return (s);
-	}
+    if (pos != std::string::npos && pos < s.length() - 1)
+    {
+        ++pos;
+        switch (s.at(pos))
+        {
+            case ('%'):
+                {
+                    s.replace(pos, 1, "");
+                    p_formatString(pos, s, v, args...);
+                    break;
+                }
+            case ('d'):
+            case ('i'):
+            case ('f'):
+                {
+                    std::string r = stringify(v);
+                    s.replace(pos - 1, 2, r, 0, std::string::npos);
+                    p_formatString(pos + r.length() - 1, s, args...);
+                    break;
+                }
+            default: 
+                {
+                    std::cerr << "   is unknown" << std::endl;
+                    p_formatString(pos, s, args...);
+                }
+        }
+    }
+    return (s);
+}
 
 #endif
