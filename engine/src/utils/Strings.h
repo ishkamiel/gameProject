@@ -147,6 +147,14 @@ pdUtils::p_formatString(string_pos start, std::string& s, T v, Targs ... args)
                     p_formatString(pos, s, v, args...);
                     break;
                 }
+            case ('c'):
+                {
+                    std::string r = stringify(v);
+                    s.replace(pos - 1, 2, r, 0, std::string::npos);
+                    p_formatString(pos + r.length() - 1, s, args...);
+                    break;
+                }
+            case ('s'):
             case ('d'):
             case ('i'):
             case ('f'):

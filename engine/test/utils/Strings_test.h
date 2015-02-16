@@ -33,7 +33,6 @@ class StringsTests : public CppUnit::TestFixture
         template<typename ... Targs>
         void testFormaters(std::string, std::string, Targs... args);
 
-
         const std::string c_simpleString = "All Your Base Are Belong to Us";
         std::string simpleString;
 };
