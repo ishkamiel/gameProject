@@ -59,8 +59,10 @@ namespace pdEngine
 
     EventListenerPtrW EventManagerImpl::addListener(EventID id, EventListener listener)
     {
-        // std::map::operator[] does insertion if not existing
+        EventListenerPtrS ptr { new EventListenerHandle(listener) };
         listenerMap->operator[](id).push_back(listener);
+        EventListenerPtrW retval { ptr };
+        return (retval);
     }
 
     void EventManagerImpl::removeListener(EventID id, EventListenerPtrW listener)

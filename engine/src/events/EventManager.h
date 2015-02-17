@@ -21,21 +21,22 @@ namespace pdEngine
 
     EventManagerPtr getEventManager();
 
-    class EventListenerHandle
-    {
-        public:
-            ~EventListenerHandle();
-            void cancel();
-        private:
-            EventListenerHandle(EventListener);
-            inline void fire();
-            inline ListenerID listenerID();
-            inline EventID eventID();
-            inline bool isRemoved();
-    };
 
     class EventManager
     {
+        class EventListenerHandle
+        {
+            public:
+                ~EventListenerHandle();
+                void cancel();
+            private:
+                EventListenerHandle(EventListener);
+                inline void fire();
+                inline ListenerID listenerID();
+                inline EventID eventID();
+                inline bool isRemoved();
+        };
+
         public:
             EventListenerPtrW addListener(EventID, EventListener);
             void removeListener(EventID, EventListenerPtrW);
