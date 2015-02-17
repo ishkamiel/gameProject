@@ -6,7 +6,9 @@
 
 namespace pdEngine 
 {
-    class EventManagerImpl 
+    typedef std::shared_ptr<EventManager::ListenerHandleImpl> SharedHandlePtr;
+
+    class EventManager::EventManagerImpl 
     {
         typedef std::list<EventListener> ListenerList;
         typedef std::map<EventID, ListenerList> ListenerMap;
@@ -14,11 +16,18 @@ namespace pdEngine
         public:
             EventManagerImpl();
             ~EventManagerImpl();
-            inline EventListenerPtrW addListener(EventID, EventListener);
-            inline void removeListener(EventID, EventListenerPtrW);
+            inline ListenerHandle addListener(EventID, EventListener);
+            inline void removeListener(EventID, ListenerHandle);
             inline void fireEvent(EventID, EventData);
         private:
             std::unique_ptr<ListenerMap> listenerMap;
+    };
+
+    class EventManager::ListenerHandleImpl
+    {
+        public:
+            ListenerHandleImpl(EventListener);
+            ~ListenerHandleImpl();
     };
 }
 
@@ -36,14 +45,15 @@ namespace pdEngine
     EventManager::EventManager() : impl( new EventManagerImpl)
     {}
 
-    EventListenerPtrW EventManager::addListener(EventID id, EventListener listener)
+    EventManager::ListenerHandle 
+        EventManager::addListener(EventID id, EventListener listener)
     {
         return impl->addListener(id, listener);
     }
 
-    void EventManager::removeListener(EventID id, EventListenerPtrW listener) 
+    void EventManager::removeListener(EventID id, ListenerHandle listenerHandle) 
     {
-        impl->removeListener(id, listener);
+        impl->removeListener(id, listenerHandle);
     }
 
     void EventManager::fireEvent(EventID id, EventData data)
@@ -54,23 +64,28 @@ namespace pdEngine
 
 namespace pdEngine
 {
-    EventManagerImpl::EventManagerImpl() : listenerMap(new ListenerMap)
+    EventManager::EventManagerImpl::EventManagerImpl() 
+        : listenerMap(new ListenerMap)
     {}
 
-    EventListenerPtrW EventManagerImpl::addListener(EventID id, EventListener listener)
+    EventManager::ListenerHandle
+        EventManager::EventManagerImpl::addListener
+        (EventManager::EventID id, EventManager::EventListener listener)
     {
-        EventListenerPtrS ptr { new EventListenerHandle(listener) };
+        SharedHandlePtr ptr { new EventManager::ListenerHandleImpl(listener) };
         listenerMap->operator[](id).push_back(listener);
-        EventListenerPtrW retval { ptr };
-        return (retval);
+        return ptr;
     }
 
-    void EventManagerImpl::removeListener(EventID id, EventListenerPtrW listener)
+    void EventManager::EventManagerImpl::removeListener
+        (EventID id, ListenerHandle listener)
     {
-        return true;
+        // TODO
+        void(id), void(listener);
     }
 
-    void EventManagerImpl::fireEvent(EventID id, EventData data)
+    void EventManager::EventManagerImpl::fireEvent
+        (EventID id, EventData data)
     {
          auto search = listenerMap->find(id);
          if(search != listenerMap->end()) {
