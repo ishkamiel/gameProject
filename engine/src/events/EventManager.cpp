@@ -1,41 +1,38 @@
 #include "EventManager.h"
-#include <vector>
-#include <memory>
-#include <list>
+
+#include <iterator>
 #include <map>
+#include <memory>
+#include <vector>
 
 namespace pdEngine 
 {
-    typedef std::shared_ptr<EventManager::ListenerHandleImpl> SharedHandlePtr;
+    typedef unsigned int ListenerID;
+
+    ListenerHandle::ListenerHandle(EventID eventID, ListenerID listenerID) 
+        : eventID(eventID), listenerID(listenerID) {}
 
     class EventManager::EventManagerImpl 
     {
-        typedef std::list<EventListener> ListenerList;
-        typedef std::map<EventID, ListenerList> ListenerMap;
+        typedef std::map<ListenerID, EventListener> ListenerMap;
+        typedef std::map<EventID, ListenerMap> EventMap;
 
         public:
             EventManagerImpl();
             ~EventManagerImpl();
-            inline ListenerHandle addListener(EventID, EventListener);
-            inline void removeListener(EventID, ListenerHandle);
+            inline ListenerHandlePtrS addListener(EventID, EventListener);
+            inline void removeListener(ListenerHandlePtrS);
             inline void fireEvent(EventID, EventData);
         private:
-            std::unique_ptr<ListenerMap> listenerMap;
-    };
-
-    class EventManager::ListenerHandleImpl
-    {
-        public:
-            ListenerHandleImpl(EventListener);
-            ~ListenerHandleImpl();
+            std::unique_ptr<EventMap> eventListeners;
     };
 }
 
 namespace pdEngine
 {
-    EventManagerPtr getEventManager()
+    EventManagerPtrS EventManager::getEventManager()
     {
-        static EventManagerPtr em {};
+        static EventManagerPtrS em {};
         return em;
     }
 }
@@ -45,15 +42,16 @@ namespace pdEngine
     EventManager::EventManager() : impl( new EventManagerImpl)
     {}
 
-    EventManager::ListenerHandle 
+    ListenerHandlePtrS 
         EventManager::addListener(EventID id, EventListener listener)
     {
         return impl->addListener(id, listener);
     }
 
-    void EventManager::removeListener(EventID id, ListenerHandle listenerHandle) 
+    void EventManager::removeListener(
+            ListenerHandlePtrS listenerHandle) 
     {
-        impl->removeListener(id, listenerHandle);
+        impl->removeListener(listenerHandle);
     }
 
     void EventManager::fireEvent(EventID id, EventData data)
@@ -65,33 +63,45 @@ namespace pdEngine
 namespace pdEngine
 {
     EventManager::EventManagerImpl::EventManagerImpl() 
-        : listenerMap(new ListenerMap)
+        : eventListeners(new EventMap)
     {}
 
-    EventManager::ListenerHandle
+    ListenerHandlePtrS
         EventManager::EventManagerImpl::addListener
-        (EventManager::EventID id, EventManager::EventListener listener)
+        (EventID eventID, EventListener listener)
     {
-        SharedHandlePtr ptr { new EventManager::ListenerHandleImpl(listener) };
-        listenerMap->operator[](id).push_back(listener);
-        return ptr;
+        static ListenerID listenerID {0};
+        
+        eventListeners->operator[](eventID).operator[](listenerID) = listener;
+
+        ListenerHandlePtrS retval {
+            new ListenerHandle(eventID, listenerID)
+        };
+
+        ++listenerID;
+
+        return retval;
     }
 
     void EventManager::EventManagerImpl::removeListener
-        (EventID id, ListenerHandle listener)
+        (ListenerHandlePtrS listener)
     {
-        // TODO
-        void(id), void(listener);
+        EventMap::iterator it = eventListeners->find(listener->getEventID());
+
+        if (it != eventListeners->end())
+        {
+            it->second.erase(listener->getListenerID());
+        }
     }
 
     void EventManager::EventManagerImpl::fireEvent
         (EventID id, EventData data)
     {
-         auto search = listenerMap->find(id);
-         if(search != listenerMap->end()) {
-             for (auto l : search->second)
-                 l(data);
-         }
+        EventMap::iterator event = eventListeners->find(id);
+
+        if (event != eventListeners->end())
+            for (auto l : event->second)
+                l.second(data);
     }
 }
 
