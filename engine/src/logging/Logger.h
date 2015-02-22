@@ -9,8 +9,8 @@
 
 #include "../utils/Strings.h"
 
-#include <iostream> 
-#include <cstdarg> 
+#include <iostream>
+#include <cstdarg>
 #include <memory>
 
 namespace pdLogger
@@ -77,24 +77,24 @@ namespace pdLogger
 			~Logger();
 
 			template<typename ... Targs>
-				inline void
-				log(LogLevel, const std::string&, Targs ... args);
+			inline void
+			log(LogLevel, const std::string&, Targs ... args);
 
 			template<typename ... Targs>
-				inline void
-				error(const std::string&, Targs ... args);
+			inline void
+			error(const std::string&, Targs ... args);
 
 			template<typename ... Targs>
-				inline void
-				warn(const std::string&, Targs ... args);
+			inline void
+			warn(const std::string&, Targs ... args);
 
 			template<typename ... Targs>
-				inline void
-				info(const std::string&, Targs ... args);
+			inline void
+			info(const std::string&, Targs ... args);
 
 			template<typename ... Targs>
-				inline void
-				debug(const std::string&, Targs ... args);
+			inline void
+			debug(const std::string&, Targs ... args);
 		private:
 			FormatterPtr formatter;
 			WriterPtr writer;
