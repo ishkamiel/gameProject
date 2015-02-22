@@ -1,2 +1,2 @@
 add_library(TestUtils Strings_test.cpp)
-list(APPEND TEST_LIBS TestUtils)
+target_link_libraries(TestUtils Strings)
