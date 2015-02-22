@@ -1,6 +1,5 @@
 #include "Logger.h"
-
-#include "../utils/Strings.h"
+#include "Strings.h"
 
 #include <iostream>
 #include <assert.h>
@@ -14,7 +13,6 @@ namespace pdLogger {
         : formatter(new BasicFormatter()), writer(new StreamWriter()) {}
 
     Logger::~Logger() {}
-
 
     const std::string PREFIX_ERROR = "[!!]> ";
     const std::string PREFIX_WARN = "[--]> ";

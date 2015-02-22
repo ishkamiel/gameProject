@@ -1,19 +1,9 @@
-project (pdEngine)
+file(GLOB MY_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB MY_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-    cmake_minimum_required (VERSION 2.8)
-    
-    set(CMAKE_MODULE_PATH 
-    	"${CMAKE_SOURCE_DIR}/CMake" 
-    	"${CMAKE_SOURCE_DIR}/CMake/Utils" 
-    	"${CMAKE_SOURCE_DIR}/CMake/Packages" 
-	)
-    
-    set (MAIN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/build)
-    set (LIBRARY_OUTPUT_PATH ${MAIN_OUTPUT_DIR}/lib)
-    set (EXECUTABLE_OUTPUT_PATH ${MAIN_OUTPUT_DIR})
+include_directories( "includes" )
 
-    message("Using output dir: ${MAIN_OUTPUT_DIR}")
-    
-    add_subdirectory(src)
-    add_subdirectory(demo)
-    add_subdirectory(test)
+set ( EXTERNAL_LIBRARIES glut GL GLU )
+
+add_library ( pdEngine ${MY_HEADER_FILES} ${MY_SOURCE_FILES} )
+target_link_libraries ( pdEngine pdUtils ${EXTERNAL_LIBRARIES} )

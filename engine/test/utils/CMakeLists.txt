@@ -1,2 +1,0 @@
-add_library(TestUtils Strings_test.cpp)
-target_link_libraries(TestUtils Strings)

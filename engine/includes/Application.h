@@ -3,6 +3,7 @@
 
 #include <GL/glut.h>
 
+#include <string>
 #include <memory>
 
 namespace pdGame
@@ -10,6 +11,8 @@ namespace pdGame
 	class Application;
 
     using AppPtrS = std::shared_ptr<Application>;
+
+    AppPtrS getMainWindow(std::string windowName);
 
     class Application
     {
@@ -29,7 +32,6 @@ namespace pdGame
             std::string windowName;
     };
 
-    AppPtrS getMainWindow(std::string windowName);
 }
 
 #endif

@@ -1,5 +1,6 @@
-#include "../src/logging/Logger.h"
-#include "../src/app/Application.h"
+#include "Application.h"
+
+#include "Logger.h"
 
 int main(int argc, char **argv)
 {

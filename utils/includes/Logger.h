@@ -7,7 +7,7 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include "../utils/Strings.h"
+#include "Strings.h"
 
 #include <iostream>
 #include <cstdarg>
@@ -101,6 +101,6 @@ namespace pdLogger
 	};
 }
 
-#include "Logger_templates.h"
+#include "Logger_definitions.h"
 
 #endif

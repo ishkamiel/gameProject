@@ -76,6 +76,6 @@ namespace pdUtils
     trim(std::string&, TrimOption = TrimOption::defaultTrim);
 }
 
-#include "Strings_templates.h"
+#include "Strings_definitions.h"
 
 #endif
