@@ -1,5 +1,4 @@
-
-#include "utils/Strings_test.h"
+#include "Strings_test.h"
 
 #include <cppunit/ui/text/TestRunner.h>
 
@@ -9,4 +8,4 @@ int main()
 	runner.addTest( StringsTests::suite() );
 	runner.run();
 	return (0);
-} 
+}
