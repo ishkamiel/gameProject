@@ -7,7 +7,6 @@ include_directories(
     ${OGRE_INCLUDE_DIRS}
     ${OGRE_Overlay_INCLUDE_DIRS}
     )
-    #${OGRE_SAMPLES_INCLUDEPATH}
 
 add_library ( pdEngine ${MY_HEADER_FILES} ${MY_SOURCE_FILES} )
 target_link_libraries ( 

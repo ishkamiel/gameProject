@@ -52,3 +52,9 @@ find_package ( OIS )
 if(NOT OIS_FOUND)
     message(SEND_ERROR "Failed to find OIS.")
 endif()
+
+include_directories( 
+    ${OIS_INCLUDE_DIRS}
+    ${OGRE_INCLUDE_DIRS}
+    ${OGRE_Overlay_INCLUDE_DIRS}
+    )
