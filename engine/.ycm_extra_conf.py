@@ -91,6 +91,12 @@ flags = [
 '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1',
 '-isystem',
 '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include',
+'-I',
+'/usr/local/include/OGRE',
+'-I',
+'/usr/local/include/OGRE/Overlay',
+'-I',
+'/usr/include/ois'
 ]
 
 

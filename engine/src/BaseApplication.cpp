@@ -36,7 +36,6 @@ BaseApplication::~BaseApplication(void) {
 	windowClosed(mWindow);
 	delete mRoot;
 }
-
 //-------------------------------------------------------------------------------------
 bool BaseApplication::configure(void) {
 	// Show the configuration dialog and initialise the system
@@ -168,7 +167,6 @@ void BaseApplication::setupResources(void) {
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::createResourceListener(void) {
-
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::loadResources(void) {
@@ -221,7 +219,6 @@ bool BaseApplication::setup(void) {
 
 	return true;
 }
-;
 //-------------------------------------------------------------------------------------
 bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt) {
 	if (mWindow->isClosed())
