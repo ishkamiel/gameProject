@@ -2,8 +2,8 @@ file(GLOB MY_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB MY_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 include_directories( 
-    "includes" 
-    ${PD_ENGINE_INCLUDES} 
+	"includes" 
+	${PD_ENGINE_INCLUDES} 
     ${PD_UTILS_INCLUDES} 
     ${OGRE_INCLUDE_DIRS}
     ${OGRE_Overlay_INCLUDE_DIRS}
@@ -12,20 +12,20 @@ include_directories(
 
 add_executable (demo ${MY_HEADER_FILES} ${MY_SOURCE_FILES})
 target_link_libraries ( demo 
-	pdUtils 
+      pdUtils 
 	pdEngine 
 	${OGRE_LIBRARIES}
 	${OGRE_Overlay_LIBRARIES}
-    ${OIS_LIBRARIES}
+	${OIS_LIBRARIES}
 	)
 	
 file(COPY
 	${CMAKE_CURRENT_SOURCE_DIR}/config/plugins.cfg
-    ${CMAKE_CURRENT_SOURCE_DIR}/config/resources.cfg
-    DESTINATION ${EXECUTABLE_OUTPUT_PATH}
-    )
-    
+	${CMAKE_CURRENT_SOURCE_DIR}/config/resources.cfg
+	DESTINATION ${CMAKE_BINARY_DIR}
+	)
+	
 file(COPY
 	${CMAKE_CURRENT_SOURCE_DIR}/assets
-    DESTINATION ${PD_OUTPUT_DIR}
+	DESTINATION ${CMAKE_BINARY_DIR}
     )

@@ -13,9 +13,9 @@ set(CMAKE_MODULE_PATH
 set (PD_ENGINE_INCLUDES "${CMAKE_SOURCE_DIR}/engine/includes")
 set (PD_UTILS_INCLUDES "${CMAKE_SOURCE_DIR}/utils/includes")
     
-set (PD_OUTPUT_DIR ${CMAKE_BINARY_DIR}/build)
-set (LIBRARY_OUTPUT_PATH ${PD_OUTPUT_DIR}/lib)
-set (EXECUTABLE_OUTPUT_PATH ${PD_OUTPUT_DIR}/bin)
+#set (PD_OUTPUT_DIR ${CMAKE_BINARY_DIR}/build)
+#set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+#set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Debug")
@@ -36,9 +36,3 @@ include(SetupEclipse)
 add_subdirectory(utils)
 add_subdirectory(engine)
 add_subdirectory(demo)
-
-
-#file(COPY
-    #${CMAKE_CURRENT_SOURCE_DIR}/configs/eclipse*
-    #DESTINATION ${PD_OUTPUT_DIR}
-    #)

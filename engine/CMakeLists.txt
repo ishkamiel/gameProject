@@ -3,6 +3,7 @@ file(GLOB MY_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
  
 include_directories( 
     "includes"
+    ${PD_UTILS_INCLUDES} 
     ${OIS_INCLUDE_DIRS}
     ${OGRE_INCLUDE_DIRS}
     ${OGRE_Overlay_INCLUDE_DIRS}
