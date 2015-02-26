@@ -1,11 +1,11 @@
-#include "Logger.h"
-#include "Strings.h"
+#include "pdLogger.h"
+#include "pdStrings.h"
 
 #include <iostream>
 #include <assert.h>
 #include <ctime>
 
-namespace pdLogger {
+namespace pdUtils {
     Logger::Logger(WriterPtr w, FormatterPtr f)
         : formatter(f), writer(w) {}
 
@@ -19,9 +19,9 @@ namespace pdLogger {
     const std::string PREFIX_INFO = "[__]> ";
     const std::string PREFIX_DEBUG = "[..]> ";
 
-    LoggerPtr getLogger()
+    LoggerSharedPtr getLogger()
     {
-        static LoggerPtr logger { new Logger() };
+        static LoggerSharedPtr logger { new Logger() };
         return(logger);
     }
 

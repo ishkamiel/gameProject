@@ -5,7 +5,7 @@
  *      Author: ishkamiel
  */
 
-#include "Strings.h"
+#include "pdStrings.h"
 
 #include <ostream>
 #include <string>

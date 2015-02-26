@@ -3,6 +3,7 @@
 
 #include "TaskManager.h"
 #include "EventManager.h"
+#include "pdLogger.h"
 
 #include <memory>
 
@@ -21,6 +22,7 @@ namespace pdEngine
 		virtual std::unique_ptr<EventManager> v_getEventManager();
 	private:
 		std::unique_ptr<TaskManager> taskManager;
+		pdUtils::LoggerSharedPtr log;
 	};
 }
 

@@ -1,7 +1,7 @@
 #ifndef PD_STRING_TEST_H
 #define PD_STRING_TEST_H
 
-#include "Strings.h"
+#include "pdStrings.h"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

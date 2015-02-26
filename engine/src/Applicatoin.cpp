@@ -7,6 +7,8 @@
 
 #include "Application.h"
 
+#include "Logger.h"
+
 namespace pdEngine
 {
     Application::Application()
