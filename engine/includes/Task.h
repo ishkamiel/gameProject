@@ -8,11 +8,11 @@
 
 namespace pdEngine
 {
-    class ITask;
-    typedef std::shared_ptr<ITask> TaskPtrS;
-    typedef std::weak_ptr<ITask> TaskPtrW;
+    class Task;
+    typedef std::shared_ptr<Task> TaskSharedPtr;
+    typedef std::weak_ptr<Task> TaskWeakPtr;
 
-    class ITask
+    class Task
     {
         friend class TaskManager;
 
@@ -30,11 +30,11 @@ namespace pdEngine
 
         private:
         State state;
-        TaskPtrS childTask;
+        TaskSharedPtr childTask;
 
         public:
-        ITask(void);
-        virtual ~ITask(void);
+        Task(void);
+        virtual ~Task(void);
 
         protected:
         virtual void onInit(void);
@@ -56,9 +56,9 @@ namespace pdEngine
         inline bool isRemoveD(void) const;
         inline bool isPaused(void) const;
 
-        void AttachChild(TaskPtrS child);
-        TaskPtrS removeChild(void);
-        TaskPtrS peekChild(void);
+        void AttachChild(TaskSharedPtr child);
+        TaskSharedPtr removeChild(void);
+        TaskSharedPtr peekChild(void);
     };
 }
 

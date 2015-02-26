@@ -6,8 +6,8 @@ namespace pdEngine
 	class IGraphics
 	{
 	public:
-		virtual IGraphics();
-		virtual ~IGraphics();
+		explicit IGraphics();
+		virtual ~IGraphics() =0;
 
 		virtual bool v_init() { return(true); };
 		virtual bool v_start() { return(true); };

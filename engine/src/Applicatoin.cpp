@@ -9,22 +9,22 @@
 
 namespace pdEngine
 {
-	Application::Application()
-	{}
+    Application::Application()
+    : taskManager(new TaskManager())
+    {}
 
-	Application::~Application()
-	{}
+    Application::~Application()
+    {}
 
-	bool Application::init()
-	{
-	}
+    bool Application::init()
+    {
+        taskManager->addTask(getEventManager());
+        return(true);
+    }
 
-	bool Application::start()
-	{
-	}
-
-
-
-
+    bool Application::start()
+    {
+        return(true);
+    }
 }
 

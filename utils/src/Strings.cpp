@@ -11,17 +11,17 @@
 #include <string>
 #include <regex>
 
-namespace pdUtils 
+namespace pdUtils
 {
     std::string getTrimmed(std::string s, TrimOption trimOption)
     {
-        return trim(s, trimOption);
+        return(trim(s, trimOption));
     }
 
 
     std::string& trim(std::string& s, TrimOption trimOption)
     {
-        switch(trimOption) 
+        switch(trimOption)
         {
             case (TrimOption::defaultTrim):
             case (TrimOption::endOnNewline):

@@ -7,17 +7,18 @@
 #include <memory>
 #include <string>
 #include <functional>
+#include <vector>
 
 namespace pdEngine
 {
     class EventListener;
     class EventManager;
 
+    typedef std::string EventData;
     typedef std::function<void(EventData)> EventListenerDelegate;
     typedef std::vector<EventID> EventList;
-    typedef std::string EventData;
+    typedef std::shared_ptr<EventManager> EventManagerSharedPtr;
 
-    static EventManager& getEventManager();
 
     class EventListener
     {
@@ -32,13 +33,13 @@ namespace pdEngine
     private:
     };
 
-    class EventManager : public ITask
+    class EventManager : public Task
     {
         class EventManagerImpl;
 
+        friend EventManagerSharedPtr getEventManager();
     	friend class EventListener;
     	friend class EventListenerImpl;
-        friend EventManager& getEventManager();
 
         public:
             void fireEvent(EventID, EventData);
@@ -52,6 +53,8 @@ namespace pdEngine
 
 	        std::unique_ptr<EventManagerImpl> impl;
     };
+
+    EventManagerSharedPtr getEventManager();
 }
 
 #endif

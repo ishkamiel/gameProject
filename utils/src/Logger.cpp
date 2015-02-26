@@ -22,7 +22,7 @@ namespace pdLogger {
     LoggerPtr getLogger()
     {
         static LoggerPtr logger { new Logger() };
-        return logger;
+        return(logger);
     }
 
     Writer::~Writer() {}
@@ -55,7 +55,7 @@ namespace pdLogger {
     {
         using pdUtils::getTrimmed;
         using pdUtils::TrimOption;
-        
+
         auto timeNow = std::time(nullptr);
 
         switch (l) {
@@ -84,7 +84,7 @@ namespace pdLogger {
                         getTrimmed(s, TrimOption::endOnNewline)
                         );
         }
-        assert(false && "reached end of exhausted enum switch");
-        return "";
+        assert(false && "reached end of exhausted enumerated switch");
+        return("");
     }
 }

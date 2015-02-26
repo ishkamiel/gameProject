@@ -14,7 +14,4 @@ namespace pdEngine
 	typedef unsigned int EventID;
 }
 
-
-
-
 #endif /* SOURCE_DIRECTORY__ENGINE_INCLUDES_GENERAL_H_ */

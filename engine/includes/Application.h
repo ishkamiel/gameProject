@@ -1,7 +1,9 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include "IGraphics.h"
+#include "TaskManager.h"
+#include "EventManager.h"
+
 #include <memory>
 
 namespace pdEngine
@@ -9,23 +11,16 @@ namespace pdEngine
 	class Application
 	{
 	public:
-		virtual Application();
+		Application();
 		virtual ~Application();
 
 		bool init();
 		bool start();
 	protected:
-		virtual bool v_initTaskManager();
-		virtual bool v_initEventManager();
-		virtual bool v_initGraphics();
-		virtual bool v_initGUI();
-
-		virtual bool v_startTaskManager();
-		virtual bool v_startEventManager();
-		virtual bool v_startGraphics();
-		virtual bool v_startGUI();
+		virtual std::unique_ptr<TaskManager> v_getTaskManager();
+		virtual std::unique_ptr<EventManager> v_getEventManager();
 	private:
-		std::unique_ptr<TaskManager> TaskManager;
+		std::unique_ptr<TaskManager> taskManager;
 	};
 }
 

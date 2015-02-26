@@ -9,19 +9,22 @@
 #define PDENGINE_TASKMANAGER_H_
 
 #include "General.h"
+#include "Task.h"
 
 namespace pdEngine
 {
-	class ITask
+	class TaskManager
 	{
 	public:
-		virtual ITask() =0;
-		virtual ~ITask() =0;
+		TaskManager();
+		~TaskManager();
 
-		virtual void v_onUpdate(timeDelta) =0;
-		virtual void v_pause() {};
-		virtual void v_unPause() {};
+		void addTask(TaskSharedPtr);
+
+		void updateTasks(TimeDelta);
+		void pauseTasks() {};
+		void unPauseTasks() {};
 	};
 }
 
-#endif /* PDENGINE_TASKMAN_AGER_H_ */
+#endif /* PDENGINE_TASKMANAGER_H_ */
