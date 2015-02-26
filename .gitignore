@@ -31,3 +31,4 @@ build
 .ycm_extra_conf.pyc
 .kdev4
 gameProject.kdev4
+tmp

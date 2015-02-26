@@ -22,7 +22,7 @@ target_link_libraries ( demo
 file(COPY
 	${CMAKE_CURRENT_SOURCE_DIR}/config/plugins.cfg
 	${CMAKE_CURRENT_SOURCE_DIR}/config/resources.cfg
-	DESTINATION ${CMAKE_BINARY_DIR}
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 	)
 	
 file(COPY

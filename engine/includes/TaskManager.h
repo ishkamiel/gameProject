@@ -11,6 +11,8 @@
 #include "General.h"
 #include "Task.h"
 
+#include <vector>
+
 namespace pdEngine
 {
 	class TaskManager
@@ -22,8 +24,11 @@ namespace pdEngine
 		void addTask(TaskSharedPtr);
 
 		void updateTasks(TimeDelta);
-		void pauseTasks() {};
-		void unPauseTasks() {};
+		void pauseTasks();
+		void unPauseTasks();
+		
+	private:
+		std::vector<TaskSharedPtr> taskList;
 	};
 }
 

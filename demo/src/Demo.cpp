@@ -6,12 +6,15 @@
  */
 
 #include "Demo.h"
+#include "Application.h"
 
 #include <iostream>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	pdEngine::Application app {};
+	app.init();
+	app.start();
     return(0);
 }
 

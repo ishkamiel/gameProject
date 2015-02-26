@@ -10,7 +10,8 @@
 namespace pdEngine
 {
 	Application::Application()
-	: taskManager(new TaskManager())
+	: log(pdUtils::getLogger()), taskManager(new TaskManager())
+	//: taskManager(new TaskManager()), log(pdUtils::getLogger())
 	{}
 	
 	Application::~Application()
@@ -18,7 +19,8 @@ namespace pdEngine
 	
 	bool Application::init()
 	{
-		taskManager->addTask(getEventManager());
+		log->info("initializing application..");
+		//taskManager->addTask(getEventManager());
 		return(true);
 	}
 	

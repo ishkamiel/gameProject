@@ -17,12 +17,10 @@ namespace pdEngine
 
 		bool init();
 		bool start();
-	protected:
-		virtual std::unique_ptr<TaskManager> v_getTaskManager();
-		virtual std::unique_ptr<EventManager> v_getEventManager();
+		
 	private:
-		std::unique_ptr<TaskManager> taskManager;
 		pdUtils::LoggerSharedPtr log;
+		std::unique_ptr<TaskManager> taskManager;
 	};
 }
 
