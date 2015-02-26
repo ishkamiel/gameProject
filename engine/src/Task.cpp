@@ -2,17 +2,17 @@
 
 namespace pdEngine
 {
-    void Task::onInit(void)
+    void ITask::onInit(void)
     {
         state = State::running;
     }
 
-    void Task::onSuccess(void)
+    void ITask::onSuccess(void)
     {}
 
-    void Task::onFail(void)
+    void ITask::onFail(void)
     {}
 
-    void Task::onAbort(void)
+    void ITask::onAbort(void)
     {}
 }

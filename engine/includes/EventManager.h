@@ -1,53 +1,56 @@
 #ifndef EVENTMANAGER_H_
 #define EVENTMANAGER_H_
 
+#include "General.h"
+#include "Task.h"
+
 #include <memory>
 #include <string>
 #include <functional>
 
 namespace pdEngine
 {
-    class ListenerHandle;
+    class EventListener;
     class EventManager;
 
+    typedef std::function<void(EventData)> EventListenerDelegate;
+    typedef std::vector<EventID> EventList;
     typedef std::string EventData;
-    typedef unsigned int EventID;
-    typedef unsigned int ListenerID;
-    typedef std::shared_ptr<ListenerHandle> ListenerHandlePtrS;
-    typedef std::shared_ptr<EventManager> EventManagerPtrS;
-    typedef std::function<void(EventData)> EventListener;
 
-    class ListenerHandle
+    static EventManager& getEventManager();
+
+    class EventListener
     {
-        friend class EventManager;
+    public:
+    	EventListener(EventID, EventListenerDelegate);
+    	EventListener(EventList, EventListenerDelegate);
+    	~EventListener();
 
-        EventID eventID;
-        ListenerID listenerID;
-
-        public:
-            ~ListenerHandle() {};
-            inline EventID getEventID() { return eventID; };
-            inline ListenerID getListenerID() { return listenerID; }
-        private: 
-            ListenerHandle(EventID, ListenerID);
+    	EventList getEventList() const;
+    	void cancelAll();
+    	void canel(EventID);
+    private:
     };
 
-    class EventManager
+    class EventManager : public ITask
     {
         class EventManagerImpl;
-        std::unique_ptr<EventManagerImpl> impl;
+
+    	friend class EventListener;
+    	friend class EventListenerImpl;
+        friend EventManager& getEventManager();
 
         public:
-            static EventManagerPtrS getEventManager();
-
-            ListenerHandlePtrS addListener(EventID, EventListener);
-            void removeListener(ListenerHandlePtrS);
-            void removeEvent(EventID);
             void fireEvent(EventID, EventData);
 
         private:
             EventManager();
             ~EventManager();
+
+            void addListener(const EventID, const EventListenerDelegate&);
+            void removeListener(const EventID, const EventListenerDelegate&);
+
+	        std::unique_ptr<EventManagerImpl> impl;
     };
 }
 

@@ -1,16 +1,18 @@
 #ifndef TASK_H_
 #define TASK_H_
 
+#include "General.h"
+
 #include <assert.h>
 #include <memory>
 
 namespace pdEngine
 {
-    class Task;
-    typedef std::shared_ptr<Task> TaskPtrS;
-    typedef std::weak_ptr<Task> TaskPtrW;
+    class ITask;
+    typedef std::shared_ptr<ITask> TaskPtrS;
+    typedef std::weak_ptr<ITask> TaskPtrW;
 
-    class Task
+    class ITask
     {
         friend class TaskManager;
 
@@ -31,12 +33,12 @@ namespace pdEngine
         TaskPtrS childTask;
 
         public:
-        Task(void);
-        virtual ~Task(void);
+        ITask(void);
+        virtual ~ITask(void);
 
         protected:
         virtual void onInit(void);
-        virtual void onUpdate(unsigned long delta) =0;
+        virtual void onUpdate(TimeDelta) =0;
         virtual void onSuccess(void);
         virtual void onFail(void);
         virtual void onAbort(void);
