@@ -2,10 +2,6 @@ project (pdEngine)
 
 cmake_minimum_required (VERSION 2.8)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
-
 #set(CMAKE_VERBOSE_MAKEFILE ON)
     
 set(CMAKE_MODULE_PATH 
@@ -25,13 +21,17 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Debug")
 endif ()
 
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_COMPILER_ARG1 "-std=c++11") # Needed for Eclipse?
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
 
 #set ( CMAKE_INSTALL_PREFIX ${PD_OUTPUT_DIR})
 #set ( CMAKE_DEBUG_POSTFIX "_d" )
 
 include(SetupOgre)
 include(SetupCppUnit)
+include(SetupEclipse)
     
 add_subdirectory(utils)
 add_subdirectory(engine)
@@ -39,6 +39,6 @@ add_subdirectory(demo)
 
 
 #file(COPY
-	#${CMAKE_CURRENT_SOURCE_DIR}/assets
+    #${CMAKE_CURRENT_SOURCE_DIR}/configs/eclipse*
     #DESTINATION ${PD_OUTPUT_DIR}
     #)
