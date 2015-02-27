@@ -4,9 +4,10 @@
 #include "General.h"
 #include "Task.h"
 
+#include <functional>
+#include <map>
 #include <memory>
 #include <string>
-#include <functional>
 #include <vector>
 
 namespace pdEngine
@@ -15,46 +16,49 @@ namespace pdEngine
 	class EventManager;
 	
 	typedef std::string EventData;
-	typedef std::function<void(EventData)> EventListenerDelegate;
+	typedef std::function<bool(EventData)> EventListenerDelegate;
 	typedef std::vector<EventID> EventList;
 	typedef std::shared_ptr<EventManager> EventManagerSharedPtr;
+	typedef std::unique_ptr<EventListener> EventListenerUniquePtr;
 	
 	
 	class EventListener
 	{
+		friend class EventManager;
+
 	public:
-		EventListener(EventID, EventListenerDelegate);
-		EventListener(EventList, EventListenerDelegate);
-		~EventListener();
-		
 		EventList getEventList() const;
 		void cancelAll();
 		void canel(EventID);
+
 	private:
+		EventListener(EventID, EventListenerDelegate);
+		EventListener(EventList, EventListenerDelegate);
+		~EventListener();
 	};
 	
 	class EventManager : public Task
 	{
-		class EventManagerImpl;
-		
 		friend EventManagerSharedPtr getEventManager();
 		friend class EventListener;
-		friend class EventListenerImpl;
+
+		typedef std::shared_ptr<std::vector<EventListenerDelegate>> EventListenerList;
+		typedef std::map<EventID, EventListenerList> EventMap;
+
+		EventMap eventListeners;
 		
 	public:
-		void fireEvent(EventID, EventData);
-		
-	private:
 		EventManager();
 		~EventManager();
+
+		int fireEvent(EventID, EventData);
+		EventListenerUniquePtr createEventListener(EventID, EventListenerDelegate);
+		EventListenerUniquePtr createEventListener(EventList, EventListenerDelegate);
 		
+	private:
 		void addListener(const EventID, const EventListenerDelegate&);
 		void removeListener(const EventID, const EventListenerDelegate&);
-		
-		std::unique_ptr<EventManagerImpl> impl;
 	};
-	
-	EventManagerSharedPtr getEventManager();
 }
 
 #endif
