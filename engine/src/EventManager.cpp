@@ -45,12 +45,16 @@ namespace pdEngine
 		if (foundList == eventListeners.end())
 			return;
 
-		auto foundDelegate = foundList->second->find(delegate);
+		auto list = foundList->second;
 
-		if (foundDelegate == foundDelegate->second->end())
-			return; // hmm, cannot find delegate
-
-		foundList->second->erase(foundDelegate);
+		for (auto i = list->begin(); i != list->end(); i++)
+		{
+			if (*i = delegate)
+			{
+				list->erase(i);
+				return;
+			}
+		}
 	}
 
 	/*
@@ -61,7 +65,6 @@ namespace pdEngine
 	: eventManager(em), eventID(id), delegate(delegate)
 	{
 		assert(delegate != nullptr);
-		//assert(eventManager != nullptr && delegate != nullptr);
 		eventManager->addListener(id, delegate);
 	}
 
