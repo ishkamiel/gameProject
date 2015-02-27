@@ -7,6 +7,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <queue>
 #include <string>
 #include <vector>
 
@@ -16,9 +17,9 @@ namespace pdEngine
 	class EventManager;
 	
 	typedef std::string EventData;
-	typedef std::function<bool(EventData)> EventListenerDelegate;
-	typedef std::shared_ptr<EventManager> EventManagerSharedPtr;
-	typedef std::unique_ptr<EventListener> EventListenerUniquePtr;
+	typedef std::function<bool(EventData)> 	EventListenerDelegate;
+	typedef std::shared_ptr<EventManager> 	EventManagerSharedPtr;
+	typedef std::unique_ptr<EventListener> 	EventListenerUniquePtr;
 
 	class EventListener
 	{
@@ -42,16 +43,21 @@ namespace pdEngine
 	{
 		friend class EventListener;
 
-		typedef std::shared_ptr<std::vector<EventListenerDelegate>> EventListenerList;
-		typedef std::map<EventID, EventListenerList> EventMap;
+		typedef std::vector<EventListenerDelegate> 	DelegateVector;
+		typedef std::map<EventID, DelegateVector> 	EventListenerMap;
+		typedef std::pair<EventID, EventData> 		PendingEvent;
+		typedef std::queue<PendingEvent> 			EventQueue;
 
-		EventMap eventListeners;
-		
+		std::unique_ptr<EventQueue> eventQueueIn;
+		std::unique_ptr<EventQueue> eventQueueOut;
+
+		EventListenerMap eventListeners;
+
 	public:
 		EventManager();
 		~EventManager();
 
-		int fireEvent(const EventID, const EventData&);
+		void fireEvent(const EventID, const EventData);
 		EventListenerUniquePtr createEventListener(const EventID, EventListenerDelegate);
 		
 	private:

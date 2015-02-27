@@ -8,14 +8,25 @@ namespace pdEngine
 	: eventListeners()
 	{}
 
-	int EventManager::fireEvent(const EventID id, const EventData& eventData)
+	void EventManager::fireEvent(const EventID id, const EventData eventData)
 	{
+		eventQueueIn->push(std::make_pair<EventID,EventData>(id, eventData));
+	}
+
+	void EventManager::onUpdate(TimeDetla timeDelta) override
+	{
+		eventQueueIn.swap(eventQueueOut);
+
+		/*
 		auto list = eventListeners.find(id);
 
 		if (list == eventListeners.end())
+		{
 			return(0); // no registered listeners for event
+		}
 
 		auto listenersCalled = 0;
+
 		for (auto listener = list->second->begin(); listener != list->second->end(); list++)
 		{
 			if (! (*listener)(eventData))
@@ -24,8 +35,7 @@ namespace pdEngine
 			}
 			++listenersCalled;
 		}
-
-		return(listenersCalled);
+		*/
 	}
 
 	EventListenerUniquePtr EventManager::createEventListener(EventID eventID, EventListenerDelegate eld)
@@ -35,7 +45,7 @@ namespace pdEngine
 	void EventManager::addListener(const EventID id, const EventListenerDelegate delegate)
 	{
 		auto list = eventListeners[id];
-		list->push_back(delegate);
+		list.push_back(delegate);
 	}
 
 	void EventManager::removeListener(const EventID id, const EventListenerDelegate delegate)
@@ -47,11 +57,11 @@ namespace pdEngine
 
 		auto list = foundList->second;
 
-		for (auto i = list->begin(); i != list->end(); i++)
+		for (auto i = list.begin(); i != list.end(); i++)
 		{
 			if (*i = delegate)
 			{
-				list->erase(i);
+				list.erase(i);
 				return;
 			}
 		}
@@ -79,8 +89,6 @@ namespace pdEngine
 		{
 			eventManager->removeListener(eventID, delegate);
 			eventManager.reset();
-			// FIXME need to fix this once FastDelegate stuff is added.
-			//delete delegate;
 		}
 	}
 
