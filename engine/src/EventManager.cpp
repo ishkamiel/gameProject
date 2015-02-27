@@ -2,53 +2,36 @@
 
 #include <assert.h>
 
+#include <algorithm>
+
 namespace pdEngine
 {
 	EventManager::EventManager()
-	: eventListeners()
+	: eventListeners(), eventQueueIn(), eventQueueOut()
 	{}
 
-	void EventManager::fireEvent(const EventID id, const EventData eventData)
+	void EventManager::fireEvent(EventID id, EventData eventData)
 	{
-		eventQueueIn->push(std::make_pair<EventID,EventData>(id, eventData));
+        //auto pair = std::make_pair<EventID, EventData>(id, eventData);
+		eventQueueIn->push({id, eventData});
 	}
 
-	void EventManager::onUpdate(TimeDetla timeDelta) override
+	void EventManager::onUpdate(TimeDelta timeDelta)
 	{
-		eventQueueIn.swap(eventQueueOut);
-
-		/*
-		auto list = eventListeners.find(id);
-
-		if (list == eventListeners.end())
-		{
-			return(0); // no registered listeners for event
-		}
-
-		auto listenersCalled = 0;
-
-		for (auto listener = list->second->begin(); listener != list->second->end(); list++)
-		{
-			if (! (*listener)(eventData))
-			{
-				return(++listenersCalled);
-			}
-			++listenersCalled;
-		}
-		*/
+        timeDelta--;
 	}
 
-	EventListenerUniquePtr EventManager::createEventListener(EventID eventID, EventListenerDelegate eld)
+	EventListener_uptr EventManager::createListener(EventID eventID, ListenerFunction eld)
 	{
+        auto l_ptr = std::make_shared<ListenerFunction>(eld);
+		auto list = eventListeners[eventID];
+		list.push_back(l_ptr);
+
+        EventListener_uptr retval { new EventListener(this, eventID, l_ptr) };
+        return retval;
 	}
 
-	void EventManager::addListener(const EventID id, const EventListenerDelegate delegate)
-	{
-		auto list = eventListeners[id];
-		list.push_back(delegate);
-	}
-
-	void EventManager::removeListener(const EventID id, const EventListenerDelegate delegate)
+	void EventManager::removeListener(const EventID id, ListenerFunction_sptr listener)
 	{
 		auto foundList = eventListeners.find(id);
 
@@ -56,27 +39,16 @@ namespace pdEngine
 			return;
 
 		auto list = foundList->second;
-
-		for (auto i = list.begin(); i != list.end(); i++)
-		{
-			if (*i = delegate)
-			{
-				list.erase(i);
-				return;
-			}
-		}
+        std::remove(list.begin(), list.end(), listener);
 	}
 
 	/*
 	 * EventListener
 	 */
 
-	EventListener::EventListener(EventManagerSharedPtr em, EventID id, EventListenerDelegate delegate)
-	: eventManager(em), eventID(id), delegate(delegate)
-	{
-		assert(delegate != nullptr);
-		eventManager->addListener(id, delegate);
-	}
+	EventListener::EventListener(EventManager* em, EventID id, ListenerFunction_wptr listener)
+	: eventManager(em), eventID(id), listenerFunction(listener)
+	{}
 
 	EventListener::~EventListener()
 	{
@@ -85,14 +57,16 @@ namespace pdEngine
 
 	void EventListener::cancel()
 	{
-		if (eventManager != nullptr)
-		{
-			eventManager->removeListener(eventID, delegate);
-			eventManager.reset();
+        auto l = listenerFunction.lock();
+        if (l)
+        {
+			eventManager->removeListener(eventID, l);
+            l.reset();
 		}
+        listenerFunction.reset();
 	}
 
-	const EventID EventListener::getEventID() const
+	EventID EventListener::getEventID() const
 	{
 		return(eventID);
 	}

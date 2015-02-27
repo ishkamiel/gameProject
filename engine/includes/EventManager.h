@@ -9,6 +9,7 @@
 #include <memory>
 #include <queue>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace pdEngine
@@ -16,54 +17,60 @@ namespace pdEngine
 	class EventListener;
 	class EventManager;
 	
-	typedef std::string EventData;
-	typedef std::function<bool(EventData)> 	EventListenerDelegate;
-	typedef std::shared_ptr<EventManager> 	EventManagerSharedPtr;
-	typedef std::unique_ptr<EventListener> 	EventListenerUniquePtr;
+	typedef std::shared_ptr<std::string>      EventData;
+	typedef std::function<bool(EventData)>    ListenerFunction;
+	typedef std::shared_ptr<ListenerFunction> ListenerFunction_sptr;
+	typedef std::weak_ptr<ListenerFunction>   ListenerFunction_wptr;
+	typedef std::unique_ptr<EventListener> 	  EventListener_uptr;
 
 	class EventListener
 	{
-		friend class EventManage;
+		friend class EventManager;
 
-		EventID eventID;
-		EventListenerDelegate delegate;
-		EventManagerSharedPtr eventManager;
+		EventManager*           eventManager;
+		EventID                 eventID;
+		ListenerFunction_wptr   listenerFunction;
 
 	public:
-		const EventID getEventID() const;
+		EventID getEventID() const;
 		void cancel();
+		~EventListener();
 
 	private:
 		EventListener();
-		EventListener(EventManagerSharedPtr, const EventID, EventListenerDelegate);
-		~EventListener();
+		EventListener(EventManager*, const EventID, ListenerFunction_wptr);
 	};
 	
-	class EventManager : public Task
-	{
-		friend class EventListener;
+    class EventManager : public Task
+    {
+        friend class EventListener;
 
-		typedef std::vector<EventListenerDelegate> 	DelegateVector;
-		typedef std::map<EventID, DelegateVector> 	EventListenerMap;
-		typedef std::pair<EventID, EventData> 		PendingEvent;
-		typedef std::queue<PendingEvent> 			EventQueue;
+        struct PendingEvent
+        {
+            EventID   id;
+            EventData data;
+        };
+            
+        typedef std::vector<ListenerFunction_sptr> 	DelegateVector;
+        typedef std::map<EventID, DelegateVector> 	EventListenerMap;
+        typedef std::queue<PendingEvent> 			EventQueue;
 
-		std::unique_ptr<EventQueue> eventQueueIn;
-		std::unique_ptr<EventQueue> eventQueueOut;
+        EventListenerMap            eventListeners;
+        std::unique_ptr<EventQueue> eventQueueIn;
+        std::unique_ptr<EventQueue> eventQueueOut;
 
-		EventListenerMap eventListeners;
+    public:
+        EventManager();
+        ~EventManager();
 
-	public:
-		EventManager();
-		~EventManager();
+        void fireEvent(EventID, EventData);
+        void onUpdate(TimeDelta timeDelta) override;
+        EventListener_uptr createListener(const EventID, ListenerFunction);
 
-		void fireEvent(const EventID, const EventData);
-		EventListenerUniquePtr createEventListener(const EventID, EventListenerDelegate);
-		
-	private:
-		void addListener(const EventID, const EventListenerDelegate);
-		void removeListener(const EventID, const EventListenerDelegate);
-	};
+    private:
+        void addListener(const EventID, ListenerFunction);
+        void removeListener(const EventID, ListenerFunction_sptr);
+    };
 }
 
 #endif
