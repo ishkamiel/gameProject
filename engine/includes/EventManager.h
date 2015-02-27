@@ -25,7 +25,7 @@ namespace pdEngine
 		friend class EventManage;
 
 		EventID eventID;
-		EventListenerDelegate& delegate;
+		EventListenerDelegate delegate;
 		EventManagerSharedPtr eventManager;
 
 	public:
@@ -34,7 +34,7 @@ namespace pdEngine
 
 	private:
 		EventListener();
-		EventListener(EventManagerSharedPtr, const EventID, EventListenerDelegate&);
+		EventListener(EventManagerSharedPtr, const EventID, EventListenerDelegate);
 		~EventListener();
 	};
 	
@@ -52,11 +52,11 @@ namespace pdEngine
 		~EventManager();
 
 		int fireEvent(const EventID, const EventData&);
-		EventListenerUniquePtr createEventListener(const EventID, EventListenerDelegate&);
+		EventListenerUniquePtr createEventListener(const EventID, EventListenerDelegate);
 		
 	private:
-		void addListener(const EventID, const EventListenerDelegate&);
-		void removeListener(const EventID, const EventListenerDelegate&);
+		void addListener(const EventID, const EventListenerDelegate);
+		void removeListener(const EventID, const EventListenerDelegate);
 	};
 }
 

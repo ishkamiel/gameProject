@@ -8,7 +8,7 @@ namespace pdEngine
 	: eventListeners()
 	{}
 
-	int EventManager::fireEvent(const EventID& id, const EventData& eventData)
+	int EventManager::fireEvent(const EventID id, const EventData& eventData)
 	{
 		auto list = eventListeners.find(id);
 
@@ -28,21 +28,17 @@ namespace pdEngine
 		return(listenersCalled);
 	}
 
-	EventListenerUniquePtr EventManager::createEventListener(EventListenerDelegate& eld)
+	EventListenerUniquePtr EventManager::createEventListener(EventID eventID, EventListenerDelegate eld)
 	{
 	}
 
-	EventListenerUniquePtr EventManager::createEventListener(EventListenerDelegate& eld, EventID& eventID)
-	{
-	}
-
-	void EventManager::addListener(const EventID id, const EventListenerDelegate& delegate)
+	void EventManager::addListener(const EventID id, const EventListenerDelegate delegate)
 	{
 		auto list = eventListeners[id];
 		list->push_back(delegate);
 	}
 
-	void EventManager::removeListener(const EventID id, const EventListenerDelegate& delegate)
+	void EventManager::removeListener(const EventID id, const EventListenerDelegate delegate)
 	{
 		auto foundList = eventListeners.find(id);
 
@@ -61,10 +57,11 @@ namespace pdEngine
 	 * EventListener
 	 */
 
-	EventListener::EventListener(EventManager& em, EventID& id, EventListenerDelegate delegate)
+	EventListener::EventListener(EventManagerSharedPtr em, EventID id, EventListenerDelegate delegate)
 	: eventManager(em), eventID(id), delegate(delegate)
 	{
-		assert(eventManager != nullptr && id != nullptr & delegate != nullptr);
+		assert(delegate != nullptr);
+		//assert(eventManager != nullptr && delegate != nullptr);
 		eventManager->addListener(id, delegate);
 	}
 
