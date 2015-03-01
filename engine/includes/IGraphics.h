@@ -17,7 +17,7 @@ namespace pdEngine
 
 		virtual bool init() =0;
 		virtual bool start() =0;
-		virtual bool shutdown() =0;
+		virtual void shutdown() =0;
 	};
 }
 

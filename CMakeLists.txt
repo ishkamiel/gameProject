@@ -22,10 +22,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
-include(SetupOgre)
-include(SetupCppUnit)
-include(SetupEclipse)
-    
 add_subdirectory(utils)
 add_subdirectory(engine)
 add_subdirectory(demo)

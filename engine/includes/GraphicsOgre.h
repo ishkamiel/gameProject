@@ -15,7 +15,9 @@ namespace pdEngine
     {
         typedef Ogre::NameValuePairList VideoOptions;
 
-        Ogre::Root root;
+        Ogre::Root*             ogreRoot        { nullptr };
+        Ogre::RenderWindow*     ogreWindow      { nullptr };
+        Ogre::SceneManager*     guiSceneManager { nullptr };
 
     public:
 		GraphicsOgre();
