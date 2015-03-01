@@ -23,6 +23,7 @@ namespace pdEngine
 		
         bool init() override;
         bool start() override;
+        void shutdown() override;
 
     private:
         VideoOptions getVideoOptions();

@@ -24,6 +24,11 @@ namespace pdEngine
         return(true);
     }
 
+    void GraphicsOgre::shutdown()
+    {
+        return(true);
+    }
+
     GraphicsOgre::VideoOptions GraphicsOgre::getVideoOptions()
     {
         VideoOptions options;
