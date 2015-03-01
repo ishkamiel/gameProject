@@ -2,6 +2,9 @@
 
 namespace pdEngine 
 {
+	GraphicsOgre::GraphicsOgre()
+	{}
+	
     GraphicsOgre::~GraphicsOgre()
     {}
 

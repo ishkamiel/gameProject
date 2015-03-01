@@ -6,7 +6,7 @@ include_directories(
 	${PD_ENGINE_INCLUDES} 
     ${PD_UTILS_INCLUDES} 
     ${OGRE_INCLUDE_DIRS}
-    ${OGRE_Overlay_INCLUDE_DIRS}
+    #${OGRE_Overlay_INCLUDE_DIRS}
     ${OIS_INCLUDE_DIRS}
     )
 
@@ -15,7 +15,7 @@ target_link_libraries ( demo
       pdUtils 
 	pdEngine 
 	${OGRE_LIBRARIES}
-	${OGRE_Overlay_LIBRARIES}
+    #${OGRE_Overlay_LIBRARIES}
 	${OIS_LIBRARIES}
 	)
 	

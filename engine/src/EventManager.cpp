@@ -8,6 +8,11 @@ namespace pdEngine
 {
 	EventManager::EventManager()
 	{}
+	
+	EventManager::~EventManager()
+	{
+		//TODO
+	}
 
 	void EventManager::fireEvent(EventID id, EventData eventData)
 	{

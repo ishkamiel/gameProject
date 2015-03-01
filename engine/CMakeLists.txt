@@ -6,7 +6,7 @@ include_directories(
     ${PD_UTILS_INCLUDES} 
     ${OIS_INCLUDE_DIRS}
     ${OGRE_INCLUDE_DIRS}
-    ${OGRE_Overlay_INCLUDE_DIRS}
+    #${OGRE_Overlay_INCLUDE_DIRS}
     )
 
 add_library ( pdEngine ${MY_HEADER_FILES} ${MY_SOURCE_FILES} )

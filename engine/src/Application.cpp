@@ -21,7 +21,7 @@ namespace pdEngine
 
     bool Application::init()
     {
-        log->info("initializing application..");
+        log->info("Initializing pdEngine..");
 
         initGraphics();
 
@@ -30,7 +30,7 @@ namespace pdEngine
 
     bool Application::start()
     {
-        log->info("Exiting...");
+        log->info("Exiting pdEngine...");
         return(true);
     }
 

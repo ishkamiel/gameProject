@@ -12,6 +12,7 @@ namespace pdEngine
 	class IGraphics
 	{
 	public:
+		IGraphics() {};
 		virtual ~IGraphics() =0;
 
 		virtual bool init() =0;

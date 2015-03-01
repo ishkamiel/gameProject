@@ -18,9 +18,11 @@ namespace pdEngine
         Ogre::Root root;
 
     public:
-        virtual ~GraphicsOgre();
-        virtual bool init() override;
-        virtual bool start() override;
+		GraphicsOgre();
+        ~GraphicsOgre();
+		
+        bool init() override;
+        bool start() override;
 
     private:
         VideoOptions getVideoOptions();
