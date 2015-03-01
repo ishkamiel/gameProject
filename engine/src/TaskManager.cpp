@@ -2,34 +2,28 @@
 
 namespace pdEngine
 {
-	/*
-	class TaskManager
-	{
-	public:
-		TaskManager();
-		~TaskManager();
-
-		void addTask(TaskSharedPtr);
-
-		void updateTasks(TimeDelta);
-		void pauseTasks() {};
-		void unPauseTasks() {};
-	};
-	*/
-	
 	TaskManager::TaskManager() 
-	: taskList()
 	{}
 	
 	TaskManager::~TaskManager() {}
 	
 	void TaskManager::updateTasks(TimeDelta timeDelta)
-	{}
+	{
+        //TODO
+        --timeDelta;
+    }
 	
 	void TaskManager::pauseTasks()
-	{}
+	{
+        //TODO
+    }
+
+	void TaskManager::unPauseTasks()
+	{
+        //TODO
+    }
 	
-	void TaskManager::addTask(TaskSharedPtr newTask)
+	void TaskManager::addTask(Task_sptr newTask)
 	{
 		taskList.push_back(newTask);
 	}

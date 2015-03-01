@@ -6,27 +6,40 @@
  */
 
 #include "Application.h"
+#include "GraphicsOgre.h"
 
 namespace pdEngine
 {
-	Application::Application()
-	: log(pdUtils::getLogger()), taskManager(new TaskManager())
-	//: taskManager(new TaskManager()), log(pdUtils::getLogger())
-	{}
-	
-	Application::~Application()
-	{}
-	
-	bool Application::init()
-	{
-		log->info("initializing application..");
-		//taskManager->addTask(getEventManager());
-		return(true);
-	}
-	
-	bool Application::start()
-	{
-		return(true);
-	}
+    Application::Application()
+        : log(pdUtils::getLogger()), 
+        taskManager(new TaskManager()),
+        eventManager(new EventManager())
+    {}
+
+    Application::~Application()
+    {}
+
+    bool Application::init()
+    {
+        log->info("initializing application..");
+
+        initGraphics();
+
+        return(true);
+    }
+
+    bool Application::start()
+    {
+        log->info("Exiting...");
+        return(true);
+    }
+
+    bool Application::initGraphics()
+    {
+        graphicsEngine = std::make_shared<GraphicsOgre>();
+        graphicsEngine->init();
+
+        return(true);
+    }
 }
 

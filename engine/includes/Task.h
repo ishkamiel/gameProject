@@ -9,56 +9,54 @@
 namespace pdEngine
 {
     class Task;
-    typedef std::shared_ptr<Task> TaskSharedPtr;
-    typedef std::weak_ptr<Task> TaskWeakPtr;
+    typedef std::shared_ptr<Task> Task_sptr;
+    typedef std::weak_ptr<Task> Task_wptr;
+
+    enum class TaskState
+    {
+        uninitialized,
+        removed,
+        running,
+        paused,
+        succeeded,
+        failed,
+        aborted
+    };
 
     class Task
     {
         friend class TaskManager;
 
-        public:
-        enum class State
-        {
-            uninitialized,
-            removed,
-            running,
-            paused,
-            succeeded,
-            failed,
-            aborted
-        };
+        TaskState   state       { TaskState::uninitialized };
+        Task_sptr   childTask   { nullptr };
 
-        private:
-        State state;
-        TaskSharedPtr childTask;
+    public:
+        virtual ~Task(void) =0;
 
-        public:
-        Task(void);
-        virtual ~Task(void);
+        inline void succeed(void) { state = TaskState::succeeded; }
+        inline void fail(void) { state = TaskState::failed; }
 
-        protected:
+        inline void pause(void);
+        inline void unPause(void);
+
+        inline TaskState getState(void) const;
+        inline bool isAlive(void) const;
+        inline bool isDead(void) const;
+        inline bool isRemoveD(void) const;
+        inline bool isPaused(void) const;
+
+        void AttachChild(Task_sptr child);
+        Task_sptr removeChild(void);
+        Task_sptr peekChild(void);
+
+    protected:
         virtual void onInit(void);
         virtual void onUpdate(TimeDelta) =0;
         virtual void onSuccess(void);
         virtual void onFail(void);
         virtual void onAbort(void);
 
-        public:
-        inline void succeed(void) { state = State::succeeded; }
-        inline void fail(void) { state = State::failed; }
-
-        inline void pause(void);
-        inline void unPause(void);
-
-        inline State getState(void) const;
-        inline bool isAlive(void) const;
-        inline bool isDead(void) const;
-        inline bool isRemoveD(void) const;
-        inline bool isPaused(void) const;
-
-        void AttachChild(TaskSharedPtr child);
-        TaskSharedPtr removeChild(void);
-        TaskSharedPtr peekChild(void);
+    private:
     };
 }
 

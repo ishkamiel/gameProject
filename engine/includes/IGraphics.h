@@ -1,17 +1,21 @@
 #ifndef IGRAPHICS_H_
 #define IGRAPHICS_H_
 
+#include <memory>
+
 namespace pdEngine
 {
+    class IGraphics;
+
+    typedef std::shared_ptr<IGraphics> Graphics_sptr;
+
 	class IGraphics
 	{
 	public:
-		explicit IGraphics();
 		virtual ~IGraphics() =0;
 
-		virtual bool v_init() { return(true); };
-		virtual bool v_start() { return(true); };
-
+		virtual bool init() =0;
+		virtual bool start() =0;
 	};
 }
 

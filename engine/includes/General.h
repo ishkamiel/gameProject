@@ -10,6 +10,14 @@
 
 namespace pdEngine
 {
+#ifdef WIN32 
+    constexpr bool win32 = true;
+#else
+    constexpr bool win32 = false;
+#endif /* WIN32 */
+
+    constexpr short MAX_PATH = 100;
+
 	typedef int long TimeDelta;
 	typedef unsigned int EventID;
 }

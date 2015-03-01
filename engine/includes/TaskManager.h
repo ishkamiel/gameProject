@@ -17,18 +17,19 @@ namespace pdEngine
 {
 	class TaskManager
 	{
+		std::vector<Task_sptr> taskList;
+
 	public:
 		TaskManager();
 		~TaskManager();
 
-		void addTask(TaskSharedPtr);
+		void addTask(Task_sptr);
 
 		void updateTasks(TimeDelta);
 		void pauseTasks();
 		void unPauseTasks();
 		
 	private:
-		std::vector<TaskSharedPtr> taskList;
 	};
 }
 

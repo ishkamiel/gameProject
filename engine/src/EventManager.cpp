@@ -7,17 +7,17 @@
 namespace pdEngine
 {
 	EventManager::EventManager()
-	: eventListeners(), eventQueueIn(), eventQueueOut()
 	{}
 
 	void EventManager::fireEvent(EventID id, EventData eventData)
 	{
         //auto pair = std::make_pair<EventID, EventData>(id, eventData);
-		eventQueueIn->push({id, eventData});
+		eventQueueIn.push({id, eventData});
 	}
 
 	void EventManager::onUpdate(TimeDelta timeDelta)
 	{
+        //TODO
         timeDelta--;
 	}
 

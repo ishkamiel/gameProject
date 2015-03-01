@@ -22,6 +22,7 @@ namespace pdEngine
 	typedef std::shared_ptr<ListenerFunction> ListenerFunction_sptr;
 	typedef std::weak_ptr<ListenerFunction>   ListenerFunction_wptr;
 	typedef std::unique_ptr<EventListener> 	  EventListener_uptr;
+    typedef std::shared_ptr<EventManager>     EventManager_sptr;
 
 	class EventListener
 	{
@@ -55,16 +56,16 @@ namespace pdEngine
         typedef std::map<EventID, DelegateVector> 	EventListenerMap;
         typedef std::queue<PendingEvent> 			EventQueue;
 
-        EventListenerMap            eventListeners;
-        std::unique_ptr<EventQueue> eventQueueIn;
-        std::unique_ptr<EventQueue> eventQueueOut;
+        EventListenerMap    eventListeners  {};
+        EventQueue          eventQueueIn    {};
+        EventQueue          eventQueueOut   {};
 
     public:
         EventManager();
         ~EventManager();
 
         void fireEvent(EventID, EventData);
-        void onUpdate(TimeDelta timeDelta) override;
+        void onUpdate(TimeDelta) override;
         EventListener_uptr createListener(const EventID, ListenerFunction);
 
     private:

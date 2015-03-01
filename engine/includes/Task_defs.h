@@ -8,37 +8,37 @@ namespace pdEngine
     void Task::pause(void) 
     {
         assert(isAlive());
-        state = State::paused;
+        state = TaskState::paused;
     };
 
     void Task::unPause(void)
     {
         assert(isAlive());
-        state = State::running;
+        state = TaskState::running;
     };
 
-    Task::State Task::getState(void) const 
+    TaskState Task::getState(void) const 
     { 
         return (state); 
     }
 
     bool Task::isAlive(void) const 
     { 
-        return (state == State::running || state == State::paused); 
+        return (state == TaskState::running || state == TaskState::paused); 
     }
 
     bool Task::isDead(void) const 
     { 
-        return (state == State::failed || state == State::aborted); 
+        return (state == TaskState::failed || state == TaskState::aborted); 
     }
 
     bool Task::isRemoveD(void) const { 
-        return (state == State::removed); 
+        return (state == TaskState::removed); 
     }
 
     bool Task::isPaused(void) const 
     { 
-        return (state == State::paused); 
+        return (state == TaskState::paused); 
     }
 }
 
