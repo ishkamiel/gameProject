@@ -26,9 +26,10 @@ namespace pdUtils
 
 	typedef std::shared_ptr<Writer> WriterPtr;
 	typedef std::shared_ptr<Formatter> FormatterPtr;
-	typedef std::shared_ptr<Logger> LoggerSharedPtr;
+	typedef std::shared_ptr<Logger> Logger_sptr;
 
-	LoggerSharedPtr getLogger();
+	Logger_sptr getLogger();
+	inline Logger_sptr log() { return(getLogger()); }
 
 	class Writer
 	{

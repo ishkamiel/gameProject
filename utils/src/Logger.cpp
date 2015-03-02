@@ -19,9 +19,9 @@ namespace pdUtils {
     const std::string PREFIX_INFO = "[__]> ";
     const std::string PREFIX_DEBUG = "[..]> ";
 
-    LoggerSharedPtr getLogger()
+    Logger_sptr getLogger()
     {
-        static LoggerSharedPtr logger { new Logger() };
+        static Logger_sptr logger { new Logger() };
         return(logger);
     }
 

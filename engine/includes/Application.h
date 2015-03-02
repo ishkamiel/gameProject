@@ -13,7 +13,6 @@ namespace pdEngine
 {
 	class Application
 	{
-		pdUtils::LoggerSharedPtr        log;
 		std::unique_ptr<TaskManager>    taskManager;
         EventManager_sptr               eventManager;
         Graphics_sptr                   graphicsEngine;
@@ -24,6 +23,7 @@ namespace pdEngine
 
 		bool init();
 		bool start();
+		void shutdown();
 
     protected:
         virtual bool initGraphics();

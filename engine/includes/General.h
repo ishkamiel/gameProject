@@ -5,8 +5,12 @@
  *      Author: ishkamiel
  */
 
-#ifndef SOURCE_DIRECTORY__ENGINE_INCLUDES_GENERAL_H_
-#define SOURCE_DIRECTORY__ENGINE_INCLUDES_GENERAL_H_
+#ifndef PDENGINE_GENERAL_H_
+#define PDENGINE_GENERAL_H_
+
+#include "pdLogger.h"
+
+#define PD_DELETE(x) if (x != nullptr) delete x
 
 namespace pdEngine
 {
@@ -20,6 +24,8 @@ namespace pdEngine
 
 	typedef int long TimeDelta;
 	typedef unsigned int EventID;
+	
+	using pdUtils::log;
 }
 
-#endif /* SOURCE_DIRECTORY__ENGINE_INCLUDES_GENERAL_H_ */
+#endif /* PDENGINE_GENERAL_H_ */

@@ -4,9 +4,8 @@
 #include "General.h"
 #include "IGraphics.h"
 
-#include "OgreCommon.h"
 #include "OgreRoot.h"
-#include "OgreResourceGroupManager.h"
+#include "CEGUISystem.h"
 
 namespace pdEngine 
 {
@@ -15,9 +14,12 @@ namespace pdEngine
     {
         typedef Ogre::NameValuePairList VideoOptions;
 
-        Ogre::Root*             ogreRoot        { nullptr };
-        Ogre::RenderWindow*     ogreWindow      { nullptr };
-        Ogre::SceneManager*     guiSceneManager { nullptr };
+        Ogre::Root*             	ogreRoot        { nullptr };
+        Ogre::RenderWindow*     	ogreWindow      { nullptr };
+        Ogre::SceneManager*     	guiSceneManager { nullptr };
+		
+		CEGUI::OgreCEGUIRenderer*	guiRenderer;
+		CEGUI::System*				guiSystem;
 
     public:
 		GraphicsOgre();
@@ -29,6 +31,10 @@ namespace pdEngine
 
     private:
         VideoOptions getVideoOptions();
+		
+		bool setRenderSystem(VideoOptions&);
+		
+		bool showGUI();
     };
 }
 

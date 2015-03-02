@@ -10,8 +10,7 @@
 
 namespace pdEngine
 {
-    Application::Application()
-        : log(pdUtils::getLogger()), 
+    Application::Application() :
         taskManager(new TaskManager()),
         eventManager(new EventManager())
     {}
@@ -21,18 +20,22 @@ namespace pdEngine
 
     bool Application::init()
     {
-        log->info("Initializing pdEngine..");
+        log()->info("Initializing pdEngine..");
 
-        initGraphics();
+        if (! initGraphics());
 
         return(true);
     }
 
     bool Application::start()
     {
-        log->info("Exiting pdEngine...");
+        log()->info("Exiting pdEngine...");
         return(true);
     }
+    
+    void Application::shutdown()
+	{
+	}
 
     bool Application::initGraphics()
     {
