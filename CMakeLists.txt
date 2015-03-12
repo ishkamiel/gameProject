@@ -25,6 +25,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -o3")
 endif()
 
+find_package(CEGUI)
+find_package(SDL)
+
 add_subdirectory(utils)
-#add_subdirectory(engine)
-#add_subdirectory(demo)
+add_subdirectory(engine)
+add_subdirectory(demo)
