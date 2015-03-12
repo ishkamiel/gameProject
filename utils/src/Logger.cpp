@@ -47,9 +47,9 @@ namespace pdUtils {
      * BasicFormatter
      */
 
-    BasicFormatter::BasicFormatter() {};
+    BasicFormatter::BasicFormatter() {}
 
-    BasicFormatter::~BasicFormatter() {};
+    BasicFormatter::~BasicFormatter() {}
 
     inline std::string BasicFormatter::format(LogLevel l, const std::string& s)
     {
