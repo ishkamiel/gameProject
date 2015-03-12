@@ -3,8 +3,8 @@ project(pdEngine)
 file(GLOB MY_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB MY_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-find_package(SDL)
-find_package(CEGUI)
+#find_package(SDL)
+#find_package(CEGUI)
  
 include_directories( 
     "include"
