@@ -6,7 +6,6 @@
  */
 
 #include "Application.h"
-#include "GraphicsOgre.h"
 
 namespace pdEngine
 {
@@ -20,16 +19,14 @@ namespace pdEngine
 
     bool Application::init()
     {
-        log()->info("Initializing pdEngine..");
-
-        if (! initGraphics());
+        log()->info("Initializing pdEngine application..");
 
         return(true);
     }
 
     bool Application::start()
     {
-        log()->info("Exiting pdEngine...");
+        log()->info("Starting pdEngine application...");
         return(true);
     }
     
@@ -39,9 +36,6 @@ namespace pdEngine
 
     bool Application::initGraphics()
     {
-        graphicsEngine = std::make_shared<GraphicsOgre>();
-        graphicsEngine->init();
-
         return(true);
     }
 }

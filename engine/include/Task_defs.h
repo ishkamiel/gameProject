@@ -9,13 +9,13 @@ namespace pdEngine
     {
         assert(isAlive());
         state = TaskState::paused;
-    };
+    }
 
     void Task::unPause(void)
     {
         assert(isAlive());
         state = TaskState::running;
-    };
+    }
 
     TaskState Task::getState(void) const 
     { 
