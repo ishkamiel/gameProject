@@ -2,6 +2,7 @@
 #define APPLICATION_H_
 
 #include "EventManager.h"
+#include "InputManager.h"
 #include "TaskManager.h"
 
 #include <memory>
@@ -18,10 +19,13 @@ namespace pdEngine
         EventManager_sptr               eventManager;
         // Graphics_sptr                   graphicsEngine;
         ApplicatioImpl_sptr             pimpl;
+        InputManager_sptr               inputManager;
 
 	public:
 		Application();
 		virtual ~Application();
+
+        virtual InputManager_sptr getInputManager();
 
         void addSubsystem(Task_sptr);
 

@@ -11,14 +11,22 @@ namespace pdEngine
 
     ApplicationImpl::~ApplicationImpl()
     {
+        if (window != nullptr)
+            SDL_DestroyWindow(window);
+
+        SDL_Quit();
     }
 
-    void ApplicationImpl::init()
+    bool ApplicationImpl::init()
     {
-        initSDL();
+        if ( !initSDL() )
+        {
+            return false;
+        }
+        return true;
     }
 
-    void ApplicationImpl::initSDL()
+    bool ApplicationImpl::initSDL()
     {
         auto logger = LOGGER;
         logger->debug("Initializing SDL");
@@ -27,7 +35,26 @@ namespace pdEngine
         {
             logger->error("SDL_Init error: {}", 1);
             logger->error() << SDL_GetError() << 1;
-            exit(-1);
+            return false;
         }
+
+        window = SDL_CreateWindow("Hello World!", 
+                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                window_width, window_height, 
+                SDL_WINDOW_SHOWN);
+
+        if (window == nullptr)
+        {
+            logger->error("SDL_CreateWindow Error: {}", 1);
+            logger->error() << SDL_GetError() << 1;
+            return false;
+        }
+
+        screenSurface = SDL_GetWindowSurface(window);
+        SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) ); 
+        SDL_UpdateWindowSurface( window ); 
+        SDL_Delay( 2000 );
+
+        return true;
     }
 }

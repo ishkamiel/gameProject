@@ -12,18 +12,18 @@ namespace pdEngine
         ApplicationImpl();
         ~ApplicationImpl();
 
-        void init();
+        bool init();
 
     protected:
 
     private:
-        int screen_width = 640;
-        int screen_height = 480;
+        int window_width = 640;
+        int window_height = 480;
 
         SDL_Window* window = nullptr;
         SDL_Surface* screenSurface = nullptr;
 
-        void initSDL();
+        bool initSDL();
     };
 }
 

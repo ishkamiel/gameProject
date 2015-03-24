@@ -32,9 +32,13 @@ namespace pdEngine
         LOGGER_SET_DEBUG(logger);
 
         logger->info("Initializing pdEngine application..");
-        pimpl->init();
+
+        if ( !pimpl->init() ) 
+        {
+            return false;
+        }
         // eventManager->init();
-        taskManager->init();
+        // taskManager->init();
 
         return(true);
     }
@@ -48,6 +52,12 @@ namespace pdEngine
     void Application::shutdown()
 	{
 	}
+
+    InputManager_sptr Application::getInputManager()
+    {
+        return nullptr;
+        //return std::make_shared<InputManager>(new InputManager(eventManager));
+    }
 
     bool Application::initGraphics()
     {
