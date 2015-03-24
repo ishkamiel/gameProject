@@ -7,9 +7,8 @@
 
 #include "Application.h"
 #include "ApplicationImpl.h"
+#include "Logger.h"
 #include "TaskManager.h"
-
-#include "spdlog/spdlog.h"
 
 namespace pdEngine
 {
@@ -29,7 +28,9 @@ namespace pdEngine
 
     bool Application::init()
     {
-        auto logger = spdlog::stderr_logger_mt("pdengine");
+        auto logger = MK_LOGGER;
+        LOGGER_SET_DEBUG(logger);
+
         logger->info("Initializing pdEngine application..");
         pimpl->init();
         // eventManager->init();
