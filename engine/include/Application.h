@@ -11,11 +11,16 @@
 
 namespace pdEngine
 {
+    class ApplicationImpl;
+
+    using App_sptr = std::shared_ptr<ApplicationImpl>;
+
 	class Application
 	{
 		std::unique_ptr<TaskManager>    taskManager;
         EventManager_sptr               eventManager;
         Graphics_sptr                   graphicsEngine;
+        App_sptr                        appimpl;
 
 	public:
 		Application();
