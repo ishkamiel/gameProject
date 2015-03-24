@@ -90,15 +90,15 @@ flags = [
 '-isystem',
 '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include',
 '-I',
-'./include',
+'./engine/include',
 '-I',
-'./../utils/include',
+'./utils/include',
 '-I',
-'/usr/local/include/OGRE',
+'./demo/include',
 '-I',
-'/usr/local/include/OGRE/Overlay',
+'./lib/spdlog/include',
 '-I',
-'/usr/include/ois'
+'/usr/include/SDL2',
 ]
 
 

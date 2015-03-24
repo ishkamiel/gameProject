@@ -6,27 +6,41 @@
  */
 
 #include "Application.h"
+#include "ApplicationImpl.h"
+#include "TaskManager.h"
+
+#include "spdlog/spdlog.h"
 
 namespace pdEngine
 {
     Application::Application() :
         taskManager(new TaskManager()),
-        eventManager(new EventManager())
+        eventManager(new EventManager()),
+        pimpl(new ApplicationImpl())
     {}
 
     Application::~Application()
     {}
 
+    void Application::addSubsystem(Task_sptr ptr)
+    {
+        taskManager->addTask(ptr);
+    }
+
     bool Application::init()
     {
-        log()->info("Initializing pdEngine application..");
+        auto logger = spdlog::stderr_logger_mt("pdengine");
+        logger->info("Initializing pdEngine application..");
+        pimpl->init();
+        // eventManager->init();
+        taskManager->init();
 
         return(true);
     }
 
     bool Application::start()
     {
-        log()->info("Starting pdEngine application...");
+        spdlog::get("pdengine")->info("Starting pdEngine application...");
         return(true);
     }
     

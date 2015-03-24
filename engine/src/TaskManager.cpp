@@ -6,6 +6,11 @@ namespace pdEngine
 	{}
 	
 	TaskManager::~TaskManager() {}
+
+    void TaskManager::init()
+    {
+        //TODO
+    }
 	
 	void TaskManager::updateTasks(TimeDelta timeDelta)
 	{

@@ -3,24 +3,25 @@ project(pdEngine)
 file(GLOB MY_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB MY_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-#find_package(SDL)
-#find_package(CEGUI)
+find_package(SDL2)
+find_package(Spdlog)
+
+set(PDENGINE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
  
 include_directories( 
-    "include"
-    "../utils/include"
-    ${SDL_INCLUDES} 
-    ${CEGUI_INCLUDES}
+    ${PDENGINE_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIR} 
+    ${Spdlog_INCLUDE_DIR}
+    #${CEGUI_INCLUDES}
     )
 
 add_library(pdEngine SHARED
-    ${MY_HEADER_FILES} 
     ${MY_SOURCE_FILES} 
     )
 
 target_link_libraries( 
     pdEngine 
-    pdUtils 
-    ${SDL_LIBRARIES}
-    ${CEGUI_LIBRARIES}
+    #pdUtils 
+    ${SDL2_LIBRARY}
+    #${CEGUI_LIBRARIES}
     )

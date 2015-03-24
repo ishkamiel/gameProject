@@ -8,7 +8,6 @@
 #ifndef PDENGINE_TASKMANAGER_H_
 #define PDENGINE_TASKMANAGER_H_
 
-#include "General.h"
 #include "Task.h"
 
 #include <vector>
@@ -22,6 +21,8 @@ namespace pdEngine
 	public:
 		TaskManager();
 		~TaskManager();
+
+        void init();
 
 		void addTask(Task_sptr);
 
