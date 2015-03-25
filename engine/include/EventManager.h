@@ -19,7 +19,7 @@ namespace pdEngine
     class EventManager;
     using EventManager_sptr = std::shared_ptr<EventManager>;
     using EventListenerList = std::vector<EventListener_wptr>;
-    using EventDataQueue = std::queue<EventData>;
+    using EventDataQueue = std::queue<EventData_sptr>;
 
     class EventManager : public Task
     {
@@ -33,11 +33,11 @@ namespace pdEngine
 
         void onUpdate(TimeDelta) override;
 
-        void queueEvent(const EventData&);
+        void queueEvent(const EventData_sptr);
 
-        void addListener(const EventTypeName&, EventListener_sptr);
-        void addListener(const EventTypeID&, EventListener_sptr);
-        void removeListener(const EventTypeID&, EventListener_sptr);
+        void addListener(const EventTypeName, EventListener_sptr);
+        void addListener(const EventTypeID, EventListener_sptr);
+        void removeListener(const EventTypeID, EventListener_sptr);
     };
 }
 

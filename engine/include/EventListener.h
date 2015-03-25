@@ -8,7 +8,7 @@
 
 namespace pdEngine
 {
-    using EventListener = std::function<bool(EventData&)>;
+    using EventListener = std::function<bool(EventData_sptr)>;
     using EventListener_sptr = std::shared_ptr<EventListener>;
     using EventListener_wptr = std::weak_ptr<EventListener>;
 
