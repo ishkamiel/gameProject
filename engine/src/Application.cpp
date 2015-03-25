@@ -37,6 +37,7 @@ namespace pdEngine
         {
             return false;
         }
+        taskManager->addTask(new InputManager(eventManager));
         // eventManager->init();
         // taskManager->init();
 

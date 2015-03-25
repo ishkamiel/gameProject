@@ -17,6 +17,7 @@ namespace pdEngine
 	class EventListener;
 	class EventManager;
 	
+	typedef unsigned int                      EventID;
 	typedef std::shared_ptr<std::string>      EventData;
 	typedef std::function<bool(EventData)>    ListenerFunction;
 	typedef std::shared_ptr<ListenerFunction> ListenerFunction_sptr;

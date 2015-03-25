@@ -21,7 +21,6 @@ namespace pdEngine
     // constexpr short MAX_PATH = 100;
     //
 	typedef int long TimeDelta;
-	typedef unsigned int EventID;
 	//
 	// using pdUtils::log;
 }
