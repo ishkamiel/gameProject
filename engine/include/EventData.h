@@ -5,12 +5,15 @@
 
 namespace pdEngine
 {
+    class EventData;
+    using EventData_sptr = std::shared_ptr<EventData>;
+
     class EventData
     {
-        public:
-            virtual const EventTypeID& getEventTypeID(void) const =0;
-            virtual const EventTypeName& getEventTypeName(void) const =0;
-            virtual float getTimestamp(void) const =0;
+    public:
+        virtual const EventTypeID& getEventTypeID(void) const =0;
+        virtual const EventTypeName& getEventTypeName(void) const =0;
+        virtual float getTimestamp(void) const =0;
     };
 
     class BaseEventData : public EventData
@@ -18,7 +21,7 @@ namespace pdEngine
         const EventTypeID id;
         const EventTypeName name;
 
-        public:
+    public:
         BaseEventData(void) =delete;
         BaseEventData(const EventTypeName&);
 

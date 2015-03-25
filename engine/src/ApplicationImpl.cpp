@@ -3,9 +3,9 @@
 
 #include <SDL.h>
 
-namespace pdEngine 
+namespace pdEngine
 {
-    ApplicationImpl::ApplicationImpl() 
+    ApplicationImpl::ApplicationImpl()
     {
     }
 
@@ -13,6 +13,7 @@ namespace pdEngine
     {
         if (window != nullptr)
             SDL_DestroyWindow(window);
+
 
         SDL_Quit();
     }
@@ -28,19 +29,19 @@ namespace pdEngine
 
     bool ApplicationImpl::initSDL()
     {
-        auto logger = LOGGER;
+        auto logger = GET_LOGGER();
         logger->debug("Initializing SDL");
 
-        if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+        if (SDL_Init(SDL_INIT_VIDEO) != 0)
         {
             logger->error("SDL_Init error: {}", 1);
             logger->error() << SDL_GetError() << 1;
             return false;
         }
 
-        window = SDL_CreateWindow("Hello World!", 
+        window = SDL_CreateWindow("Hello World!",
                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                window_width, window_height, 
+                window_width, window_height,
                 SDL_WINDOW_SHOWN);
 
         if (window == nullptr)
@@ -51,8 +52,8 @@ namespace pdEngine
         }
 
         screenSurface = SDL_GetWindowSurface(window);
-        SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) ); 
-        SDL_UpdateWindowSurface( window ); 
+        SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+        SDL_UpdateWindowSurface( window );
         SDL_Delay( 2000 );
 
         return true;

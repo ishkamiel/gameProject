@@ -10,6 +10,8 @@
 #include "Logger.h"
 #include "TaskManager.h"
 
+#include <memory>
+
 namespace pdEngine
 {
     Application::Application() :
@@ -28,7 +30,7 @@ namespace pdEngine
 
     bool Application::init()
     {
-        auto logger = MK_LOGGER;
+        auto logger = MK_LOGGER();
         LOGGER_SET_DEBUG(logger);
 
         logger->info("Initializing pdEngine application..");
@@ -37,7 +39,7 @@ namespace pdEngine
         {
             return false;
         }
-        taskManager->addTask(new InputManager(eventManager));
+        //taskManager->addTask(std::make_shared(new InputManager(eventManager)));
         // eventManager->init();
         // taskManager->init();
 

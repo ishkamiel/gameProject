@@ -1,5 +1,4 @@
 #include "EventManager.h"
-
 #include "Logger.h"
 
 #include <assert.h>
@@ -19,30 +18,31 @@ namespace pdEngine
     void EventManager::onUpdate(TimeDelta timeDelta)
     {
         (void)timeDelta;
-
-        std::swap(eventQueueIn, eventQueueOut);
-
-        while (eventQueueOut.size() > 0)
-        {
-            EventData& data = eventQueueOut.pop();
-
-            auto f = eventMap.find(data.getEventTypeID());
-            if (f == eventMap.end()) continue;
-
-            auto list = f->second;
-            auto iterator = list.begin();
-
-            while (iterator != list.end())
-            {
-                if (iterator->expired())
-                {
-                    list.erase(iterator++);
-                    continue;
-                }
-                (*iterator->lock())(data);
-                ++iterator;
-            }
-        }
+        //
+        // std::swap(eventQueueIn, eventQueueOut);
+        //
+        // while (eventQueueOut.size() > 0)
+        // {
+        //     auto data = eventQueueOut.front();
+        //     eventQueueIn.pop();
+        //
+        //     auto f = eventMap.find(data.getEventTypeID());
+        //     if (f == eventMap.end()) continue;
+        //
+        //     auto list = f->second;
+        //     auto iterator = list.begin();
+        //
+        //     while (iterator != list.end())
+        //     {
+        //         if (iterator->expired())
+        //         {
+        //             list.erase(iterator++);
+        //             continue;
+        //         }
+        //         (*iterator->lock())(data);
+        //         ++iterator;
+        //     }
+        // }
     }
 
     void EventManager::queueEvent(const EventData& eventData)
@@ -70,10 +70,10 @@ namespace pdEngine
             const EventTypeID& id, 
             EventListener_sptr listener)
     {
-        auto f = eventMap.find(id);
-        if (f == eventMap.end()) return;
-
-        auto list = f->second;
-        std::remove(list.begin(), list.end(), listener);
+        // auto f = eventMap.find(id);
+        // if (f == eventMap.end()) return;
+        //
+        // auto list = f->second;
+        // std::remove(list.begin(), list.end(), listener);
     }
 }

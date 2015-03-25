@@ -19,11 +19,11 @@ namespace pdEngine
     class EventManager;
     using EventManager_sptr = std::shared_ptr<EventManager>;
     using EventListenerList = std::vector<EventListener_wptr>;
-    using EventDataQueue = std::queue<EventData&>;
+    using EventDataQueue = std::queue<EventData>;
 
     class EventManager : public Task
     {
-        std::map<EventTypeID, EventListenerList> eventMap;
+        std::map<EventTypeID, EventListenerList> eventMap {};
         EventDataQueue eventQueueIn {};
         EventDataQueue eventQueueOut {};
 
