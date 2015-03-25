@@ -1,7 +1,8 @@
 #ifndef EVENTMANAGER_H_
 #define EVENTMANAGER_H_
 
-#include "General.h"
+#include "Events.h"
+#include "EventListener.h"
 #include "Task.h"
 
 #include <functional>
@@ -14,39 +15,11 @@
 
 namespace pdEngine
 {
-	class EventListener;
 	class EventManager;
-	
-	typedef unsigned int                      EventID;
-	typedef std::shared_ptr<std::string>      EventData;
-	typedef std::function<bool(EventData)>    ListenerFunction;
-	typedef std::shared_ptr<ListenerFunction> ListenerFunction_sptr;
-	typedef std::weak_ptr<ListenerFunction>   ListenerFunction_wptr;
-	typedef std::unique_ptr<EventListener> 	  EventListener_uptr;
-    typedef std::shared_ptr<EventManager>     EventManager_sptr;
-
-	class EventListener
-	{
-		friend class EventManager;
-
-		EventManager*           eventManager;
-		EventID                 eventID;
-		ListenerFunction_wptr   listenerFunction;
-
-	public:
-		EventID getEventID() const;
-		void cancel();
-		~EventListener();
-
-	private:
-		EventListener();
-		EventListener(EventManager*, const EventID, ListenerFunction_wptr);
-	};
+    using EventManager_sptr = std::shared_ptr<EventManager>;
 	
     class EventManager : public Task
     {
-        friend class EventListener;
-
         struct PendingEvent
         {
             EventID   id;
@@ -65,13 +38,16 @@ namespace pdEngine
         EventManager();
         ~EventManager();
 
-        void fireEvent(EventID, EventData);
         void onUpdate(TimeDelta) override;
-        EventListener_uptr createListener(const EventID, ListenerFunction);
+
+        int fireEvent(const EventID&, EventData);
+        int fireEvent(const EventName&, EventData);
+
+        EventListener addListener(const EventName&, ListenerFunction);
+        EventListener addListener(const EventID, ListenerFunction);
+        bool removeListener(const EventID, ListenerFunction_sptr);
 
     private:
-        void addListener(const EventID, ListenerFunction);
-        void removeListener(const EventID, ListenerFunction_sptr);
     };
 }
 
