@@ -9,23 +9,34 @@ namespace pdEngine
 
     void TaskManager::init()
     {
-        //TODO
+        for (auto t : taskList)
+        {
+            t->onInit();
+        }
     }
 	
 	void TaskManager::updateTasks(TimeDelta timeDelta)
 	{
-        //TODO
-        --timeDelta;
+        for (auto t : taskList)
+        {
+            t->onUpdate(timeDelta);
+        }
     }
 	
 	void TaskManager::pauseTasks()
 	{
-        //TODO
+        for (auto t : taskList)
+        {
+            t->pause();
+        }
     }
 
 	void TaskManager::unPauseTasks()
 	{
-        //TODO
+        for (auto t : taskList)
+        {
+            t->unPause();
+        }
     }
 	
 	void TaskManager::addTask(Task_sptr newTask)

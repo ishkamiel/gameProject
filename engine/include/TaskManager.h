@@ -31,6 +31,8 @@ namespace pdEngine
 		void unPauseTasks();
 		
 	private:
+        TimeDelta previous;
+        bool paused;
 	};
 }
 
