@@ -5,7 +5,6 @@
 
 #include <string>
 
-
 namespace pdEngine
 {
     using EventListener = std::function<bool(EventData_sptr)>;
@@ -17,7 +16,6 @@ namespace pdEngine
 
 namespace pdEngine
 {
-
     EventListener_sptr createListenerPtr(EventListener listener)
     {
         return std::make_shared<EventListener>(listener);

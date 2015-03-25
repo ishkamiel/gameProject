@@ -1,12 +1,17 @@
 #ifndef PDENGINE_EVENTDATA_H_
 #define PDENGINE_EVENTDATA_H_
 
-#include "Events.h"
+#include <memory>
+#include <string>
 
 namespace pdEngine
 {
     class EventData;
     using EventData_sptr = std::shared_ptr<EventData>;
+    using EventTypeName = std::string;
+    using EventTypeID = std::size_t;
+
+    inline EventTypeID getEventID(const EventTypeName&);
 
     class EventData
     {
@@ -33,6 +38,12 @@ namespace pdEngine
 
 namespace pdEngine
 {
+    EventTypeID getEventID(const EventTypeName& eventName)
+    {
+        static std::hash<EventTypeName> hasher;
+        return hasher(eventName);
+    }
+
     inline const EventTypeID& BaseEventData::getEventTypeID(void) const 
     {
         return id;

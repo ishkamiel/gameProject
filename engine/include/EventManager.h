@@ -1,7 +1,6 @@
-#ifndef EVENTMANAGER_H_
-#define EVENTMANAGER_H_
+#ifndef PDENGINE_EVENTMANAGER_H_
+#define PDENGINE_EVENTMANAGER_H_
 
-#include "Events.h"
 #include "EventData.h"
 #include "EventListener.h"
 #include "Task.h"
@@ -29,6 +28,7 @@ namespace pdEngine
 
     public:
         EventManager();
+        EventManager(TimeDelta updateInterval);
         ~EventManager();
 
         void onUpdate(TimeDelta) override;
@@ -38,8 +38,11 @@ namespace pdEngine
         void addListener(const EventTypeName, EventListener_sptr);
         void addListener(const EventTypeID, EventListener_sptr);
         void removeListener(const EventTypeID, EventListener_sptr);
+
+    private:
+        TimeDelta updateInterval {10 };
+        TimeDelta lastUpdate = { 0 };
     };
 }
 
-#endif
-
+#endif /* PDENGINE_EVENTMANAGER_H_ */

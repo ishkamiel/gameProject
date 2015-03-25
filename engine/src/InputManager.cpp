@@ -18,5 +18,6 @@ namespace pdEngine
 
     void InputManager::onInit(void) 
     {
+        // TODO setup sdl event stuff here
     }
 }

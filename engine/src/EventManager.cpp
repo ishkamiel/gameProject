@@ -9,11 +9,14 @@ namespace pdEngine
     EventManager::EventManager()
     {}
 
+    EventManager::EventManager(TimeDelta updateInterval)
+        : updateInterval(updateInterval)
+    {}
+
     EventManager::~EventManager()
     {
-        //TODO
+        //TODO Do we need to clean something up?
     }
-
 
     void EventManager::onUpdate(TimeDelta timeDelta)
     {
