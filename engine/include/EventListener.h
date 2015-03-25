@@ -1,30 +1,28 @@
 #ifndef PDENGINE_EVENTLISTENER_H_
 #define PDENGINE_EVENTLISTENER_H_
 
-#include "EventManager.h"
-#include "Events.h"
+#include "EventData.h"
+
+#include <string>
+
 
 namespace pdEngine
 {
-    class EventListener;
-	using EventListener_sptr =  std::unique_ptr<EventListener>;
+    using EventListener = std::function<bool(EventData&)>;
+    using EventListener_sptr = std::shared_ptr<EventListener>;
+    using EventListener_wptr = std::weak_ptr<EventListener>;
 
-    class EventListener
-    {
-        EventManager*           eventManager;
-        EventID                 eventID;
-        ListenerFunction_wptr   listenerFunction;
-
-    public:
-        EventID getEventID() const;
-        EventName getEventName() const;
-        void cancel();
-        ~EventListener();
-
-    protected:
-        EventListener() =delete;
-        EventListener(EventManager*, const EventID, ListenerFunction_wptr);
-    };
+    inline EventListener_sptr createListenerPtr(EventListener);
 }
+
+namespace pdEngine
+{
+
+    EventListener_sptr createListenerPtr(EventListener listener)
+    {
+        return std::make_shared<EventListener>(listener);
+    }
+}
+
 
 #endif /* PDENGINE_EVENTLISTENER_H_ */

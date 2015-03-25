@@ -2,6 +2,7 @@
 #define EVENTMANAGER_H_
 
 #include "Events.h"
+#include "EventData.h"
 #include "EventListener.h"
 #include "Task.h"
 
@@ -15,24 +16,16 @@
 
 namespace pdEngine
 {
-	class EventManager;
+    class EventManager;
     using EventManager_sptr = std::shared_ptr<EventManager>;
-	
+    using EventListenerList = std::vector<EventListener_wptr>;
+    using EventDataQueue = std::queue<EventData&>;
+
     class EventManager : public Task
     {
-        struct PendingEvent
-        {
-            EventID   id;
-            EventData data;
-        };
-            
-        typedef std::vector<ListenerFunction_sptr> 	DelegateVector;
-        typedef std::map<EventID, DelegateVector> 	EventListenerMap;
-        typedef std::queue<PendingEvent> 			EventQueue;
-
-        EventListenerMap    eventListeners  {};
-        EventQueue          eventQueueIn    {};
-        EventQueue          eventQueueOut   {};
+        std::map<EventTypeID, EventListenerList> eventMap;
+        EventDataQueue eventQueueIn {};
+        EventDataQueue eventQueueOut {};
 
     public:
         EventManager();
@@ -40,14 +33,11 @@ namespace pdEngine
 
         void onUpdate(TimeDelta) override;
 
-        int fireEvent(const EventID&, EventData);
-        int fireEvent(const EventName&, EventData);
+        void queueEvent(const EventData&);
 
-        EventListener addListener(const EventName&, ListenerFunction);
-        EventListener addListener(const EventID, ListenerFunction);
-        bool removeListener(const EventID, ListenerFunction_sptr);
-
-    private:
+        void addListener(const EventTypeName&, EventListener_sptr);
+        void addListener(const EventTypeID&, EventListener_sptr);
+        void removeListener(const EventTypeID&, EventListener_sptr);
     };
 }
 

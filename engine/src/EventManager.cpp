@@ -1,53 +1,79 @@
 #include "EventManager.h"
 
-#include <assert.h>
+#include "Logger.h"
 
+#include <assert.h>
 #include <algorithm>
 
 namespace pdEngine
 {
-	EventManager::EventManager()
-	{}
-	
-	EventManager::~EventManager()
-	{
-		//TODO
-	}
+    EventManager::EventManager()
+    {}
 
-	void EventManager::fireEvent(EventID id, EventData eventData)
-	{
-        //auto pair = std::make_pair<EventID, EventData>(id, eventData);
-		eventQueueIn.push({id, eventData});
-	}
-
-	void EventManager::onUpdate(TimeDelta timeDelta)
-	{
+    EventManager::~EventManager()
+    {
         //TODO
-        timeDelta--;
-	}
+    }
 
-	EventListener_uptr EventManager::createListener(EventID eventID, ListenerFunction eld)
-	{
-        auto l_ptr = std::make_shared<ListenerFunction>(eld);
-		auto list = eventListeners[eventID];
-		list.push_back(l_ptr);
 
-        EventListener_uptr retval { new EventListener(this, eventID, l_ptr) };
-        return retval;
-	}
+    void EventManager::onUpdate(TimeDelta timeDelta)
+    {
+        (void)timeDelta;
 
-	void EventManager::removeListener(const EventID id, ListenerFunction_sptr listener)
-	{
-		auto foundList = eventListeners.find(id);
+        std::swap(eventQueueIn, eventQueueOut);
 
-		if (foundList == eventListeners.end())
-			return;
+        while (eventQueueOut.size() > 0)
+        {
+            EventData& data = eventQueueOut.pop();
 
-		auto list = foundList->second;
+            auto f = eventMap.find(data.getEventTypeID());
+            if (f == eventMap.end()) continue;
+
+            auto list = f->second;
+            auto iterator = list.begin();
+
+            while (iterator != list.end())
+            {
+                if (iterator->expired())
+                {
+                    list.erase(iterator++);
+                    continue;
+                }
+                (*iterator->lock())(data);
+                ++iterator;
+            }
+        }
+    }
+
+    void EventManager::queueEvent(const EventData& eventData)
+    {
+        eventQueueIn.push(eventData);
+    }
+
+    void EventManager::addListener(
+            const EventTypeName& eventName, 
+            EventListener_sptr listener)
+    {
+        addListener(getEventID(eventName), listener);
+    }
+
+    void EventManager::addListener(
+            const EventTypeID& eventID,
+            EventListener_sptr listener)
+    {
+        auto list = eventMap[eventID];
+
+        list.push_back(listener);
+    }
+
+    void EventManager::removeListener(
+            const EventTypeID& id, 
+            EventListener_sptr listener)
+    {
+        auto f = eventMap.find(id);
+        if (f == eventMap.end()) return;
+
+        auto list = f->second;
         std::remove(list.begin(), list.end(), listener);
-	}
-
-	/*
-	 * EventListener
-	 */
+    }
 }

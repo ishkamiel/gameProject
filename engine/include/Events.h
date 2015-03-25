@@ -7,24 +7,20 @@
 
 namespace pdEngine
 {
-    using EventName = std::string;
-    using EventID = std::size_t;
-    using EventData = std::shared_ptr<std::string>;
+    using EventTypeName = std::string;
+    using EventTypeID = std::size_t;
 
-    using EventListener = std::function<bool(EventData)>;
-    using EventListener_sptr = std::shared_ptr<EventListener>;
-    using EventListener_wptr = std::weak_ptr<EventListener>;
-
-    inline EventID getEventID(const EventName&);
+    inline EventTypeID getEventID(const EventTypeName&);
 }
 
 namespace pdEngine
 {
-    EventID getEventID(const EventName& eventName)
+    EventTypeID getEventID(const EventTypeName& eventName)
     {
-        static std::hash<EventName> hasher;
+        static std::hash<EventTypeName> hasher;
         return hasher(eventName);
     }
+
 }
 
 #endif /* PDENGINE_EVENTS_H */
