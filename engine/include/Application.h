@@ -1,6 +1,7 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
+#include "Event.h"
 #include "EventManager.h"
 #include "InputManager.h"
 #include "TaskManager.h"
@@ -34,13 +35,16 @@ namespace pdEngine
 		bool start();
 		void shutdown();
 
-        void onQuit();
+        bool onShutdown(Event_sptr e);
+        bool onRequestQuit(Event_sptr e);
 
     protected:
         virtual bool initGraphics();
 
 	private:
-        EventManager_sptr initEventManager();
+        bool setupTaskManager();
+        bool setupApplicationImpl();
+        bool setupEventManager();
 	};
 }
 

@@ -1,7 +1,8 @@
+#include "EventBasic.h"
 #include "EventManager.h"
 #include "Logger.h"
 
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <memory>
 
@@ -28,77 +29,107 @@ namespace pdEngine
     {
         (void)timeDelta;
 
-        std::swap(eventQueueIn, eventQueueOut);
+        if (eventQueueIn.size() == 0) return;
+        auto log = GET_LOGGER();
+        log->debug("EventManager processinging queued events");
 
-        while (eventQueueOut.size() > 0)
+        std::swap(eventQueueIn, eventsProcessing);
+
+        while (eventsProcessing.size() > 0)
         {
-            auto data = eventQueueOut.front();
-            eventQueueIn.pop();
+            auto data = eventsProcessing.front();
+            eventsProcessing.pop();
 
-            auto f = eventMap.find(data->getEventTypeID());
-            if (f == eventMap.end()) continue;
+            assert(data != nullptr);
+            log->debug("Processing event of type {}", data->getTypeID());
 
-            auto list = f->second;
-            auto iterator = list.begin();
-
-            while (iterator != list.end())
+            auto list = findEventList(data->getTypeID());
+            if (list != nullptr) 
             {
-                if (iterator->expired())
+                log->debug("Found {} listeners", list->size());
+
+                for (auto i : *list)
                 {
-                    list.erase(iterator++);
-                    continue;
+                    log->debug("Trying to call listener");
+                    i(data);
                 }
-                (*iterator->lock())(data);
-                ++iterator;
             }
         }
     }
 
-    void EventManager::queueEvent(const EventData_sptr eventDataPtr)
+    void EventManager::queueEvent(const EventTypeID id)
+    {
+        eventQueueIn.push(std::make_shared<EventBasic>(id));
+    }
+
+    void EventManager::queueEvent(const Event_sptr eventDataPtr)
     {
         eventQueueIn.push(eventDataPtr);
     }
 
     void EventManager::addListener(
             const EventTypeName eventName, 
-            EventListener_sptr listener)
+            EventListener listener)
     {
         addListener(getEventID(eventName), listener);
     }
 
     void EventManager::addListener(
             const EventTypeID eventID,
-            EventListener_sptr listener)
+            EventListener listener)
     {
-        auto list = eventMap[eventID];
+        auto log = GET_LOGGER();
 
-        list.push_back(listener);
+        auto list = findEventList(eventID, true);
+        assert(list != nullptr);
+
+        list->push_back(listener);
+        assert(list->size() != 0);
+        assert(list->size() == eventMap[eventID]->size());
+
+        log->debug("Added listener for event, EventTypeID {}", eventID, "\n");
     }
 
-    void EventManager::removeListener(
-            const EventTypeID id, 
-            EventListener_sptr listener)
+    // void EventManager::removeListener(
+    //         const EventTypeID id, 
+    //         EventListener listener)
+    // {
+    //     auto f = eventMap.find(id);
+    //     if (f == eventMap.end()) return;
+    //
+    //     auto list = f->second;
+    //
+    //     //listener.reset();
+    //
+    //     //TODO check on weak_ptr == shared_ptr comparison.
+    //
+    //     //this is kinda useless since we only do a search for expired weak
+    //     //pointer, which is useless while we hold a corresponding shared_ptr 
+    //
+    //     auto iterator = list.begin();
+    //     while (iterator != list.end())
+    //     {
+    //         if (iterator->expired())
+    //             list.erase(iterator++);
+    //         else 
+    //             ++iterator;
+    //     }
+    // }
+
+    EventListenerList* EventManager::findEventList(EventTypeID id, bool create)
     {
         auto f = eventMap.find(id);
-        if (f == eventMap.end()) return;
-
-        auto list = f->second;
-
-        listener.reset();
-
-        //TODO check on weak_ptr == shared_ptr comparison.
-
-        //this is kinda useless since we only do a search for expired weak
-        //pointer, which is useless while we hold a corresponding shared_ptr 
-
-        auto iterator = list.begin();
-        while (iterator != list.end())
+        if (f == eventMap.end()) 
         {
-            if (iterator->expired())
-                list.erase(iterator++);
-            else 
-                ++iterator;
+            if (create)
+            {
+                eventMap.insert(EventMapPair(id, new EventListenerList()));
+                return findEventList(id);
+            }
+            return nullptr;
         }
+
+        return f->second;
     }
 
     EventManager_sptr getEventManager()

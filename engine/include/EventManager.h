@@ -1,7 +1,7 @@
 #ifndef PDENGINE_EVENTMANAGER_H_
 #define PDENGINE_EVENTMANAGER_H_
 
-#include "EventData.h"
+#include "Event.h"
 #include "EventListener.h"
 #include "Task.h"
 
@@ -17,15 +17,19 @@ namespace pdEngine
 {
     class EventManager;
     using EventManager_sptr = std::shared_ptr<EventManager>;
-    using EventListenerList = std::vector<EventListener_wptr>;
-    using EventDataQueue = std::queue<EventData_sptr>;
+    using EventListenerList = std::vector<EventListener>;
+    using EventDataQueue = std::queue<Event_sptr>;
 
 
     class EventManager : public Task
     {
-        std::map<EventTypeID, EventListenerList> eventMap {};
+        using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
+
+        std::map<EventTypeID, EventListenerList*> eventMap {};
         EventDataQueue eventQueueIn {};
-        EventDataQueue eventQueueOut {};
+        EventDataQueue eventsProcessing {};
+        TimeDelta updateInterval {10 };
+        TimeDelta lastUpdate = { 0 };
 
     public:
         EventManager();
@@ -35,15 +39,15 @@ namespace pdEngine
         void onInit() override;
         void onUpdate(TimeDelta) override;
 
-        void queueEvent(const EventData_sptr);
+        void queueEvent(const Event_sptr);
+        void queueEvent(const EventTypeID);
 
-        void addListener(const EventTypeName, EventListener_sptr);
-        void addListener(const EventTypeID, EventListener_sptr);
-        void removeListener(const EventTypeID, EventListener_sptr);
+        void addListener(const EventTypeName, EventListener);
+        void addListener(const EventTypeID, EventListener);
+        //void removeListener(const EventTypeID, EventListener);
 
     private:
-        TimeDelta updateInterval {10 };
-        TimeDelta lastUpdate = { 0 };
+        EventListenerList* findEventList(EventTypeID, bool = false);
     };
 
     EventManager_sptr getEventManager();

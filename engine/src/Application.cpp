@@ -7,7 +7,7 @@
 
 #include "Application.h"
 #include "ApplicationImpl.h"
-#include "EventData.h"
+#include "Event.h"
 #include "Logger.h"
 #include "TaskManager.h"
 
@@ -35,41 +35,50 @@ namespace pdEngine
         auto log = MK_LOGGER();
         LOGGER_SET_DEBUG(log);
 
-        log->info("Initializing pdEngine");
+        log->info("Initializing Appllicatoin");
 
-        if ( !pimpl->init() ) 
-        {
-            log->error("initialization failed");
-            return false;
-        }
-
-        log->debug("Adding EventManager to main TaskManager");
-        taskManager->addTask(eventManager);
+        if (!setupTaskManager()) return false;
+        if (!setupApplicationImpl()) return false;
+        if (!setupEventManager()) return false;
 
         log->debug("Initializing main TaskManager");
         taskManager->init();
 
-        //taskManager->addTask(std::make_shared(new InputManager(eventManager)));
+        // taskManager->addTask(std::make_shared(new InputManager(eventManager)));
         // taskManager->init();
 
         return(true);
     }
 
-    EventManager_sptr Application::initEventManager()
+    bool Application::setupTaskManager()
     {
-        // EventManager_sptr em = getEventManager();
-        // auto listener = std::bind(&Application::shutdown, this);
-        // using EventListener_sptr = std::shared_ptr<EventListener>;
-        // using EventListener = std::function<bool(EventData_sptr)>;
+        return true;
+    }
 
+    bool Application::setupApplicationImpl()
+    {
+        auto log = GET_LOGGER();
 
-        EventListener listener = [this](EventData_sptr a) {
-            this.shtdown();
-        } 
+        if ( pimpl->init() ) 
+        {
+            return true;
+        }
+        log->error("initialization failed");
+        return false;
+    }
 
-        auto ptr = std::make_shared<EventListener>(listener);
-        em->addListener("QUIT", ptr);
-        return em;
+    bool Application::setupEventManager()
+    {
+        auto log = GET_LOGGER();
+
+        using namespace std::placeholders;
+
+        EventListener listener = std::bind(&Application::onRequestQuit, this, _1);
+        eventManager->addListener(ev_RequestQuit, listener);
+
+        log->debug("Adding EventManager to main TaskManager");
+        taskManager->addTask(eventManager);
+        return true;
     }
 
     bool Application::start()
@@ -82,8 +91,12 @@ namespace pdEngine
         auto i = 10;
         while (!doShutdown)
         {
+            log->debug("Main loop");
+
+            if (i == 5) eventManager->queueEvent(ev_RequestQuit);
+
             taskManager->updateTasks(1);
-            if (i == 5) eventManager->queueEvent(std::make_shared<BaseEventData>("QUIT"));
+
             if (--i < 0) shutdown();
         }
         log->info("Leaving main loop");
@@ -92,10 +105,10 @@ namespace pdEngine
     }
 
     void Application::shutdown()
-	{
+    {
         GET_LOGGER()->info("Requesting shutdown");
         doShutdown = true;
-	}
+    }
 
     InputManager_sptr Application::getInputManager()
     {
@@ -108,10 +121,21 @@ namespace pdEngine
         return(true);
     }
 
-    void Application::onQuit()
+    bool Application::onShutdown(Event_sptr e)
     {
+        (void) e;
+        GET_LOGGER()->debug("Recieved Shutdown event, shutting down");
         shutdown();
+        return true;
     }
-    
+
+    bool Application::onRequestQuit(Event_sptr e)
+    {
+        (void) e;
+        GET_LOGGER()->debug("Recieved RequestQuit event, trying to do clean quit");
+        shutdown();
+        return true;
+    }
+
 }
 
