@@ -16,7 +16,7 @@ namespace pdEngine
 	{
         using ApplicatioImpl_sptr = std::shared_ptr<ApplicationImpl>;
 
-        TimerFrequency                  updateFrequency {120};
+        TimerFrequency                  updateFrequency {240};
 
 		TaskManager_sptr                taskManager;
         EventManager_sptr               eventManager;

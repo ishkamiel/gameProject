@@ -99,22 +99,14 @@ namespace pdEngine
     {
         auto log = GET_LOGGER();
 
-        //auto start = now();
-        auto i = 100;
-
         auto timer = new Timer(updateFrequency);
         log->info("Entering main loop");
         while (!doShutdown)
         {
             auto deltaTime = timer->stepAndSleep();
-
             //DLOG("Main loop, timeDelta: {0}", deltaTime);
 
-            if (i == 5) eventManager->queueEvent(ev_RequestQuit);
-
             taskManager->updateTasks(deltaTime);
-
-            if (--i < 0) shutdown();
         }
         log->info("Leaving main loop after {0} milliseconds", timer->totalMilliseconds());
         delete timer;
