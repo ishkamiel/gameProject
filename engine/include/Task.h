@@ -44,6 +44,7 @@ namespace pdEngine
         inline bool isDead(void) const;
         inline bool isRemoveD(void) const;
         inline bool isPaused(void) const;
+        inline bool isUninitialized(void) const;
 
         void AttachChild(Task_sptr child);
         Task_sptr removeChild(void);
@@ -96,6 +97,11 @@ namespace pdEngine
     bool Task::isPaused(void) const 
     { 
         return (state == TaskState::paused); 
+    }
+
+    bool Task::isUninitialized(void) const
+    {
+        return (state == TaskState::uninitialized);
     }
 }
 

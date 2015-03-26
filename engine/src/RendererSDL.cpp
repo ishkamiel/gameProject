@@ -1,15 +1,15 @@
-#include "ApplicationImpl.h"
+#include "RendererSDL.h"
 #include "Logger.h"
 
 #include <SDL.h>
 
 namespace pdEngine
 {
-    ApplicationImpl::ApplicationImpl()
+    RendererSDL::RendererSDL()
     {
     }
 
-    ApplicationImpl::~ApplicationImpl()
+    RendererSDL::~RendererSDL()
     {
         if (window != nullptr)
             SDL_DestroyWindow(window);
@@ -17,21 +17,27 @@ namespace pdEngine
         SDL_Quit();
     }
 
-    bool ApplicationImpl::init()
+    void RendererSDL::onInit(void)
     {
-        if ( !initSDL() )
+        if (isUninitialized()) 
         {
-            return false;
+            if (!initSDL())
+                fail();
         }
-        return true;
     }
 
-    void ApplicationImpl::start()
+    void RendererSDL::onUpdate(TimeDelta delta)
     {
-
+        (void)delta;
     }
 
-    bool ApplicationImpl::initSDL()
+    void RendererSDL::render()
+    {
+        // TODO
+    }
+
+
+    bool RendererSDL::initSDL()
     {
         auto logger = GET_LOGGER();
         logger->debug("Initializing SDL");
@@ -58,7 +64,6 @@ namespace pdEngine
         screenSurface = SDL_GetWindowSurface(window);
         SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
         SDL_UpdateWindowSurface( window );
-        //SDL_Delay( 2000 );
 
         return true;
     }

@@ -19,26 +19,27 @@ namespace pdEngine
     class TaskManager;
     using TaskManager_sptr = std::shared_ptr<TaskManager>;
 
-	class TaskManager
-	{
-		std::vector<Task_sptr> taskList;
 
-	public:
-		TaskManager();
-		~TaskManager();
+    class TaskManager
+    {
+        std::vector<Task_sptr>      taskList;
+        TimeDelta                   previous;
+        bool                        paused;
+
+    public:
+        TaskManager();
+        ~TaskManager();
 
         void init();
 
-		void addTask(Task_sptr);
+        void addTask(Task_sptr);
 
-		void updateTasks(TimeDelta);
-		void pauseTasks();
-		void unPauseTasks();
-		
-	private:
-        TimeDelta previous;
-        bool paused;
-	};
+        void updateTasks(TimeDelta);
+        void pauseTasks();
+        void unPauseTasks();
+
+    private:
+    };
 }
 
 #endif /* PDENGINE_TASKMANAGER_H_ */

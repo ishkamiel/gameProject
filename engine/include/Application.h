@@ -4,24 +4,19 @@
 #include "Event.h"
 #include "EventManager.h"
 #include "InputManager.h"
+#include "Renderer.h"
 #include "TaskManager.h"
 
 #include <memory>
 
 namespace pdEngine
 {
-    class ApplicationImpl;
-
 	class Application
 	{
-        using ApplicatioImpl_sptr = std::shared_ptr<ApplicationImpl>;
-
         TimerFrequency                  updateFrequency {240};
 
 		TaskManager_sptr                taskManager;
-        EventManager_sptr               eventManager;
-        ApplicatioImpl_sptr             pimpl;
-        InputManager_sptr               inputManager;
+        Renderer_sptr                   renderer;
 
         bool doShutdown { false };
 
@@ -36,11 +31,17 @@ namespace pdEngine
 		void shutdown();
 
     protected:
-        bool setupTaskManager();
-        bool setupApplicationImpl();
-        bool setupEventManager();
-        bool setupInputManager();
+        virtual bool setupTaskManager(void);
+        virtual void shutdownTaskManager(void);
+        virtual bool setupRenderer(void);
+        virtual void shutdownRenderer(void);
+        virtual bool setupEventManager(void);
+        virtual void shutdownEventManager(void);
+        virtual bool setupInputManager(void);
+        virtual void shutdownInputManager(void);
+
 	private:
+        void registerListeners(void);
         bool onShutdown(Event_sptr e);
         bool onRequestQuit(Event_sptr e);
 	};

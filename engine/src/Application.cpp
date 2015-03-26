@@ -6,10 +6,10 @@
  */
 
 #include "Application.h"
-#include "ApplicationImpl.h"
 #include "Event.h"
 #include "InputManagerSDL.h"
 #include "Logger.h"
+#include "RendererSDL.h"
 #include "TaskManager.h"
 #include "Timer.h"
 
@@ -39,60 +39,22 @@ namespace pdEngine
         if (!setupTaskManager()) return false;
         if (!setupEventManager()) return false;
         if (!setupInputManager()) return false;
-        if (!setupApplicationImpl()) return false;
+        if (!setupRenderer()) return false;
 
-        log->debug("Initializing main TaskManager");
+        log->debug("Calling TaskManager->init() to initialize all subsystems");
         taskManager->init();
 
         return(true);
     }
 
-    bool Application::setupTaskManager()
+    void Application::shutdown()
     {
-        auto log = GET_LOGGER();
-        taskManager.reset(new TaskManager());
-
-        log->debug("TaskManager setup ok");
-        return true;
-    }
-
-    bool Application::setupApplicationImpl()
-    {
-        auto log = GET_LOGGER();
-        pimpl.reset(new ApplicationImpl());
-
-        if ( !pimpl->init() ) 
-        {
-            log->error("initialization failed");
-            return false;
-        }
-        log->debug("ApplicationImpl setup ok");
-        return true;
-    }
-
-    bool Application::setupEventManager()
-    {
-        auto log = GET_LOGGER();
-        eventManager = getEventManager();
-        eventManager.reset(new EventManager());
-
-        using namespace std::placeholders;
-        EventListener listener = std::bind(&Application::onRequestQuit, this, _1);
-        eventManager->addListener(ev_RequestQuit, listener);
-
-        log->debug("Adding EventManager to main TaskManager");
-        taskManager->addTask(eventManager);
-        return true;
-    }
-
-    bool Application::setupInputManager()
-    {
-        auto log = GET_LOGGER();
-        inputManager.reset(new InputManagerSDL(eventManager));
-
-        log->debug("Adding InputManager to main TaskManager");
-        taskManager->addTask(inputManager);
-        return true;
+        GET_LOGGER()->info("Shutting down");
+        shutdownRenderer();
+        shutdownInputManager();
+        shutdownEventManager();
+        shutdownTaskManager();
+        doShutdown = true;
     }
 
     bool Application::start()
@@ -107,6 +69,8 @@ namespace pdEngine
             //DLOG("Main loop, timeDelta: {0}", deltaTime);
 
             taskManager->updateTasks(deltaTime);
+
+            renderer->render();
         }
         log->info("Leaving main loop after {0} milliseconds", timer->totalMilliseconds());
         delete timer;
@@ -114,10 +78,70 @@ namespace pdEngine
         return(true);
     }
 
-    void Application::shutdown()
+    bool Application::setupTaskManager()
     {
-        GET_LOGGER()->info("Requesting shutdown");
-        doShutdown = true;
+        auto log = GET_LOGGER();
+        taskManager.reset(new TaskManager());
+        log->debug("Created TaskManager");
+
+        return true;
+    }
+
+    void Application::shutdownTaskManager()
+    {}
+
+    bool Application::setupRenderer()
+    {
+        auto log = GET_LOGGER();
+        renderer.reset(new RendererSDL());
+        log->debug("Created RendererSDL");
+
+
+        taskManager->addTask(renderer);
+        log->debug("RenderSDL added to main TaskManager");
+        return true;
+    }
+
+    void Application::shutdownRenderer()
+    {}
+
+    bool Application::setupEventManager()
+    {
+        auto log = GET_LOGGER();
+        auto em = getEventManager();
+        em.reset(new EventManager());
+        log->debug("Created EventManager");
+
+        taskManager->addTask(em);
+        log->debug("EventManager added to main TaskManager");
+        return true;
+    }
+
+    void Application::shutdownEventManager()
+    {}
+
+    bool Application::setupInputManager()
+    {
+        auto log = GET_LOGGER();
+        auto im = std::make_shared<InputManagerSDL>(getEventManager());
+        log->debug("Created InputManager");
+
+        taskManager->addTask(im);
+        log->debug("InputManagerladded to main TaskManager");
+        return true;
+    }
+
+    void Application::shutdownInputManager()
+    {}
+
+    void Application::registerListeners(void)
+    {
+        auto log = GET_LOGGER();
+        auto em = getEventManager();
+
+        using namespace std::placeholders;
+        EventListener listener = std::bind(&Application::onRequestQuit, this, _1);
+        em->addListener(ev_RequestQuit, listener);
     }
 
     bool Application::onShutdown(Event_sptr e)

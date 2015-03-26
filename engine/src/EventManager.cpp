@@ -59,7 +59,14 @@ namespace pdEngine
 
     void EventManager::queueEvent(const EventTypeID id)
     {
-        eventQueueIn.push(std::make_shared<EventBasic>(id));
+        DLOG("Queing event based on EventTypeID: {0}", id);
+        auto ptr = std::make_shared<EventBasic>(id);
+        DLOG("ptr made");
+        //assert(eventQueueIn != nullptr);
+        //eventQueueIn.push(std::make_shared<EventBasic>(id));
+        eventQueueIn.push(ptr);
+        DLOG("okay");
+
     }
 
     void EventManager::queueEvent(const Event_sptr eventDataPtr)

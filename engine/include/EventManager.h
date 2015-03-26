@@ -19,18 +19,18 @@ namespace pdEngine
     class EventManager;
     using EventManager_sptr = std::shared_ptr<EventManager>;
     using EventListenerList = std::vector<EventListener>;
-    using EventDataQueue = std::queue<Event_sptr>;
-
+    using EventQueue = std::queue<Event_sptr>;
 
     class EventManager : public Task
     {
+        using EventMap = std::map<EventTypeID, EventListenerList*>;
         using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
 
-        std::map<EventTypeID, EventListenerList*> eventMap {};
-        EventDataQueue eventQueueIn {};
-        EventDataQueue eventsProcessing {};
-        TimeDelta updateInterval {10 };
-        TimeDelta lastUpdate = { 0 };
+        EventMap eventMap               {};
+        EventQueue eventQueueIn         {};
+        EventQueue eventsProcessing     {};
+        TimeDelta updateInterval        { 10 };
+        TimeDelta lastUpdate            { 0 };
 
     public:
         EventManager();
