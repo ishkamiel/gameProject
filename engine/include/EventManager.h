@@ -21,6 +21,8 @@ namespace pdEngine
     using EventListenerList = std::vector<EventListener>;
     using EventQueue = std::queue<Event_sptr>;
 
+    static EventManager_sptr TheEventManager;
+
     class EventManager : public Task
     {
         using EventMap = std::map<EventTypeID, EventListenerList*>;

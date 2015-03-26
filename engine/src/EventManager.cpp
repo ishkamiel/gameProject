@@ -28,6 +28,7 @@ namespace pdEngine
     void EventManager::onUpdate(TimeDelta timeDelta)
     {
         (void)timeDelta;
+        //DLOG("EventManager onUpdate");
 
         if (eventQueueIn.size() == 0) return;
         auto log = GET_LOGGER();
@@ -61,7 +62,11 @@ namespace pdEngine
     {
         DLOG("Queing event based on EventTypeID: {0}", id);
         auto ptr = std::make_shared<EventBasic>(id);
-        DLOG("ptr made");
+        DLOG("ptr made, queque size is: {0}", eventQueueIn.size());
+
+        DLOG("Still okay {0}", eventQueueIn.size());
+
+        eventQueueIn.size();
         //assert(eventQueueIn != nullptr);
         //eventQueueIn.push(std::make_shared<EventBasic>(id));
         eventQueueIn.push(ptr);
@@ -69,9 +74,10 @@ namespace pdEngine
 
     }
 
-    void EventManager::queueEvent(const Event_sptr eventDataPtr)
+    void EventManager::queueEvent(const Event_sptr eventPtr)
     {
-        eventQueueIn.push(eventDataPtr);
+        DLOG("Queing new event EventTypeID: {0}", eventPtr->getTypeID());
+        eventQueueIn.push(eventPtr);
     }
 
     void EventManager::addListener(
@@ -97,32 +103,6 @@ namespace pdEngine
         log->debug("Added listener for event, EventTypeID {}", eventID, "\n");
     }
 
-    // void EventManager::removeListener(
-    //         const EventTypeID id, 
-    //         EventListener listener)
-    // {
-    //     auto f = eventMap.find(id);
-    //     if (f == eventMap.end()) return;
-    //
-    //     auto list = f->second;
-    //
-    //     //listener.reset();
-    //
-    //     //TODO check on weak_ptr == shared_ptr comparison.
-    //
-    //     //this is kinda useless since we only do a search for expired weak
-    //     //pointer, which is useless while we hold a corresponding shared_ptr 
-    //
-    //     auto iterator = list.begin();
-    //     while (iterator != list.end())
-    //     {
-    //         if (iterator->expired())
-    //             list.erase(iterator++);
-    //         else 
-    //             ++iterator;
-    //     }
-    // }
-
     EventListenerList* EventManager::findEventList(EventTypeID id, bool create)
     {
         auto f = eventMap.find(id);
@@ -141,7 +121,7 @@ namespace pdEngine
 
     EventManager_sptr getEventManager()
     {
-        static EventManager_sptr em;
+        static EventManager_sptr em {}; //= std::make_shared<EventManager>();
         return em;
     }
 }
