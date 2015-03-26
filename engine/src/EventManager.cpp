@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <algorithm>
+#include <memory>
 
 namespace pdEngine
 {
@@ -16,6 +17,11 @@ namespace pdEngine
     EventManager::~EventManager()
     {
         //TODO Do we need to clean something up?
+    }
+
+    void EventManager::onInit()
+    {
+        //TODO Do we need to so something?
     }
 
     void EventManager::onUpdate(TimeDelta timeDelta)
@@ -93,5 +99,11 @@ namespace pdEngine
             else 
                 ++iterator;
         }
+    }
+
+    EventManager_sptr getEventManager()
+    {
+        static EventManager_sptr em = std::make_shared<EventManager>();
+        return em;
     }
 }

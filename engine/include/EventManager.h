@@ -20,6 +20,7 @@ namespace pdEngine
     using EventListenerList = std::vector<EventListener_wptr>;
     using EventDataQueue = std::queue<EventData_sptr>;
 
+
     class EventManager : public Task
     {
         std::map<EventTypeID, EventListenerList> eventMap {};
@@ -31,6 +32,7 @@ namespace pdEngine
         EventManager(TimeDelta updateInterval);
         ~EventManager();
 
+        void onInit() override;
         void onUpdate(TimeDelta) override;
 
         void queueEvent(const EventData_sptr);
@@ -43,6 +45,8 @@ namespace pdEngine
         TimeDelta updateInterval {10 };
         TimeDelta lastUpdate = { 0 };
     };
+
+    EventManager_sptr getEventManager();
 }
 
 #endif /* PDENGINE_EVENTMANAGER_H_ */

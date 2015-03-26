@@ -13,6 +13,7 @@ namespace pdEngine
         ~ApplicationImpl();
 
         bool init();
+        void start();
 
     protected:
 

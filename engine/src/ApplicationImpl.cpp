@@ -27,6 +27,11 @@ namespace pdEngine
         return true;
     }
 
+    void ApplicationImpl::start()
+    {
+
+    }
+
     bool ApplicationImpl::initSDL()
     {
         auto logger = GET_LOGGER();

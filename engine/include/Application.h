@@ -17,9 +17,10 @@ namespace pdEngine
 
 		std::unique_ptr<TaskManager>    taskManager;
         EventManager_sptr               eventManager;
-        // Graphics_sptr                   graphicsEngine;
         ApplicatioImpl_sptr             pimpl;
         InputManager_sptr               inputManager;
+
+        bool doShutdown { false };
 
 	public:
 		Application();
@@ -33,10 +34,13 @@ namespace pdEngine
 		bool start();
 		void shutdown();
 
+        void onQuit();
+
     protected:
         virtual bool initGraphics();
 
 	private:
+        EventManager_sptr initEventManager();
 	};
 }
 
