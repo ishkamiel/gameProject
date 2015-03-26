@@ -102,18 +102,17 @@ namespace pdEngine
         //auto start = now();
         auto i = 10;
 
-        auto timer = new Timer;
+        auto timer = new Timer(updateFrequency);
         log->info("Entering main loop");
         while (!doShutdown)
         {
-            timer->step();
-            auto deltaTime = timer->getTimeDelta();
+            auto deltaTime = timer->step();
 
             log->debug("Main loop, timeDelta: {}", deltaTime);
 
             if (i == 5) eventManager->queueEvent(ev_RequestQuit);
 
-            taskManager->updateTasks(timer->getTimeDelta());
+            taskManager->updateTasks(deltaTime);
 
             if (--i < 0) shutdown();
         }
