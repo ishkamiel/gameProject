@@ -8,18 +8,17 @@
 #include "Application.h"
 #include "ApplicationImpl.h"
 #include "Event.h"
+#include "InputManagerSDL.h"
 #include "Logger.h"
 #include "TaskManager.h"
+#include "Timer.h"
 
 #include <functional>
 #include <memory>
 
 namespace pdEngine
 {
-    Application::Application() :
-        taskManager(new TaskManager()),
-        eventManager(getEventManager()),
-        pimpl(new ApplicationImpl())
+    Application::Application() 
     {}
 
     Application::~Application()
@@ -35,44 +34,49 @@ namespace pdEngine
         auto log = MK_LOGGER();
         LOGGER_SET_DEBUG(log);
 
-        log->info("Initializing Appllicatoin");
+        log->info("Initializing Appllication");
 
         if (!setupTaskManager()) return false;
-        if (!setupApplicationImpl()) return false;
         if (!setupEventManager()) return false;
+        if (!setupInputManager()) return false;
+        if (!setupApplicationImpl()) return false;
 
         log->debug("Initializing main TaskManager");
         taskManager->init();
-
-        // taskManager->addTask(std::make_shared(new InputManager(eventManager)));
-        // taskManager->init();
 
         return(true);
     }
 
     bool Application::setupTaskManager()
     {
+        auto log = GET_LOGGER();
+        taskManager.reset(new TaskManager());
+
+        log->debug("TaskManager setup ok");
         return true;
     }
 
     bool Application::setupApplicationImpl()
     {
         auto log = GET_LOGGER();
+        pimpl.reset(new ApplicationImpl());
 
-        if ( pimpl->init() ) 
+        if ( !pimpl->init() ) 
         {
-            return true;
+            log->error("initialization failed");
+            return false;
         }
-        log->error("initialization failed");
-        return false;
+        log->debug("ApplicationImpl setup ok");
+        return true;
     }
 
     bool Application::setupEventManager()
     {
         auto log = GET_LOGGER();
+        eventManager = getEventManager();
+        eventManager.reset(new EventManager());
 
         using namespace std::placeholders;
-
         EventListener listener = std::bind(&Application::onRequestQuit, this, _1);
         eventManager->addListener(ev_RequestQuit, listener);
 
@@ -81,25 +85,40 @@ namespace pdEngine
         return true;
     }
 
+    bool Application::setupInputManager()
+    {
+        auto log = GET_LOGGER();
+        inputManager.reset(new InputManagerSDL(eventManager));
+
+        log->debug("Adding InputManager to main TaskManager");
+        taskManager->addTask(inputManager);
+        return true;
+    }
+
     bool Application::start()
     {
         auto log = GET_LOGGER();
 
-        log->debug("Starting main TaskManager");
-
-        log->info("Entering main loop");
+        //auto start = now();
         auto i = 10;
+
+        auto timer = new Timer;
+        log->info("Entering main loop");
         while (!doShutdown)
         {
-            log->debug("Main loop");
+            timer->step();
+            auto deltaTime = timer->getTimeDelta();
+
+            log->debug("Main loop, timeDelta: {}", deltaTime);
 
             if (i == 5) eventManager->queueEvent(ev_RequestQuit);
 
-            taskManager->updateTasks(1);
+            taskManager->updateTasks(timer->getTimeDelta());
 
             if (--i < 0) shutdown();
         }
         log->info("Leaving main loop");
+        delete timer;
 
         return(true);
     }
@@ -108,17 +127,6 @@ namespace pdEngine
     {
         GET_LOGGER()->info("Requesting shutdown");
         doShutdown = true;
-    }
-
-    InputManager_sptr Application::getInputManager()
-    {
-        return nullptr;
-        //return std::make_shared<InputManager>(new InputManager(eventManager));
-    }
-
-    bool Application::initGraphics()
-    {
-        return(true);
     }
 
     bool Application::onShutdown(Event_sptr e)
@@ -132,7 +140,7 @@ namespace pdEngine
     bool Application::onRequestQuit(Event_sptr e)
     {
         (void) e;
-        GET_LOGGER()->debug("Recieved RequestQuit event, trying to do clean quit");
+        GET_LOGGER()->debug("Recieved RequestQuit event, trying to do do a clean shutdown");
         shutdown();
         return true;
     }

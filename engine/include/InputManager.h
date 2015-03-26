@@ -3,6 +3,7 @@
 
 #include "EventManager.h"
 #include "Task.h"
+
 #include <memory>
 
 namespace pdEngine
@@ -13,17 +14,10 @@ namespace pdEngine
     class InputManager : public Task
     {
     public: 
-        InputManager() =delete;
-        InputManager(EventManager_sptr);
+        InputManager();
         virtual ~InputManager();
     protected:
-        void onUpdate(TimeDelta) override;
-        void onInit(void) override;
-        // void onSuccess(void) override;
-        // void onFail(void) override;
-        // void onAbort(void) override;
     private:
-        EventManager_sptr eventManager;
     };
 }
 

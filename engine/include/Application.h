@@ -16,7 +16,7 @@ namespace pdEngine
 	{
         using ApplicatioImpl_sptr = std::shared_ptr<ApplicationImpl>;
 
-		std::unique_ptr<TaskManager>    taskManager;
+		TaskManager_sptr                taskManager;
         EventManager_sptr               eventManager;
         ApplicatioImpl_sptr             pimpl;
         InputManager_sptr               inputManager;
@@ -27,24 +27,20 @@ namespace pdEngine
 		Application();
 		virtual ~Application();
 
-        virtual InputManager_sptr getInputManager();
-
         void addSubsystem(Task_sptr);
 
 		bool init();
 		bool start();
 		void shutdown();
 
-        bool onShutdown(Event_sptr e);
-        bool onRequestQuit(Event_sptr e);
-
     protected:
-        virtual bool initGraphics();
-
-	private:
         bool setupTaskManager();
         bool setupApplicationImpl();
         bool setupEventManager();
+        bool setupInputManager();
+	private:
+        bool onShutdown(Event_sptr e);
+        bool onRequestQuit(Event_sptr e);
 	};
 }
 

@@ -134,7 +134,7 @@ namespace pdEngine
 
     EventManager_sptr getEventManager()
     {
-        static EventManager_sptr em = std::make_shared<EventManager>();
+        static EventManager_sptr em;
         return em;
     }
 }

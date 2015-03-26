@@ -11,7 +11,7 @@ namespace pdEngine
     constexpr bool win32 = false;
 #endif /* WIN32 */
 
-    typedef int long TimeDelta;
+    //typedef int long TimeDelta;
 }
 
 #endif /* PDENGINE_GENERAL_H_ */

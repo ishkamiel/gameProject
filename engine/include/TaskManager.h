@@ -9,11 +9,16 @@
 #define PDENGINE_TASKMANAGER_H_
 
 #include "Task.h"
+#include "Timer.h"
 
+#include <memory>
 #include <vector>
 
 namespace pdEngine
 {
+    class TaskManager;
+    using TaskManager_sptr = std::shared_ptr<TaskManager>;
+
 	class TaskManager
 	{
 		std::vector<Task_sptr> taskList;
