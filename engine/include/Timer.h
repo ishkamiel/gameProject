@@ -6,6 +6,9 @@
 namespace pdEngine
 {
     using TimeDelta = unsigned long int;
+    using TimeMilliseconds = unsigned int;
+    using TimeSeconds = unsigned int;
+
     using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
     using TimerDefaultDelta = std::chrono::high_resolution_clock::duration;
     using TimerFrequency = unsigned int;
@@ -14,6 +17,7 @@ namespace pdEngine
 
     class Timer
     {
+        TimePoint           start;
         TimePoint           prev;
         TimerDefaultDelta   delta;
         TimerDefaultDelta   diff;
@@ -21,8 +25,11 @@ namespace pdEngine
 
     public:
         Timer(TimerFrequency);
-        TimeDelta step();
+        TimeDelta stepAndSleep();
         TimerDefaultDelta setFrequencey(TimerFrequency);
+
+        TimeMilliseconds totalMilliseconds();
+        TimeSeconds totalSeconds();
 
     private:
     };

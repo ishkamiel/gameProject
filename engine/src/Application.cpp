@@ -100,15 +100,15 @@ namespace pdEngine
         auto log = GET_LOGGER();
 
         //auto start = now();
-        auto i = 10;
+        auto i = 100;
 
         auto timer = new Timer(updateFrequency);
         log->info("Entering main loop");
         while (!doShutdown)
         {
-            auto deltaTime = timer->step();
+            auto deltaTime = timer->stepAndSleep();
 
-            log->debug("Main loop, timeDelta: {}", deltaTime);
+            //DLOG("Main loop, timeDelta: {0}", deltaTime);
 
             if (i == 5) eventManager->queueEvent(ev_RequestQuit);
 
@@ -116,7 +116,7 @@ namespace pdEngine
 
             if (--i < 0) shutdown();
         }
-        log->info("Leaving main loop");
+        log->info("Leaving main loop after {0} milliseconds", timer->totalMilliseconds());
         delete timer;
 
         return(true);

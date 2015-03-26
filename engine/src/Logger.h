@@ -7,9 +7,13 @@
 #define GET_LOGGER() spdlog::get("pdengine")
 #define LOGGER_SET_DEBUG(l) l->set_level(spdlog::level::debug)
 
-#ifndef NDEBUG
-#undef LOG_DEBUG
-#define LOG_DEBUG spdlog::get("pdengine")->debug()
-#endif
+#define DLOG( ... ) spdlog::get("pdengine")->debug(__VA_ARGS__)
+
+#ifdef NDEBUG
+
+#undef DLOG
+#define DLOG( ... )
+
+#endif /* NDEBUG */
 
 #endif /* PDENGINE_LOGGER_H_ */
