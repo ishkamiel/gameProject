@@ -40,6 +40,9 @@ namespace pdEngine
         if (!setupEventManager()) return false;
         if (!setupInputManager()) return false;
         if (!setupRenderer()) return false;
+		
+		log->info("Registering application level event listeners");
+		registerListeners();
 
         log->debug("Calling TaskManager->init() to initialize all subsystems");
         taskManager->init();
@@ -77,6 +80,13 @@ namespace pdEngine
 
         return(true);
     }
+    
+    EventManager_sptr Application::getEventManager()
+	{
+		if (!eventManager)
+			throw "getEventManager called before setupEventManager";
+		return eventManager;
+	}
 
     bool Application::setupTaskManager()
     {
@@ -108,11 +118,10 @@ namespace pdEngine
     bool Application::setupEventManager()
     {
         auto log = GET_LOGGER();
-        auto em = getEventManager();
-        em.reset(new EventManager());
+		eventManager.reset(new EventManager());
         log->debug("Created EventManager");
 
-        taskManager->addTask(em);
+        taskManager->addTask(eventManager);
         log->debug("EventManager added to main TaskManager");
         return true;
     }

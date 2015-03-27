@@ -4,7 +4,10 @@ namespace pdEngine
 {
     InputManagerSDL::InputManagerSDL(EventManager_sptr em)
         : eventManager(em), event(new SDL_Event())
-    {}
+    {
+		assert (event != nullptr);
+		assert (eventManager);
+	}
 
     InputManagerSDL::~InputManagerSDL()
     {
@@ -14,6 +17,8 @@ namespace pdEngine
     void InputManagerSDL::onUpdate(TimeDelta delta)
     {
         (void) delta;
+		
+		assert(eventManager);
 
         while (SDL_PollEvent(event) != 0)
         {

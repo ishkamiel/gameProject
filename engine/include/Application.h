@@ -15,6 +15,7 @@ namespace pdEngine
 	{
         TimerFrequency                  updateFrequency {240};
 
+		EventManager_sptr 				eventManager;
 		TaskManager_sptr                taskManager;
         Renderer_sptr                   renderer;
 
@@ -29,6 +30,7 @@ namespace pdEngine
 		bool init();
 		bool start();
 		void shutdown();
+		EventManager_sptr getEventManager();
 
     protected:
         virtual bool setupTaskManager(void);

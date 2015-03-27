@@ -42,7 +42,8 @@ namespace pdEngine
             eventsProcessing.pop();
 
             assert(data != nullptr);
-            log->debug("Processing event of type {}", data->getTypeID());
+            DLOG("Processing event of type {}", data->getTypeID());
+			auto listeners_called = 0;
 
             auto list = findEventList(data->getTypeID());
             if (list != nullptr) 
@@ -53,25 +54,16 @@ namespace pdEngine
                 {
                     log->debug("Trying to call listener");
                     i(data);
+					++listeners_called;
                 }
             }
+            DLOG("Event processed by {0} listeners", listeners_called);
         }
     }
 
     void EventManager::queueEvent(const EventTypeID id)
     {
-        DLOG("Queing event based on EventTypeID: {0}", id);
-        auto ptr = std::make_shared<EventBasic>(id);
-        DLOG("ptr made, queque size is: {0}", eventQueueIn.size());
-
-        DLOG("Still okay {0}", eventQueueIn.size());
-
-        eventQueueIn.size();
-        //assert(eventQueueIn != nullptr);
-        //eventQueueIn.push(std::make_shared<EventBasic>(id));
-        eventQueueIn.push(ptr);
-        DLOG("okay");
-
+        eventQueueIn.push(std::make_shared<EventBasic>(id));
     }
 
     void EventManager::queueEvent(const Event_sptr eventPtr)
@@ -117,11 +109,5 @@ namespace pdEngine
         }
 
         return f->second;
-    }
-
-    EventManager_sptr getEventManager()
-    {
-        static EventManager_sptr em {}; //= std::make_shared<EventManager>();
-        return em;
     }
 }

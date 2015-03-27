@@ -52,8 +52,6 @@ namespace pdEngine
     private:
         EventListenerList* findEventList(EventTypeID, bool = false);
     };
-
-    EventManager_sptr getEventManager();
 }
 
 #endif /* PDENGINE_EVENTMANAGER_H_ */
