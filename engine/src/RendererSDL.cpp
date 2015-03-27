@@ -51,10 +51,9 @@ namespace pdEngine
             return fail();
         }
 
-        // Load a font
-        TTF_Font *font;
-        font = TTF_OpenFont("FreeSans.ttf", 24);
-        if (font == NULL)
+        std::string fontFile = "/usr/share/texlive/texmf-dist/fonts/truetype/public/opensans/OpenSans-Regular.ttf";
+        debugFont = TTF_OpenFont(fontFile.c_str(), 24);
+        if (debugFont == nullptr)
         {
             log->error("SDL TTF_OpenFont() failed: {0}", TTF_GetError());
             return fail();
@@ -63,12 +62,18 @@ namespace pdEngine
 
     void RendererSDL::onUpdate(TimeDelta delta)
     {
-        (void)delta;
+        std::stringstream sstm;
+        sstm << "delta: " << delta;
+        printDebugMsg(sstm.str().c_str());
     }
 
     void RendererSDL::render()
     {
         SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+        if (debugMessage != nullptr)
+        {
+            SDL_BlitSurface(debugMessage, nullptr, screenSurface, nullptr);
+        }
         SDL_UpdateWindowSurface( window );
     }
 
@@ -76,7 +81,19 @@ namespace pdEngine
     {
         if (debugPrint)
         {
-            debugString = msg;
+            SDL_Color text_color {0, 0, 0, 100};
+
+            debugMessage = TTF_RenderText_Solid(debugFont,
+                    msg.c_str(),
+                    text_color);
+
+            if (debugMessage == nullptr)
+            {
+                GET_LOGGER()->error("TTF_RenderText_Solid failed: {0}", TTF_GetError());
+                TTF_Quit();
+                SDL_Quit();
+                exit(1);
+            }
         }
     }
 

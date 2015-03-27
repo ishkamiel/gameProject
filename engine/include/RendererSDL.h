@@ -21,6 +21,7 @@ namespace pdEngine
         bool debugPrint                 { true };
         std::string debugString         { "" };
         TTF_Font*                       debugFont;
+        SDL_Surface*                    debugMessage;
 
     public:
         RendererSDL(std::string = "pdEngine");
