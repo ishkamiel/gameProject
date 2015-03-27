@@ -4,6 +4,7 @@
 #include "Task.h"
 
 #include <memory>
+#include <string>
 
 namespace pdEngine
 {
@@ -14,6 +15,7 @@ namespace pdEngine
     {
     public:
         virtual void render() =0;
+        virtual void printDebugMsg(std::string) =0;
     protected:
         virtual void onInit() override =0;
         virtual void onUpdate(TimeDelta) override =0;

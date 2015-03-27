@@ -37,9 +37,13 @@ namespace pdEngine
         log->info("Initializing Appllication");
 
         if (!setupTaskManager()) return false;
+        assert(taskManager);
         if (!setupEventManager()) return false;
+        assert(eventManager);
         if (!setupInputManager()) return false;
+        assert(inputManager);
         if (!setupRenderer()) return false;
+        assert(renderer);
 		
 		log->info("Registering application level event listeners");
 		registerListeners();
@@ -79,6 +83,13 @@ namespace pdEngine
         delete timer;
 
         return(true);
+    }
+
+    InputManager_sptr  Application::getInputManager()
+    {
+        if (!inputManager)
+            throw "getInputManager called before setupInputManager";
+        return inputManager;
     }
     
     EventManager_sptr Application::getEventManager()
@@ -132,10 +143,10 @@ namespace pdEngine
     bool Application::setupInputManager()
     {
         auto log = GET_LOGGER();
-        auto im = std::make_shared<InputManagerSDL>(getEventManager());
+        inputManager.reset(new InputManagerSDL(getEventManager()));
         log->debug("Created InputManager");
 
-        taskManager->addTask(im);
+        taskManager->addTask(inputManager);
         log->debug("InputManagerladded to main TaskManager");
         return true;
     }

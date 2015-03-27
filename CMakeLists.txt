@@ -24,6 +24,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 find_package(SDL2)
+find_package(SDL2_ttf)
 find_package(Spdlog)
 
 add_subdirectory(engine)

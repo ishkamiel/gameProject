@@ -2,10 +2,12 @@
 #include "Logger.h"
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 namespace pdEngine
 {
-    RendererSDL::RendererSDL()
+    RendererSDL::RendererSDL(std::string windowTitle)
+        : windowTitle(windowTitle)
     {
     }
 
@@ -19,10 +21,45 @@ namespace pdEngine
 
     void RendererSDL::onInit(void)
     {
+        auto log = GET_LOGGER();
+
         if (isUninitialized()) 
         {
-            if (!initSDL())
-                fail();
+            log->debug("Initializing SDL");
+
+            if (SDL_Init(SDL_INIT_VIDEO) != 0)
+            {
+                log->error("SDL_Init error: {0}", SDL_GetError());
+                return fail();
+            }
+
+            window = SDL_CreateWindow(windowTitle.c_str(),
+                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                    window_width, window_height,
+                    SDL_WINDOW_SHOWN);
+
+            if (window == nullptr)
+            {
+                log->error("SDL_CreateWindow Error: {0}", SDL_GetError());
+                return fail();
+            }
+
+            screenSurface = SDL_GetWindowSurface(window);
+
+            if (TTF_Init() != 0) 
+            {
+                log->error("SDL TTF_init failed: {0}", TTF_GetError());
+                return fail();
+            }
+
+            // Load a font
+            TTF_Font *font;
+            font = TTF_OpenFont("FreeSans.ttf", 24);
+            if (font == NULL)
+            {
+                log->error("SDL TTF_OpenFont() failed: {0}", TTF_GetError());
+                return fail();
+            }
         }
     }
 
@@ -33,9 +70,17 @@ namespace pdEngine
 
     void RendererSDL::render()
     {
-        // TODO
+        SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+        SDL_UpdateWindowSurface( window );
     }
 
+    void RendererSDL::printDebugMsg(std::string msg)
+    {
+        if (debugPrint)
+        {
+            debugString = msg;
+        }
+    }
 
     bool RendererSDL::initSDL()
     {
@@ -49,7 +94,7 @@ namespace pdEngine
             return false;
         }
 
-        window = SDL_CreateWindow("Hello World!",
+        window = SDL_CreateWindow(windowTitle.c_str(),
                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                 window_width, window_height,
                 SDL_WINDOW_SHOWN);
@@ -62,8 +107,6 @@ namespace pdEngine
         }
 
         screenSurface = SDL_GetWindowSurface(window);
-        SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-        SDL_UpdateWindowSurface( window );
 
         return true;
     }

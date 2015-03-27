@@ -12,14 +12,20 @@ namespace pdEngine
     {
         int window_width                { 640 };
         int window_height               { 480 };
+        std::string windowTitle         { "pdEngine" };
+        bool debugPrint                 { true };
+        std::string debugString         { "" };
+
         SDL_Window* window              { nullptr };
         SDL_Surface* screenSurface      { nullptr };
 
+
     public:
-        RendererSDL();
+        RendererSDL(std::string = "pdEngine");
         ~RendererSDL();
 
         virtual void render(void) override;
+        virtual void printDebugMsg(std::string) override;
 
     protected:
         virtual void onUpdate(TimeDelta) override;
