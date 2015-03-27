@@ -36,7 +36,7 @@ namespace pdEngine
         virtual void onInit(void) override;
 
     private:
-        bool initSDL();
+        // bool initSDL();
     };
 }
 

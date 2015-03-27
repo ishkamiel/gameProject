@@ -29,28 +29,53 @@ namespace pdEngine
 	{
         for (auto t : taskList)
         {
-            t->onUpdate(timeDelta);
+            switch (t->state)
+            {
+                case TaskState::running:
+                    t->onUpdate(timeDelta);
+                    break;
+                case TaskState::paused:
+                    break;
+                case TaskState::succeeded:
+                    t->onSuccess();
+                    break;
+                case TaskState::failed:
+                    t->onFail();
+                    t->state = TaskState::removed;
+                    break;
+                case TaskState::aborted:
+                    t->onAbort();
+                    t->state = TaskState::removed;
+                    break;
+                case TaskState::uninitialized:
+                    t->onInit();
+                    break;
+                case TaskState::removed:
+                    // TODO remove the task from the Manager
+                    assert(false);
+                    break;
+            }
         }
     }
-	
-	void TaskManager::pauseTasks()
-	{
+
+    void TaskManager::pauseTasks()
+    {
         for (auto t : taskList)
         {
             t->pause();
         }
     }
 
-	void TaskManager::unPauseTasks()
-	{
+    void TaskManager::unPauseTasks()
+    {
         for (auto t : taskList)
         {
             t->unPause();
         }
     }
-	
-	void TaskManager::addTask(Task_sptr newTask)
-	{
-		taskList.push_back(newTask);
-	}
+
+    void TaskManager::addTask(Task_sptr newTask)
+    {
+        taskList.push_back(newTask);
+    }
 }
