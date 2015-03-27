@@ -5,17 +5,14 @@
  *      Author: ishkamiel
  */
 
-#include "Demo.h"
-#include "Application.h"
+#include "DemoApplication.h"
 
 #include <iostream>
 
 int main()
 {
-	pdEngine::Application app {};
-	app.init();
-	app.start();
+    pdEngineDemo::DemoApplication app {};
+    app.init();
+    app.start();
     return(0);
 }
-
-
