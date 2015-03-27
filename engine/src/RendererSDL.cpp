@@ -58,21 +58,27 @@ namespace pdEngine
             log->error("SDL TTF_OpenFont() failed: {0}", TTF_GetError());
             return fail();
         }
+
+        debugPosition = new SDL_Rect();
+        debugPosition->x = 0;
+        debugPosition->y = 0;
     }
 
     void RendererSDL::onUpdate(TimeDelta delta)
     {
         std::stringstream sstm;
         sstm << "delta: " << delta;
+        debugPosition->x = (debugPosition->x + 1)%window_width;
+        debugPosition->y = (debugPosition->y + 1)%window_height;
         printDebugMsg(sstm.str().c_str());
     }
 
     void RendererSDL::render()
     {
-        SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+        SDL_FillRect( screenSurface, nullptr, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
         if (debugMessage != nullptr)
         {
-            SDL_BlitSurface(debugMessage, nullptr, screenSurface, nullptr);
+            SDL_BlitSurface(debugMessage, nullptr, screenSurface, debugPosition);
         }
         SDL_UpdateWindowSurface( window );
     }
@@ -81,7 +87,7 @@ namespace pdEngine
     {
         if (debugPrint)
         {
-            SDL_Color text_color {0, 0, 0, 100};
+            SDL_Color text_color {150, 0, 50, 0};
 
             debugMessage = TTF_RenderText_Solid(debugFont,
                     msg.c_str(),
