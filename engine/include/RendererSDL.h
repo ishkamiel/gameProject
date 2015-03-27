@@ -4,6 +4,7 @@
 #include "Renderer.h"
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 namespace pdEngine
 {
@@ -13,12 +14,13 @@ namespace pdEngine
         int window_width                { 640 };
         int window_height               { 480 };
         std::string windowTitle         { "pdEngine" };
-        bool debugPrint                 { true };
-        std::string debugString         { "" };
 
         SDL_Window* window              { nullptr };
         SDL_Surface* screenSurface      { nullptr };
 
+        bool debugPrint                 { true };
+        std::string debugString         { "" };
+        TTF_Font*                       debugFont;
 
     public:
         RendererSDL(std::string = "pdEngine");

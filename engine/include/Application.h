@@ -20,7 +20,8 @@ namespace pdEngine
 		TaskManager_sptr                taskManager;
         Renderer_sptr                   renderer;
 
-        bool doShutdown { false };
+        bool initOk                     { false };
+        bool doShutdown                 { false };
 
 	public:
 		Application();
@@ -30,7 +31,6 @@ namespace pdEngine
 
 		bool init();
 		bool start();
-		void shutdown();
 		EventManager_sptr getEventManager();
         InputManager_sptr getInputManager();
 
@@ -45,6 +45,7 @@ namespace pdEngine
         virtual void shutdownInputManager(void);
 
 	private:
+		void shutdown();
         void registerListeners(void);
         bool onShutdown(Event_sptr e);
         bool onRequestQuit(Event_sptr e);

@@ -22,44 +22,42 @@ namespace pdEngine
     void RendererSDL::onInit(void)
     {
         auto log = GET_LOGGER();
+        if (!isUninitialized()) throw std::string("duplicate initializations");
 
-        if (isUninitialized()) 
+        log->debug("Initializing SDL");
+
+        if (SDL_Init(SDL_INIT_VIDEO) != 0)
         {
-            log->debug("Initializing SDL");
+            log->error("SDL_Init error: {0}", SDL_GetError());
+            return fail();
+        }
 
-            if (SDL_Init(SDL_INIT_VIDEO) != 0)
-            {
-                log->error("SDL_Init error: {0}", SDL_GetError());
-                return fail();
-            }
+        window = SDL_CreateWindow(windowTitle.c_str(),
+                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                window_width, window_height,
+                SDL_WINDOW_SHOWN);
 
-            window = SDL_CreateWindow(windowTitle.c_str(),
-                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    window_width, window_height,
-                    SDL_WINDOW_SHOWN);
+        if (window == nullptr)
+        {
+            log->error("SDL_CreateWindow Error: {0}", SDL_GetError());
+            return fail();
+        }
 
-            if (window == nullptr)
-            {
-                log->error("SDL_CreateWindow Error: {0}", SDL_GetError());
-                return fail();
-            }
+        screenSurface = SDL_GetWindowSurface(window);
 
-            screenSurface = SDL_GetWindowSurface(window);
+        if (TTF_Init() != 0) 
+        {
+            log->error("SDL TTF_init failed: {0}", TTF_GetError());
+            return fail();
+        }
 
-            if (TTF_Init() != 0) 
-            {
-                log->error("SDL TTF_init failed: {0}", TTF_GetError());
-                return fail();
-            }
-
-            // Load a font
-            TTF_Font *font;
-            font = TTF_OpenFont("FreeSans.ttf", 24);
-            if (font == NULL)
-            {
-                log->error("SDL TTF_OpenFont() failed: {0}", TTF_GetError());
-                return fail();
-            }
+        // Load a font
+        TTF_Font *font;
+        font = TTF_OpenFont("FreeSans.ttf", 24);
+        if (font == NULL)
+        {
+            log->error("SDL TTF_OpenFont() failed: {0}", TTF_GetError());
+            return fail();
         }
     }
 

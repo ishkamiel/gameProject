@@ -14,6 +14,16 @@ namespace pdEngine
             t->onInit();
         }
     }
+
+    bool TaskManager::areAnyDead() {
+        for (auto t : taskList)
+        {
+            if (t->isDead()) {
+                return true;
+            }
+        }
+        return false;
+    }
 	
 	void TaskManager::updateTasks(TimeDelta timeDelta)
 	{

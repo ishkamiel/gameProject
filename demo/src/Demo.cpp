@@ -12,7 +12,12 @@
 int main()
 {
     pdEngineDemo::DemoApplication app {};
-    app.init();
-    app.start();
-    return(0);
+
+    if (app.init())
+    {
+        app.start();
+        return(0);
+    }
+    std::cout << "Whoops, we died...\n";
+    return(-1);
 }

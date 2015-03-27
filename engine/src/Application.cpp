@@ -30,28 +30,54 @@ namespace pdEngine
     }
 
     bool Application::init()
-    {
+   {
         auto log = MK_LOGGER();
         LOGGER_SET_DEBUG(log);
 
         log->info("Initializing Appllication");
 
-        if (!setupTaskManager()) return false;
-        assert(taskManager);
-        if (!setupEventManager()) return false;
-        assert(eventManager);
-        if (!setupInputManager()) return false;
-        assert(inputManager);
-        if (!setupRenderer()) return false;
-        assert(renderer);
-		
-		log->info("Registering application level event listeners");
-		registerListeners();
+        if ( !setupTaskManager()
+                || !setupEventManager() 
+                || !setupInputManager() 
+                || !setupRenderer())
+            return false;
+
+        log->info("Registering application level event listeners");
+        registerListeners();
 
         log->debug("Calling TaskManager->init() to initialize all subsystems");
         taskManager->init();
 
+        if (taskManager->areAnyDead())
+        {
+            log->error("Some tasks failed initialization");
+            return(false);
+        }
+
+        initOk = true;
         return(true);
+   }
+
+    bool Application::start()
+    {
+        if (!initOk) throw std::string("Applicatoin::start before successfull init");
+        auto log = GET_LOGGER();
+
+        auto timer = new Timer(updateFrequency);
+        log->info("Entering main loop");
+        while (!doShutdown)
+        {
+            auto deltaTime = timer->stepAndSleep();
+
+            taskManager->updateTasks(deltaTime);
+
+            renderer->render();
+        }
+        log->info("Leaving main loop after {0} milliseconds", timer->totalMilliseconds());
+        delete timer;
+
+        shutdown();
+        return true;
     }
 
     void Application::shutdown()
@@ -61,28 +87,6 @@ namespace pdEngine
         shutdownInputManager();
         shutdownEventManager();
         shutdownTaskManager();
-        doShutdown = true;
-    }
-
-    bool Application::start()
-    {
-        auto log = GET_LOGGER();
-
-        auto timer = new Timer(updateFrequency);
-        log->info("Entering main loop");
-        while (!doShutdown)
-        {
-            auto deltaTime = timer->stepAndSleep();
-            //DLOG("Main loop, timeDelta: {0}", deltaTime);
-
-            taskManager->updateTasks(deltaTime);
-
-            renderer->render();
-        }
-        log->info("Leaving main loop after {0} milliseconds", timer->totalMilliseconds());
-        delete timer;
-
-        return(true);
     }
 
     InputManager_sptr  Application::getInputManager()
@@ -91,13 +95,13 @@ namespace pdEngine
             throw "getInputManager called before setupInputManager";
         return inputManager;
     }
-    
+
     EventManager_sptr Application::getEventManager()
-	{
-		if (!eventManager)
-			throw "getEventManager called before setupEventManager";
-		return eventManager;
-	}
+    {
+        if (!eventManager)
+            throw "getEventManager called before setupEventManager";
+        return eventManager;
+    }
 
     bool Application::setupTaskManager()
     {
@@ -129,7 +133,7 @@ namespace pdEngine
     bool Application::setupEventManager()
     {
         auto log = GET_LOGGER();
-		eventManager.reset(new EventManager());
+        eventManager.reset(new EventManager());
         log->debug("Created EventManager");
 
         taskManager->addTask(eventManager);
@@ -162,21 +166,25 @@ namespace pdEngine
         using namespace std::placeholders;
         EventListener listener = std::bind(&Application::onRequestQuit, this, _1);
         em->addListener(ev_RequestQuit, listener);
+
+        em->addListener(ev_Shutdown,
+                std::bind(&Application::onShutdown, this, _1));
     }
 
     bool Application::onShutdown(Event_sptr e)
     {
         (void) e;
         GET_LOGGER()->debug("Recieved Shutdown event, shutting down");
-        shutdown();
-        return true;
+        doShutdown = true;
+        return false;
     }
 
     bool Application::onRequestQuit(Event_sptr e)
     {
         (void) e;
-        GET_LOGGER()->debug("Recieved RequestQuit event, trying to do do a clean shutdown");
-        shutdown();
+        GET_LOGGER()->debug("Recieved RequestQuit event");
+        eventManager->queueEvent(ev_Shutdown);
+
         return true;
     }
 

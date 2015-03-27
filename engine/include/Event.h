@@ -30,6 +30,7 @@ namespace pdEngine
     constexpr uint32_t crc32<size_t(-1)>(const char*);
 
     const EventTypeID ev_RequestQuit = getEventID("RequestQuit");
+    const EventTypeID ev_Shutdown = getEventID("Shutdown");
 }
 
 namespace pdEngine
@@ -109,7 +110,7 @@ namespace pdEngine
     template<>
         constexpr uint32_t crc32<size_t(-1)>(const char * str)
         { // This is the stop-recursion function
-            // (void) str;
+            //(void) str;
             return 0xFFFFFFFF;
         }
 }

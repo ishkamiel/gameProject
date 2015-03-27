@@ -38,6 +38,8 @@ namespace pdEngine
         void pauseTasks();
         void unPauseTasks();
 
+        bool areAnyDead();
+
     private:
     };
 }
