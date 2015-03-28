@@ -1,18 +1,11 @@
-/*
- * Demo.cpp
- *
- *  Created on: Feb 26, 2015
- *      Author: ishkamiel
- */
-
-#include "DemoApplication.h"
+#include "DemoSDL.h"
 
 #include <iostream>
 
 int main()
 {
     try {
-        pdEngineDemo::DemoApplication app {};
+        pdEngineDemo::DemoSDL app {};
 
         if (app.init())
         {

@@ -3,14 +3,30 @@
 
 #include "Renderer.h"
 
+#include <GL/glew.h> 
+#include <GL/glu.h> 
+#include <SDL.h> 
+#include <SDL_opengl.h> 
+
 namespace pdEngine
 {
     class RendererOpengl : public Renderer
     {
-        std::string     windowTitle;
+        int window_width                { 640 };
+        int window_height               { 480 };
+        std::string windowTitle         { "pdEngine" };
 
-    public:
-        RendererOpengl();
+        SDL_Window* window              { nullptr };
+
+        SDL_GLContext   glContext;
+        SDL_Window*     glWindow;
+        GLuint          programID               { 0 }; 
+
+        bool            gRenderQuad             { true };
+        GLint           gVertexPos2DLocation    { -1 }; 
+        GLuint          gVBO                    { 0 };
+        GLuint          gIBO                    { 0 };
+
 
     public:
         RendererOpengl(std::string = "pdEngine");
@@ -20,10 +36,14 @@ namespace pdEngine
         virtual void printDebugMsg(std::string) override;
 
     protected:
-
-    private:
         virtual void onInit() override;
         virtual void onUpdate(TimeDelta) override;
+
+    private:
+        bool initOpengl(void);
+        GLuint compileShader(const GLenum, const GLchar[]);
+        void printProgramLog(GLuint program); 
+        void printShaderLog(GLuint shader);
     };
 }
 

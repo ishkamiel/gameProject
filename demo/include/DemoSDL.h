@@ -5,11 +5,11 @@
 
 namespace pdEngineDemo
 {
-    class DemoApplication : public pdEngine::Application
+    class DemoSDL : public pdEngine::Application
     {
     public:
-        DemoApplication();
-        ~DemoApplication();
+        DemoSDL();
+        ~DemoSDL();
     protected:
         virtual pdEngine::Renderer_sptr createRenderer() override;
     };
