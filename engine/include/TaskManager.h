@@ -25,12 +25,15 @@ namespace pdEngine
         std::vector<Task_sptr>      taskList;
         TimeDelta                   previous;
         bool                        paused;
+        bool                        removals;
 
     public:
         TaskManager();
         ~TaskManager();
 
-        void init();
+        void initAll();
+
+        void abortAllNow();
 
         void addTask(Task_sptr);
 

@@ -10,6 +10,8 @@ namespace pdEngineDemo
     public:
         DemoApplication();
         ~DemoApplication();
+    protected:
+        virtual pdEngine::Renderer_sptr createRenderer() override;
     };
 }
 

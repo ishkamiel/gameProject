@@ -7,7 +7,7 @@ namespace pdEngine
 	
 	TaskManager::~TaskManager() {}
 
-    void TaskManager::init()
+    void TaskManager::initAll()
     {
         for (auto t : taskList)
         {
@@ -19,7 +19,21 @@ namespace pdEngine
         }
     }
 
-    bool TaskManager::areAnyDead() {
+    void TaskManager::abortAllNow()
+    {
+        for (auto t : taskList)
+        {
+            if (t->isAlive()) 
+            {
+                t->onAbort();
+                t->state = TaskState::aborted;
+            }
+        }
+    }
+
+
+    bool TaskManager::areAnyDead() 
+    {
         for (auto t : taskList)
         {
             if (t->isDead()) {
@@ -46,17 +60,18 @@ namespace pdEngine
                 case TaskState::failed:
                     t->onFail();
                     t->state = TaskState::removed;
+                    removals = true;
                     break;
                 case TaskState::aborted:
                     t->onAbort();
                     t->state = TaskState::removed;
+                    removals = true;
                     break;
                 case TaskState::uninitialized:
                     t->onInit();
                     break;
                 case TaskState::removed:
-                    // TODO remove the task from the Manager
-                    assert(false);
+                    assert(removals);
                     break;
             }
         }

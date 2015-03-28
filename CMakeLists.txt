@@ -23,9 +23,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -o3")
 endif()
 
-find_package(SDL2)
-find_package(SDL2_ttf)
-find_package(Spdlog)
+# find_package(SDL2)
+# find_package(SDL2_ttf)
+# find_package(Spdlog)
 
 add_subdirectory(engine)
 add_subdirectory(demo)

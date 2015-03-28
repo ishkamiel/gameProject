@@ -35,14 +35,15 @@ namespace pdEngine
         InputManager_sptr getInputManager();
 
     protected:
-        virtual bool setupTaskManager(void);
-        virtual void shutdownTaskManager(void);
-        virtual bool setupRenderer(void);
-        virtual void shutdownRenderer(void);
-        virtual bool setupEventManager(void);
-        virtual void shutdownEventManager(void);
-        virtual bool setupInputManager(void);
-        virtual void shutdownInputManager(void);
+        virtual TaskManager_sptr createTaskManager(void);
+        virtual EventManager_sptr createEventManager(void);
+        virtual Renderer_sptr createRenderer(void);
+        virtual InputManager_sptr createInputManager(void);
+
+        virtual void deleteTaskManager(void);
+        virtual void deleteEventManager(void);
+        virtual void deleteRenderer(void);
+        virtual void deleteInputManager(void);
 
 	private:
 		void shutdown();

@@ -7,12 +7,23 @@ namespace pdEngine
 {
     class RendererOpengl : public Renderer
     {
+        std::string     windowTitle;
+
     public:
         RendererOpengl();
 
+    public:
+        RendererOpengl(std::string = "pdEngine");
+        ~RendererOpengl();
+
+        virtual void render(void) override;
+        virtual void printDebugMsg(std::string) override;
+
+    protected:
+
+    private:
         virtual void onInit() override;
         virtual void onUpdate(TimeDelta) override;
-    private:
     };
 }
 
