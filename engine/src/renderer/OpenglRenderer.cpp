@@ -1,28 +1,28 @@
-#include "RendererOpengl.h"
+#include "renderer/OpenglRenderer.h"
 
 #include "Logger.h"
 
 namespace pdEngine 
 {
-    RendererOpengl::RendererOpengl(std::string windowTitle)
+    OpenglRenderer::OpenglRenderer(std::string windowTitle)
         : windowTitle(windowTitle)
     {}
 
-    RendererOpengl::~RendererOpengl()
+    OpenglRenderer::~OpenglRenderer()
     {
         if (window != nullptr)
             SDL_DestroyWindow(window);
     }
 
-    void RendererOpengl::onInit(void)
+    void OpenglRenderer::onInit(void)
     {
         auto log = GET_LOGGER();
 
         //Use OpenGL 3.1 core 
         SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 ); 
         SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 ); 
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
         SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
-
 
         if (SDL_Init(0) != 0) {
             printf("Error initializing SDL:  %s\n", SDL_GetError());
@@ -71,30 +71,37 @@ namespace pdEngine
         }
     }
 
-    void RendererOpengl::onUpdate(TimeDelta delta)
+    void OpenglRenderer::onUpdate(TimeDelta delta)
     {
         (void)delta;
     }
 
-    void RendererOpengl::render()
+    void OpenglRenderer::render()
     {
         //Clear color buffer 
         glClear( GL_COLOR_BUFFER_BIT ); 
 
         //Render quad 
-        if( gRenderQuad ) { 
+        if (gRenderQuad) { 
             //Bind program 
             glUseProgram( programID ); 
+
             //Enable vertex position 
             glEnableVertexAttribArray( gVertexPos2DLocation ); 
+
             //Set vertex data 
             glBindBuffer( GL_ARRAY_BUFFER, gVBO ); 
             glVertexAttribPointer( gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL ); 
+
             //Set index data and render 
             glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO ); 
+
             glDrawElements( GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL ); 
+            //glDrawArrays(GL_TRIANGLES, 0, 3);
+
             //Disable vertex position 
             glDisableVertexAttribArray( gVertexPos2DLocation ); 
+
             //Unbind program 
             glUseProgram(0); 
         }
@@ -102,12 +109,12 @@ namespace pdEngine
         SDL_GL_SwapWindow(window);
     }
 
-    void RendererOpengl::printDebugMsg(std::string msg)
+    void OpenglRenderer::printDebugMsg(std::string msg)
     {
         (void)msg;
     }
 
-    bool RendererOpengl::initOpengl(void)
+    bool OpenglRenderer::initOpengl(void)
     {
         auto log = GET_LOGGER();
 
@@ -173,7 +180,7 @@ namespace pdEngine
         return true;
     }
 
-    GLuint RendererOpengl::compileShader(const GLenum type, const GLchar source[])
+    GLuint OpenglRenderer::compileShader(const GLenum type, const GLchar source[])
     {
         auto log = GET_LOGGER();
         GLuint shader = glCreateShader(type);
@@ -193,7 +200,7 @@ namespace pdEngine
         return shader;
     }
 
-    void RendererOpengl::printGLLog(GLuint logTarget)
+    void OpenglRenderer::printGLLog(GLuint logTarget)
     {
         int length = 0;
         int maxLength = length;

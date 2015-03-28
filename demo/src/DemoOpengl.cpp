@@ -1,6 +1,5 @@
 #include "DemoOpengl.h"
-#include "RendererOpengl.h"
-#include "RendererOpengl.h"
+#include "renderer/OpenglRenderer.h"
 
 namespace pdEngineDemo
 {
@@ -12,6 +11,6 @@ namespace pdEngineDemo
 
     pdEngine::Renderer_sptr DemoOpengl::createRenderer()
     {
-        return std::make_shared<pdEngine::RendererOpengl>();
+        return std::make_shared<pdEngine::OpenglRenderer>();
     }
 }

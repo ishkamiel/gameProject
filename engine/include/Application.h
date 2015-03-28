@@ -4,8 +4,8 @@
 #include "Event.h"
 #include "EventManager.h"
 #include "InputManager.h"
-#include "Renderer.h"
 #include "TaskManager.h"
+#include "renderer/Renderer.h"
 
 #include <memory>
 
@@ -37,7 +37,7 @@ namespace pdEngine
     protected:
         virtual TaskManager_sptr createTaskManager(void);
         virtual EventManager_sptr createEventManager(void);
-        virtual Renderer_sptr createRenderer(void);
+        virtual Renderer_sptr createRenderer(void) =0;
         virtual InputManager_sptr createInputManager(void);
 
         virtual void deleteTaskManager(void);

@@ -1,7 +1,7 @@
 #ifndef PDENGINE_RENDEREROPENGL_H_
 #define PDENGINE_RENDEREROPENGL_H_
 
-#include "Renderer.h"
+#include "renderer/Renderer.h"
 
 #include <GL/glew.h> 
 #include <GL/glu.h> 
@@ -10,7 +10,7 @@
 
 namespace pdEngine
 {
-    class RendererOpengl : public Renderer
+    class OpenglRenderer : public Renderer
     {
         int window_width                { 640 };
         int window_height               { 480 };
@@ -29,8 +29,8 @@ namespace pdEngine
 
 
     public:
-        RendererOpengl(std::string = "pdEngine");
-        ~RendererOpengl();
+        OpenglRenderer(std::string = "pdEngine");
+        ~OpenglRenderer();
 
         virtual void render(void) override;
         virtual void printDebugMsg(std::string) override;

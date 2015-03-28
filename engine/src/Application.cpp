@@ -6,13 +6,10 @@
  */
 
 #include "Application.h"
-#include "Event.h"
-#include "InputManagerSDL.h"
+
 #include "Logger.h"
-#include "RendererSDL.h"
-#include "RendererOpengl.h"
-#include "TaskManager.h"
 #include "Timer.h"
+#include "InputManagerSDL.h"
 
 #include <functional>
 #include <memory>
@@ -140,10 +137,10 @@ namespace pdEngine
         return std::make_shared<TaskManager>();
     }
 
-    Renderer_sptr Application::createRenderer()
-    {
-        return std::make_shared<RendererSDL>();
-    }
+    // Renderer_sptr Application::createRenderer()
+    // {
+    //     return std::make_shared<RendererSDL>();
+    // }
 
     EventManager_sptr Application::createEventManager()
     {

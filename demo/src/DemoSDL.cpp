@@ -1,6 +1,5 @@
 #include "DemoSDL.h"
-#include "RendererOpengl.h"
-#include "RendererSDL.h"
+#include "renderer/SDLRenderer.h"
 
 namespace pdEngineDemo
 {
@@ -12,6 +11,6 @@ namespace pdEngineDemo
 
     pdEngine::Renderer_sptr DemoSDL::createRenderer()
     {
-        return std::make_shared<pdEngine::RendererSDL>();
+        return std::make_shared<pdEngine::SDLRenderer>();
     }
 }

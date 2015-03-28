@@ -1,15 +1,15 @@
-#include "RendererSDL.h"
+#include "renderer/SDLRenderer.h"
 
 #include "Logger.h"
 
 namespace pdEngine
 {
-    RendererSDL::RendererSDL(std::string windowTitle)
+    SDLRenderer::SDLRenderer(std::string windowTitle)
         : windowTitle(windowTitle)
     {
     }
 
-    RendererSDL::~RendererSDL()
+    SDLRenderer::~SDLRenderer()
     {
         if (window != nullptr)
             SDL_DestroyWindow(window);
@@ -17,7 +17,7 @@ namespace pdEngine
         SDL_Quit();
     }
 
-    void RendererSDL::onInit(void)
+    void SDLRenderer::onInit(void)
     {
         auto log = GET_LOGGER();
         if (!isUninitialized()) throw std::string("duplicate initializations");
@@ -62,7 +62,7 @@ namespace pdEngine
         debugPosition->y = 0;
     }
 
-    void RendererSDL::onUpdate(TimeDelta delta)
+    void SDLRenderer::onUpdate(TimeDelta delta)
     {
         std::stringstream sstm;
         sstm << "delta: " << delta;
@@ -71,7 +71,7 @@ namespace pdEngine
         printDebugMsg(sstm.str().c_str());
     }
 
-    void RendererSDL::render()
+    void SDLRenderer::render()
     {
         SDL_FillRect( screenSurface, nullptr, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
         if (debugMessage != nullptr)
@@ -81,7 +81,7 @@ namespace pdEngine
         SDL_UpdateWindowSurface( window );
     }
 
-    void RendererSDL::printDebugMsg(std::string msg)
+    void SDLRenderer::printDebugMsg(std::string msg)
     {
         if (debugPrint)
         {

@@ -1,7 +1,7 @@
 #ifndef PDENGINE_APPLICATIONIMPL_H_
 #define PDENGINE_APPLICATIONIMPL_H_
 
-#include "Renderer.h"
+#include "renderer/Renderer.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -9,7 +9,7 @@
 namespace pdEngine
 {
 
-    class RendererSDL : public Renderer
+    class SDLRenderer : public Renderer
     {
         int window_width                { 640 };
         int window_height               { 480 };
@@ -25,8 +25,8 @@ namespace pdEngine
         SDL_Rect*                       debugPosition;
 
     public:
-        RendererSDL(std::string = "pdEngine");
-        ~RendererSDL();
+        SDLRenderer(std::string = "pdEngine");
+        ~SDLRenderer();
 
         virtual void render(void) override;
         virtual void printDebugMsg(std::string) override;
