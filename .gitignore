@@ -27,9 +27,12 @@
 *.out
 *.app
 
+# Build directories
 build
 ninja_build
+
+# IDE and editor config stuff
 .ycm_extra_conf.pyc
 .kdev4
 gameProject.kdev4
-tmp
+nbproject
