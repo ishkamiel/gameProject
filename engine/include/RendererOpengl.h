@@ -41,9 +41,12 @@ namespace pdEngine
 
     private:
         bool initOpengl(void);
+
         GLuint compileShader(const GLenum, const GLchar[]);
-        void printProgramLog(GLuint program); 
-        void printShaderLog(GLuint shader);
+
+        void printGLLog(GLuint logTarget);
+        //void printProgramLog(GLuint program); 
+        //void printShaderLog(GLuint shader);
     };
 }
 

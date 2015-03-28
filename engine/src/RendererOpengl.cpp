@@ -137,7 +137,7 @@ namespace pdEngine
         if (programSuccess != GL_TRUE)
         {
             log->error("Error linking opengGL program {0}", programID);
-            printProgramLog(programID);
+            printGLLog(programID);
             throw std::runtime_error("openGL linking error");
         }
 
@@ -170,47 +170,6 @@ namespace pdEngine
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO ); 
         glBufferData( GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW );
 
-
-
-
-
-
-
-
-        if (false)
-        {
-            GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-            const GLchar* vertexShaderSource[] =
-            {
-                "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }"
-            };
-
-            glShaderSource(vertexShader, 1, vertexShaderSource, nullptr);
-            glCompileShader(vertexShader);
-
-            GLint vShaderCompiled = GL_FALSE;
-            glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
-            if (vShaderCompiled != GL_TRUE)
-            {
-                log->error("Unable to compile vertex shader {0}", vertexShader);
-                printShaderLog(vertexShader);
-                return false;
-            }
-
-            //glAttachShader(gProgramID, vertexShader);
-
-            GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-            const GLchar* fragmentShaderSource[] = 
-            {
-                "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 1.0, 1.0, 1.0 ); }"
-            };
-
-            glShaderSource(fragmentShader, 1, fragmentShaderSource, nullptr);
-            glCompileShader(fragmentShader);
-        }
-
         return true;
     }
 
@@ -227,74 +186,33 @@ namespace pdEngine
         if (compileOk != GL_TRUE)
         {
             log->error("Unable to compile shader {0}", shader);
-            printShaderLog(shader);
+            printGLLog(shader);
             throw std::runtime_error("shader compilation fail");
         }
 
         return shader;
     }
 
+    void RendererOpengl::printGLLog(GLuint logTarget)
+    {
+        int length = 0;
+        int maxLength = length;
 
-    void RendererOpengl::printProgramLog(GLuint program) 
-    { 
-        //Make sure name is shader 
-        if( glIsProgram( program ) ) 
-        { 
-            //Program log length 
-            int infoLogLength = 0; 
-            int maxLength = infoLogLength; 
+        glGetProgramiv(logTarget, GL_INFO_LOG_LENGTH, &maxLength);
+        char* infoLog = new char[maxLength];
 
-            //Get info string length 
-            glGetProgramiv( program, GL_INFO_LOG_LENGTH, &maxLength ); 
+        if (glIsProgram(logTarget))
+            glGetProgramInfoLog(logTarget, maxLength, &length, infoLog);
+        else if (glIsShader(logTarget))
+            glGetShaderInfoLog(logTarget, maxLength, &length, infoLog);
+        else
+            GET_LOGGER()->warn("Unable to print GLLog for {0}", logTarget);
 
-            //Allocate string 
-            char* infoLog = new char[ maxLength ]; 
+        if (length > 0) 
+        {
+            GET_LOGGER()->info(infoLog);
+        }
 
-            //Get info log 
-            glGetProgramInfoLog( program, maxLength, &infoLogLength, infoLog ); 
-
-            if( infoLogLength > 0 ) { 
-                //Print Log 
-                printf( "%s\n", infoLog ); 
-            } 
-
-            //Deallocate string 
-            delete[] infoLog; 
-        } 
-        else 
-        { 
-            printf( "Name %d is not a program\n", program ); 
-        } 
-    } 
-
-    void RendererOpengl::printShaderLog(GLuint shader) 
-    { 
-        //Make sure name is shader 
-        if( glIsShader( shader ) ) 
-        { 
-            //Shader log length 
-            int infoLogLength = 0; 
-            int maxLength = infoLogLength; 
-
-            //Get info string length 
-            glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &maxLength ); 
-
-            //Allocate string 
-            char* infoLog = new char[ maxLength ]; 
-
-            //Get info log 
-            glGetShaderInfoLog( shader, maxLength, &infoLogLength, infoLog ); 
-
-            if( infoLogLength > 0 ) { 
-                //Print Log 
-                printf( "%s\n", infoLog ); 
-            } 
-            //Deallocate string 
-            delete[] infoLog; 
-        } 
-        else 
-        { 
-            printf( "Name %d is not a shader\n", shader ); 
-        } 
+        delete infoLog;
     }
 }
