@@ -12,6 +12,10 @@ namespace pdEngine
         for (auto t : taskList)
         {
             t->onInit();
+            if (t->state == TaskState::uninitialized)
+                t->state = TaskState::running;
+            // if ( t->state == TaskState::uninitialized)
+            //     throw std::logic_error("TaskState uninitialized after call to onInit");
         }
     }
 

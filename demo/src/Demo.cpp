@@ -11,13 +11,20 @@
 
 int main()
 {
-    pdEngineDemo::DemoApplication app {};
+    try {
+        pdEngineDemo::DemoApplication app {};
 
-    if (app.init())
-    {
-        app.start();
-        return(0);
+        if (app.init())
+        {
+            app.start();
+            return(0);
+        }
+        std::cout << "Whoops, app initialization failed...\n";
+        return(-1);
     }
-    std::cout << "Whoops, we died...\n";
-    return(-1);
+    catch (std::exception& e)
+    {
+        std::cerr << "Uncaught exception: " << e.what() << "\n";
+    }
+
 }
