@@ -1,4 +1,6 @@
 #include "renderer/OpenglRenderer.h"
+#include "renderer/ShaderProgram.h"
+#include "renderer/OpenglUtils.h"
 
 #include "Logger.h"
 
@@ -121,14 +123,14 @@ namespace pdEngine
         programID = glCreateProgram();
 
         log->debug("Compiling vertex shader");
-        GLuint vertexShader = compileShader(GL_VERTEX_SHADER, 
+        GLuint vertexShader = loadShaderFromString(GL_VERTEX_SHADER, 
                 {
                 "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }"
                 });
 
 
         log->debug("Compiling fragment shader");
-        GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER,
+        GLuint fragmentShader = loadShaderFromString(GL_FRAGMENT_SHADER,
                 {
                 "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 1.0, 1.0, 1.0 ); }"
                 });
@@ -178,48 +180,5 @@ namespace pdEngine
         glBufferData( GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW );
 
         return true;
-    }
-
-    GLuint OpenglRenderer::compileShader(const GLenum type, const GLchar source[])
-    {
-        auto log = GET_LOGGER();
-        GLuint shader = glCreateShader(type);
-
-        glShaderSource(shader, 1, &source, nullptr);
-        glCompileShader(shader);
-
-        GLint compileOk = GL_FALSE;
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
-        if (compileOk != GL_TRUE)
-        {
-            log->error("Unable to compile shader {0}", shader);
-            printGLLog(shader);
-            throw std::runtime_error("shader compilation fail");
-        }
-
-        return shader;
-    }
-
-    void OpenglRenderer::printGLLog(GLuint logTarget)
-    {
-        int length = 0;
-        int maxLength = length;
-
-        glGetProgramiv(logTarget, GL_INFO_LOG_LENGTH, &maxLength);
-        char* infoLog = new char[maxLength];
-
-        if (glIsProgram(logTarget))
-            glGetProgramInfoLog(logTarget, maxLength, &length, infoLog);
-        else if (glIsShader(logTarget))
-            glGetShaderInfoLog(logTarget, maxLength, &length, infoLog);
-        else
-            GET_LOGGER()->warn("Unable to print GLLog for {0}", logTarget);
-
-        if (length > 0) 
-        {
-            GET_LOGGER()->info(infoLog);
-        }
-
-        delete infoLog;
     }
 }

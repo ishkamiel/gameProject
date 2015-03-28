@@ -18,7 +18,7 @@ foreach(BIN_SOURCE ${MY_BIN_SOURCES})
         BIN_FILENAME
         ${BIN_SOURCE})
 
-    message("Creating binary ${BIN_FILENAME}")
+    # message("Creating binary ${BIN_FILENAME}")
 
     add_executable(${BIN_FILENAME} ${BIN_SOURCE} 
         ${MY_HEADER_FILES} ${MY_SOURCE_FILES})

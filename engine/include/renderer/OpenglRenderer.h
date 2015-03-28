@@ -5,7 +5,7 @@
 
 #include <GL/glew.h> 
 #include <GL/glu.h> 
-#include <SDL.h> 
+#include <SDL.h>
 #include <SDL_opengl.h> 
 
 namespace pdEngine
@@ -41,12 +41,6 @@ namespace pdEngine
 
     private:
         bool initOpengl(void);
-
-        GLuint compileShader(const GLenum, const GLchar[]);
-
-        void printGLLog(GLuint logTarget);
-        //void printProgramLog(GLuint program); 
-        //void printShaderLog(GLuint shader);
     };
 }
 
