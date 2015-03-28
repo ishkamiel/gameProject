@@ -4,6 +4,7 @@
 #include "Event.h"
 #include "EventManager.h"
 #include "InputManager.h"
+#include "ResourceManager.h"
 #include "TaskManager.h"
 #include "renderer/Renderer.h"
 
@@ -29,24 +30,26 @@ namespace pdEngine
 
         void addSubsystem(Task_sptr);
 
-		bool init();
-		bool start();
-		EventManager_sptr getEventManager();
-        InputManager_sptr getInputManager();
+		bool init(void);
+		bool start(void);
+		EventManager_sptr getEventManager(void);
+        InputManager_sptr getInputManager(void);
 
     protected:
         virtual TaskManager_sptr createTaskManager(void);
         virtual EventManager_sptr createEventManager(void);
         virtual Renderer_sptr createRenderer(void) =0;
         virtual InputManager_sptr createInputManager(void);
+        virtual ResourceManager_sptr createResourceManager(void);
 
         virtual void deleteTaskManager(void);
         virtual void deleteEventManager(void);
         virtual void deleteRenderer(void);
         virtual void deleteInputManager(void);
+        virtual void deleteResourceManager(void);
 
 	private:
-		void shutdown();
+		void shutdown(void);
         void registerListeners(void);
         bool onShutdown(Event_sptr e);
         bool onRequestQuit(Event_sptr e);

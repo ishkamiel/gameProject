@@ -27,7 +27,7 @@ namespace pdEngine
         taskManager->addTask(ptr);
     }
 
-    bool Application::init()
+    bool Application::init(void)
     {
         auto log = MK_LOGGER();
         LOGGER_SET_DEBUG(log);
@@ -69,7 +69,7 @@ namespace pdEngine
         return(true);
     }
 
-    bool Application::start()
+    bool Application::start(void)
     {
         if (!initOk) throw std::runtime_error("Applicatoin::start before successfull init");
         auto log = GET_LOGGER();
@@ -91,7 +91,7 @@ namespace pdEngine
         return true;
     }
 
-    void Application::shutdown()
+    void Application::shutdown(void)
     {
         if (!doShutdown)
             throw std::runtime_error("shutdown() called while mainloop running");
@@ -118,50 +118,53 @@ namespace pdEngine
         // afterShutdown();
     }
 
-    InputManager_sptr  Application::getInputManager()
+    InputManager_sptr  Application::getInputManager(void)
     {
         if (!inputManager)
             throw std::logic_error("getInputManager called before setupInputManager");
         return inputManager;
     }
 
-    EventManager_sptr Application::getEventManager()
+    EventManager_sptr Application::getEventManager(void)
     {
         if (!eventManager)
             throw std::logic_error("getEventManager called before setupEventManager");
         return eventManager;
     }
 
-    TaskManager_sptr Application::createTaskManager()
+    TaskManager_sptr Application::createTaskManager(void)
     {
         return std::make_shared<TaskManager>();
     }
 
-    // Renderer_sptr Application::createRenderer()
-    // {
-    //     return std::make_shared<RendererSDL>();
-    // }
-
-    EventManager_sptr Application::createEventManager()
+    EventManager_sptr Application::createEventManager(void)
     {
         return std::make_shared<EventManager>();
     }
 
-    InputManager_sptr Application::createInputManager()
+    InputManager_sptr Application::createInputManager(void)
     {
         return std::make_shared<InputManagerSDL>(getEventManager());
     }
 
-    void Application::deleteTaskManager()
+    ResourceManager_sptr Application::createResourceManager(void)
+    {
+        return std::make_shared<ResourceManager>(getEventManager());
+    }
+
+    void Application::deleteResourceManager(void)
     {}
 
-    void Application::deleteRenderer()
+    void Application::deleteTaskManager(void)
     {}
 
-    void Application::deleteEventManager()
+    void Application::deleteRenderer(void)
     {}
 
-    void Application::deleteInputManager()
+    void Application::deleteEventManager(void)
+    {}
+
+    void Application::deleteInputManager(void)
     {}
 
     void Application::registerListeners(void)
