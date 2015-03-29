@@ -20,12 +20,6 @@ namespace pdEngine
     {
         auto log = GET_LOGGER();
 
-        //Use OpenGL 3.1 core 
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 ); 
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 ); 
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
-
         if (SDL_Init(0) != 0) {
             printf("Error initializing SDL:  %s\n", SDL_GetError());
             return fail();
@@ -35,6 +29,11 @@ namespace pdEngine
             printf("Error initializing SDL video:  %s\n", SDL_GetError());
             return fail();
         }
+
+        setGLAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); 
+        setGLAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1); 
+        setGLAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+        setGLAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
         window = SDL_CreateWindow(windowTitle.c_str(),
                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
