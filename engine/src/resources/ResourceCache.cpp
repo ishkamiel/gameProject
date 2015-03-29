@@ -33,7 +33,10 @@ namespace pdEngine
         return retval;
     }
 
-    void registerLoader(iResourceLoader_sptr);
+    void ResourceCache::registerLoader(iResourceLoader_sptr l)
+    {
+        loaders.push_back(l);
+    }
 
     ResourceHandle_sptr ResourceCache::getHandle(Resource* r)
     {
@@ -60,7 +63,7 @@ namespace pdEngine
 
     ResourceHandle_sptr ResourceCache::find(Resource* r)
     {
-        auto f = resources.find(r->name);
+        auto f = resources.find(r->getName());
         if (f == resources.end())
             return nullptr;
 
@@ -69,14 +72,14 @@ namespace pdEngine
 
     void ResourceCache::update(ResourceHandle_sptr rh)
     {
-        lruResources.remove_if(rh);
+        lruResources.remove(rh);
         lruResources.push_back(rh);
     }
 
     void ResourceCache::free(ResourceHandle_sptr rh)
     {
-        resources.erase(rh->resource.name);
-        lruResources.remove_if(rh);
+        resources.erase(rh->getResourceName());
+        lruResources.remove(rh);
     }
 
     ResourceHandle_sptr ResourceCache::load(Resource* r)
@@ -86,7 +89,7 @@ namespace pdEngine
 
         for (auto i = loaders.begin(); i != loaders.end(); ++i)
         {
-            if (std::regex_search(r->name, (*i)->vGetRegex()))
+            if (std::regex_search(r->getName(), (*i)->vGetRegex()))
             {
                 loader = (*i);
                 break;
@@ -104,8 +107,7 @@ namespace pdEngine
                 allocate(rawSize) : 
                 new char[rawSize]);
 
-        if (rawBuffer == nullptr)
-            return nullptr;
+        if (rawBuffer == nullptr) return nullptr;
 
         file->vGetRawResource(*r, rawBuffer);
         char* buffer = nullptr;
@@ -114,7 +116,7 @@ namespace pdEngine
         if (loader->vUseRawFile())
         {
             buffer = rawBuffer;
-            handle = ResourceHandle_sptr(new ResourceHandle(*r, buffer, rawSize, this))
+            handle = ResourceHandle_sptr(new ResourceHandle(*r, buffer, rawSize, this));
         }
         else 
         {
@@ -138,7 +140,7 @@ namespace pdEngine
         }
 
         lruResources.push_back(handle);
-        resources[r->name] = handle;
+        resources[r->getName()] = handle;
         return handle;
     }
 
@@ -179,6 +181,12 @@ namespace pdEngine
         ResourceHandle_sptr h = *(--(lruResources.end()));
 
         lruResources.pop_front();
-        resources.erase(h->resource.name);
+        resources.erase(h->getResourceName());
+    }
+
+    void ResourceCache::memoryHasBeenFreed(unsigned int m)
+    {
+        assert((cacheSize - allocated) + m <= cacheSize && "Freeing more memory than allocated");
+        allocated -= m;
     }
 }

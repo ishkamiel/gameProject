@@ -2,7 +2,7 @@
 
 namespace pdEngine 
 {
-    class DefaultResourceLoader : iResourceLoader
+    class DefaultResourceLoader : public iResourceLoader
     {
     public:
         virtual std::regex vGetRegex() override;

@@ -23,6 +23,8 @@ namespace pdEngine
     class ResourceCache
     {
     protected:
+        friend class ResourceHandle;
+
         ResourceHandleList lruResources;
         ResourceHandleMap resources;
         ResourceLoaderList loaders;

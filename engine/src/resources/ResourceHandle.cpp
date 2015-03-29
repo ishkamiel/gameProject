@@ -1,5 +1,6 @@
 #include "resources/ResourceHandle.h"
 
+#include "resources/ResourceCache.h"
 #include "Utils.h"
 
 namespace pdEngine
@@ -12,7 +13,8 @@ namespace pdEngine
     ResourceHandle::~ResourceHandle()
     {
         safeDeleteArray(buffer);
-        resourceCache.lock()->memoryHasBeenFreed(size);
+        if (resourceCache != nullptr)
+            resourceCache->memoryHasBeenFreed(size);
     }
 
     unsigned int ResourceHandle::getSize(void) const {
@@ -27,5 +29,10 @@ namespace pdEngine
     char* ResourceHandle::getWritableBuffer(void)
     {
         return buffer;
+    }
+
+    const std::string ResourceHandle::getResourceName(void)
+    {
+        return resource.getName();
     }
 }

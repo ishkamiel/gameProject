@@ -9,4 +9,12 @@ namespace pdEngine
     {
         std::transform(name.begin(), name.end(), name.begin(), ::tolower); 
     }
+
+    Resource::~Resource()
+    {}
+
+    const std::string Resource::getName(void)
+    {
+        return name;
+    }
 }

@@ -13,6 +13,7 @@ namespace pdEngine
     public:
         Resource(const std::string& name);
         ~Resource();
+        const std::string getName(void);
     };
 }
 #endif
