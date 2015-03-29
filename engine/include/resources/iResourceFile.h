@@ -9,7 +9,7 @@ namespace pdEngine
     {
     
     public:
-        virtual ~iResourceFile () {};
+        //virtual ~iResourceFile () {};
 
         virtual bool vOpen()=0;
         virtual int vGetRawResourceSize(const Resource &r)=0;

@@ -13,7 +13,7 @@ namespace pdEngine
     Resource::~Resource()
     {}
 
-    const std::string Resource::getName(void)
+    const std::string Resource::getName(void) const
     {
         return name;
     }
