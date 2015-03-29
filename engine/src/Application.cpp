@@ -149,7 +149,8 @@ namespace pdEngine
 
     ResourceManager_sptr Application::createResourceManager(void)
     {
-        return std::make_shared<ResourceManager>(getEventManager());
+        //return std::make_shared<ResourceManager>(getEventManager());
+        return nullptr;
     }
 
     void Application::deleteResourceManager(void)

@@ -4,8 +4,8 @@
 #include "Event.h"
 #include "EventManager.h"
 #include "InputManager.h"
-#include "ResourceManager.h"
 #include "TaskManager.h"
+#include "resources/ResourceManager.h"
 #include "renderer/Renderer.h"
 
 #include <memory>
