@@ -1,7 +1,6 @@
 #ifndef PDENGINE_INPUTMANAGER_H_
 #define PDENGINE_INPUTMANAGER_H_
 
-#include "EventManager.h"
 #include "Task.h"
 
 #include <memory>

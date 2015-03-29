@@ -1,10 +1,10 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-#include "Event.h"
-#include "EventManager.h"
 #include "InputManager.h"
 #include "TaskManager.h"
+#include "events/iEvent.h"
+#include "events/EventManager.h"
 #include "resources/ResourceManager.h"
 #include "renderer/Renderer.h"
 

@@ -1,15 +1,15 @@
-#include "EventBasic.h"
+#include "events/DefaultEvent.h"
 
 namespace pdEngine
 {
-    EventBasic::EventBasic(const EventTypeID& id)
+    DefaultEvent::DefaultEvent(const EventTypeID& id)
         : typeID(id), typeName(nullptr), timestamp(0)
     {}
 
-    EventBasic::~EventBasic()
+    DefaultEvent::~DefaultEvent()
     {}
 
-    float EventBasic::getTimestamp(void) const
+    float DefaultEvent::getTimestamp(void) const
     {
         return timestamp;
     }

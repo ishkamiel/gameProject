@@ -8,7 +8,7 @@
 #ifndef PDENGINE_TASKMANAGER_H_
 #define PDENGINE_TASKMANAGER_H_
 
-#include "EventManager.h"
+#include "events/EventManager.h"
 #include "Task.h"
 #include "Timer.h"
 

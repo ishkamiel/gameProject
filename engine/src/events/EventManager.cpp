@@ -1,5 +1,5 @@
-#include "EventBasic.h"
-#include "EventManager.h"
+#include "events/DefaultEvent.h"
+#include "events/EventManager.h"
 #include "Logger.h"
 
 #include <cassert>
@@ -63,7 +63,7 @@ namespace pdEngine
 
     void EventManager::queueEvent(const EventTypeID id)
     {
-        eventQueueIn.push(std::make_shared<EventBasic>(id));
+        eventQueueIn.push(std::make_shared<DefaultEvent>(id));
     }
 
     void EventManager::queueEvent(const Event_sptr eventPtr)

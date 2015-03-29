@@ -1,20 +1,20 @@
 #ifndef PDENGINE_EVENTBASIC_H_
 #define PDENGINE_EVENTBASIC_H_
 
-#include "Event.h"
+#include "events/iEvent.h"
 
 namespace pdEngine
 {
-    class EventBasic : public Event
+    class DefaultEvent : public iEvent
     {
         const EventTypeID typeID;
         const EventTypeName typeName;
         const float timestamp;
 
     public:
-        EventBasic(void) =delete;
-        EventBasic(const EventTypeID&);
-        virtual ~EventBasic();
+        DefaultEvent(void) =delete;
+        DefaultEvent(const EventTypeID&);
+        virtual ~DefaultEvent();
 
         virtual inline const EventTypeID& getTypeID(void) const override final;
         virtual inline const EventTypeName& getTypeName(void) const override final;
@@ -24,12 +24,12 @@ namespace pdEngine
 
 namespace pdEngine
 {
-    inline const EventTypeID& EventBasic::getTypeID(void) const 
+    inline const EventTypeID& DefaultEvent::getTypeID(void) const 
     {
         return typeID;
     }
 
-    inline const EventTypeName& EventBasic::getTypeName(void) const
+    inline const EventTypeName& DefaultEvent::getTypeName(void) const
     {
         return typeName;
     }

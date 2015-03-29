@@ -1,18 +1,17 @@
-#ifndef PDENGINE_EVENTDATA_H_
-#define PDENGINE_EVENTDATA_H_
+#ifndef PDENGINE_IEVENT_H_
+#define PDENGINE_IEVENT_H_
 
 #include <memory>
 #include <string>
 
 namespace pdEngine
 {
-
-    class Event;
-    using Event_sptr = std::shared_ptr<Event>;
+    class iEvent;
+    using Event_sptr = std::shared_ptr<iEvent>;
     using EventTypeName = const char*;
     using EventTypeID = std::size_t;
 
-    class Event
+    class iEvent
     {
     public:
         virtual const EventTypeID& getTypeID(void) const =0;
@@ -23,27 +22,27 @@ namespace pdEngine
 
     constexpr EventTypeID getEventID(const EventTypeName);
 
-    template<size_t idx>
-    constexpr uint32_t crc32(const char*);
-
-    template<>
-    constexpr uint32_t crc32<size_t(-1)>(const char*);
-
     const EventTypeID ev_RequestQuit = getEventID("RequestQuit");
     const EventTypeID ev_Shutdown = getEventID("Shutdown");
 }
 
 namespace pdEngine
 {
-    constexpr EventTypeID getEventID(const EventTypeName eventName)
-    {
-        return (crc32<sizeof(eventName) - 2>(eventName) ^ 0xFFFFFFFF);
-    }
-
     /*
      * CRC solution by Clement JACOB, from StackOverflow:
      * http://stackoverflow.com/questions/2111667/compile-time-string-hashing
      */
+
+    template<size_t idx>
+    constexpr uint32_t crc32(const char*);
+
+    template<>
+    constexpr uint32_t crc32<size_t(-1)>(const char*);
+
+    constexpr EventTypeID getEventID(const EventTypeName eventName)
+    {
+        return (crc32<sizeof(eventName) - 2>(eventName) ^ 0xFFFFFFFF);
+    }
 
     // CRC32 Table (zlib polynomial)
     static constexpr uint32_t crc_table[256] = {
@@ -108,11 +107,11 @@ namespace pdEngine
         }
 
     template<>
-        constexpr uint32_t crc32<size_t(-1)>(const char * str)
-        { // This is the stop-recursion function
-            //(void) str;
+        constexpr uint32_t crc32<size_t(-1)>(const char *)
+        { 
+            // This is the stop-recursion function
             return 0xFFFFFFFF;
         }
 }
 
-#endif /* PDENGINE_EVENTDATA_H_ */
+#endif

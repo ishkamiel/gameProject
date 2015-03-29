@@ -1,8 +1,8 @@
 #ifndef PDENGINE_EVENTMANAGER_H_
 #define PDENGINE_EVENTMANAGER_H_
 
-#include "Event.h"
-#include "EventListener.h"
+#include "events/iEvent.h"
+#include "events/EventListener.h"
 #include "Task.h"
 #include "Timer.h"
 
