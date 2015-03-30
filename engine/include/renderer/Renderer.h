@@ -1,6 +1,7 @@
 #ifndef PDENGINE_RENDERER_H_
 #define PDENGINE_RENDERER_H_
 
+#include "renderer/iRenderable.h"
 #include "Task.h"
 
 #include <memory>
@@ -11,10 +12,10 @@ namespace pdEngine
     class Renderer;
     using Renderer_sptr = std::shared_ptr<Renderer>;
 
-    class Renderer : public Task
+    class Renderer : public Task, public iRenderable
     {
     public:
-        virtual void render() =0;
+        virtual void render(void) const override =0;
         virtual void printDebugMsg(std::string) =0;
     protected:
         virtual void onInit() override =0;

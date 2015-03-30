@@ -1,6 +1,6 @@
 #include "renderer/SDLRenderer.h"
 
-#include "Logger.h"
+#include "Utils.h"
 
 namespace pdEngine
 {
@@ -19,7 +19,7 @@ namespace pdEngine
 
     void SDLRenderer::onInit(void)
     {
-        auto log = GET_LOGGER();
+        auto log = getLogger();
         if (!isUninitialized()) throw std::string("duplicate initializations");
 
         log->debug("Initializing SDL");
@@ -71,7 +71,7 @@ namespace pdEngine
         printDebugMsg(sstm.str().c_str());
     }
 
-    void SDLRenderer::render()
+    void SDLRenderer::render(void) const
     {
         SDL_FillRect( screenSurface, nullptr, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
         if (debugMessage != nullptr)
@@ -93,7 +93,7 @@ namespace pdEngine
 
             if (debugMessage == nullptr)
             {
-                GET_LOGGER()->error("TTF_RenderText_Solid failed: {0}", TTF_GetError());
+                getLogger()->error("TTF_RenderText_Solid failed: {0}", TTF_GetError());
                 TTF_Quit();
                 SDL_Quit();
                 exit(1);

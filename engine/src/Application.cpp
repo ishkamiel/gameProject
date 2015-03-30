@@ -7,7 +7,7 @@
 
 #include "Application.h"
 
-#include "Logger.h"
+#include "Utils.h"
 #include "Timer.h"
 #include "InputManagerSDL.h"
 
@@ -29,10 +29,9 @@ namespace pdEngine
 
     bool Application::init(void)
     {
-        auto log = MK_LOGGER();
-        LOGGER_SET_DEBUG(log);
+        auto log = getLogger();
+        log->set_level(spdlog::level::debug);
 
-        // beforeInit();
 
         log->info("Initializing Appllication");
 
@@ -71,8 +70,9 @@ namespace pdEngine
 
     bool Application::start(void)
     {
+        auto log = getLogger();
+
         if (!initOk) throw std::runtime_error("Applicatoin::start before successfull init");
-        auto log = GET_LOGGER();
 
         auto timer = new Timer(updateFrequency);
         log->info("Entering main loop");
@@ -93,10 +93,9 @@ namespace pdEngine
 
     void Application::shutdown(void)
     {
+        auto log = getLogger();
         if (!doShutdown)
             throw std::runtime_error("shutdown() called while mainloop running");
-
-        auto log = GET_LOGGER();
 
         log->info("Shutting down");
 
@@ -180,7 +179,7 @@ namespace pdEngine
     bool Application::onShutdown(Event_sptr e)
     {
         (void) e;
-        GET_LOGGER()->debug("Recieved ev_Shutdown event, shutting down");
+        DLOG("Recieved ev_Shutdown event, shutting down");
         doShutdown = true;
         return false;
     }
@@ -188,9 +187,8 @@ namespace pdEngine
     bool Application::onRequestQuit(Event_sptr e)
     {
         (void) e;
-        GET_LOGGER()->debug("Recieved ev_RequestQuit, sending ev_Shutdown");
+        DLOG("Recieved ev_RequestQuit, sending ev_Shutdown");
         eventManager->queueEvent(ev_Shutdown);
-
         return true;
     }
 

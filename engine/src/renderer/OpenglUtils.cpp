@@ -1,6 +1,6 @@
 #include "renderer/OpenglUtils.h"
 
-#include "Logger.h"
+#include "Utils.h"
 
 namespace pdEngine
 {
@@ -27,14 +27,14 @@ namespace pdEngine
 
         if (length > 0) 
         {
-            GET_LOGGER()->info("gl{0}InfoLog: {1}", (
+            getLogger()->info("gl{0}InfoLog: {1}", (
                         glIsProgram(logTarget) ? "Program" :
                         (glIsShader(logTarget) ? "Shader" : 
                          "UNKNOWN")), infoLog);
         }
         else 
         {
-            GET_LOGGER()->warn("fetched glInfoLog seems to be empty for {0}", logTarget);
+            getLogger()->warn("fetched glInfoLog seems to be empty for {0}", logTarget);
         }
 
         delete infoLog;
@@ -44,7 +44,7 @@ namespace pdEngine
     {
         if (SDL_GL_SetAttribute(attr, value) != 0) 
         {
-            GET_LOGGER()->warn("Error  setting GL attirbute. SDL Error: {0}", SDL_GetError());
+            getLogger()->warn("Error  setting GL attirbute. SDL Error: {0}", SDL_GetError());
             return false;
         }
         return true;

@@ -1,6 +1,6 @@
 #include "resources/SimpleResourceFile.h"
 
-#include "Logger.h"
+#include "Utils.h"
 
 #include <cassert>
 #include <fstream>
@@ -28,7 +28,7 @@ namespace pdEngine
             rawSize = file.tellg();
             return true;
         }
-        GET_LOGGER()->warn("Unable to open file {0} for reading", filename);
+        getLogger()->warn("Unable to open file {0} for reading", filename);
         return false;
     }
 

@@ -32,7 +32,7 @@ namespace pdEngine
         OpenglRenderer(std::string = "pdEngine");
         ~OpenglRenderer();
 
-        virtual void render(void) override;
+        virtual void render(void) const override;
         virtual void printDebugMsg(std::string) override;
 
     protected:

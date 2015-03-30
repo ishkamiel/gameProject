@@ -1,6 +1,4 @@
-#include "renderer/OpenglUtils.h"
-
-#include "Logger.h"
+#include "Utils.h"
 #include "renderer/OpenglUtils.h"
 
 #include <GL/glew.h> 
@@ -19,7 +17,7 @@ namespace pdEngine
 
     GLuint loadShaderFromString(const GLenum type, const GLchar source[])
     {
-        auto log = GET_LOGGER();
+        auto log = getLogger();
         GLuint shader = glCreateShader(type);
 
         glShaderSource(shader, 1, &source, nullptr);

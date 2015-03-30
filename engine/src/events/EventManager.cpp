@@ -1,6 +1,6 @@
 #include "events/DefaultEvent.h"
 #include "events/EventManager.h"
-#include "Logger.h"
+#include "Utils.h"
 
 #include <cassert>
 #include <algorithm>
@@ -31,7 +31,7 @@ namespace pdEngine
         //DLOG("EventManager onUpdate");
 
         if (eventQueueIn.size() == 0) return;
-        auto log = GET_LOGGER();
+        auto log = getLogger();
         log->debug("EventManager processinging queued events");
 
         std::swap(eventQueueIn, eventsProcessing);
@@ -83,7 +83,7 @@ namespace pdEngine
             const EventTypeID eventID,
             EventListener listener)
     {
-        auto log = GET_LOGGER();
+        auto log = getLogger();
 
         auto list = findEventList(eventID, true);
         assert(list != nullptr);

@@ -1,8 +1,8 @@
 #include "renderer/OpenglRenderer.h"
+
+#include "Utils.h"
 #include "renderer/ShaderProgram.h"
 #include "renderer/OpenglUtils.h"
-
-#include "Logger.h"
 
 namespace pdEngine 
 {
@@ -18,7 +18,7 @@ namespace pdEngine
 
     void OpenglRenderer::onInit(void)
     {
-        auto log = GET_LOGGER();
+        auto log = getLogger();
 
         if (SDL_Init(0) != 0) {
             printf("Error initializing SDL:  %s\n", SDL_GetError());
@@ -77,7 +77,7 @@ namespace pdEngine
         (void)delta;
     }
 
-    void OpenglRenderer::render()
+    void OpenglRenderer::render(void) const
     {
         //Clear color buffer 
         glClear( GL_COLOR_BUFFER_BIT ); 
@@ -117,7 +117,7 @@ namespace pdEngine
 
     bool OpenglRenderer::initOpengl(void)
     {
-        auto log = GET_LOGGER();
+        auto log = getLogger();
 
         programID = glCreateProgram();
 
