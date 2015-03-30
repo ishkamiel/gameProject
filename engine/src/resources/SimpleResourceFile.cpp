@@ -34,7 +34,7 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetRawResourceSize(const Resource &r)
     {
-        assert(r->getName() == filename);
+        assert(r.getName() == filename);
         (void)r;
 
         return rawSize;
@@ -42,7 +42,7 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetRawResource(const Resource &r, char *buffer)
     {
-        assert(r->getName() == filename);
+        assert(r.getName() == filename);
         (void)r;
 
         file.seekg(0, std::ios::beg);
