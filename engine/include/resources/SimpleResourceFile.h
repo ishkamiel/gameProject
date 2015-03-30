@@ -4,6 +4,7 @@
 #include "resources/iResourceFile.h"
 
 #include <fstream>
+#include <string>
 
 namespace pdEngine
 {
@@ -14,18 +15,14 @@ namespace pdEngine
         std::ifstream file;
 
     public:
-        SimpleResourceFile (const std::string&);
+        SimpleResourceFile(const std::string&);
         virtual ~SimpleResourceFile();
 
-        virtual bool vOpen() override;
-        virtual int vGetRawResourceSize(const Resource &r) override;
-        virtual int vGetRawResource(const Resource &r, char *buffer) override;
-        virtual int vGetNumResources() const override;
-        virtual std::string vGetResourceName(int num) const override;
-    
-    protected:
-    
-    private:
+        virtual bool vOpen(void) override;
+        virtual int vGetRawResourceSize(const Resource&) override;
+        virtual int vGetRawResource(const Resource&, char*) override;
+        virtual int vGetNumResources(void) const override;
+        virtual std::string vGetResourceName(int) const override;
     };
 }
 

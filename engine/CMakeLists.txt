@@ -33,24 +33,19 @@ target_link_libraries(pdEngine
 
 
 if(${CppUnit_FOUND})
-    file(GLOB MY_TEST_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h")
-    file(GLOB MY_TEST_BIN_SOURCES  "${CMAKE_CURRENT_SOURCE_DIR}/test/*_test.cpp")
+    file(GLOB_RECURSE T_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h")
+    file(GLOB_RECURSE T_SOURCES  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
 
-    foreach(BIN_SOURCE ${MY_TEST_BIN_SOURCES})
-        string(REGEX REPLACE "^.*/(.*)\\_test.cpp$" "test_\\1"
-            BIN_FILENAME
-            ${BIN_SOURCE})
+    include_directories(
+        "${CMAKE_CURRENT_SOURCE_DIR}/test"
+        ${PDENGINE_INCLUDE_DIR}
+        )
 
-        string(REGEX REPLACE "^.*/(.*)\\_test.cpp$" "\\1"
-            TEST_NAME
-            ${BIN_SOURCE})
+    add_executable(test_pdEngine ${T_SOURCES})
 
-        add_executable(${BIN_FILENAME} ${BIN_SOURCE})
+    target_link_libraries(test_pdEngine ${CppUnit_LIBRARIES} pdEngine)
 
-        target_link_libraries(${BIN_FILENAME} ${CppUnit_LIBRARIES} pdEngine)
-
-        add_test(NAME ${TEST_NAME} COMMAND ${BIN_FILENAME})
-    endforeach(BIN_SOURCE)
+    add_test(NAME pdEngine COMMAND test_pdEngine)
 endif()
 
 # message("SDL2_INCLUDE_DIR ${SDL2_INCLUDE_DIR}")

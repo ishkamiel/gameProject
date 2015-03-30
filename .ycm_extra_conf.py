@@ -92,6 +92,8 @@ flags = [
 '-I',
 './engine/include',
 '-I',
+'./engine/test',
+'-I',
 './utils/include',
 '-I',
 './demo/include',

@@ -8,11 +8,11 @@
 
 namespace pdEngine
 {
-    SimpleResourceFile::SimpleResourceFile (const std::string& path)
-        : filename(path)
+    SimpleResourceFile::SimpleResourceFile (const std::string& filename)
+        : filename(filename)
     {}
 
-    SimpleResourceFile::~SimpleResourceFile()
+    SimpleResourceFile::~SimpleResourceFile(void)
     {
         if (file != nullptr && file.is_open())
         {
@@ -20,7 +20,7 @@ namespace pdEngine
         }
     }
 
-    bool SimpleResourceFile::vOpen()
+    bool SimpleResourceFile::vOpen(void)
     {
         std::ifstream file(filename, std::ios::in|std::ios::binary|std::ios::ate);
         if (file.is_open())

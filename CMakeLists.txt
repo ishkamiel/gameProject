@@ -21,8 +21,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -o3")
 endif()
 
+enable_testing()
 add_subdirectory(engine)
 add_subdirectory(demo)
 add_subdirectory(utils)
-
 enable_testing()
