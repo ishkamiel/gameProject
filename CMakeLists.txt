@@ -10,8 +10,12 @@ set(CMAKE_MODULE_PATH
 	"${CMAKE_SOURCE_DIR}/cmake" 
 )
 
-set(PD_EXTERNAL_LIBRARIES "${CMAKE_SOURCE_DIR}/lib")
+SET(PD_TEST false)
+SET(PD_DEMO false)
+
+# set(PD_EXTERNAL_LIBRARIES "${CMAKE_SOURCE_DIR}/lib")
 set(PD_ENGINE_INCLUDES "${CMAKE_SOURCE_DIR}/engine/includes")
+
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -21,8 +25,13 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -o3")
 endif()
 
-enable_testing()
+if(PD_TEST)
+    include(GetGmock)
+    enable_testing()
+endif()
+
 add_subdirectory(engine)
-add_subdirectory(demo)
-add_subdirectory(utils)
+if (PD_DEMO)
+    add_subdirectory(demo)
+endif()
 enable_testing()

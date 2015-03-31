@@ -7,7 +7,6 @@ find_package(GLEW)
 find_package(SDL2)
 find_package(SDL2_ttf)
 find_package(Spdlog)
-find_package(CppUnit)
 
 set(PDENGINE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
  
@@ -31,21 +30,23 @@ target_link_libraries(pdEngine
     #${CEGUI_LIBRARIES}
     )
 
+if(${PD_TEST})
+    find_package(CppUnit)
+    if(${CppUnit_FOUND})
+        file(GLOB_RECURSE T_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h")
+        file(GLOB_RECURSE T_SOURCES  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
 
-if(${CppUnit_FOUND})
-    file(GLOB_RECURSE T_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h")
-    file(GLOB_RECURSE T_SOURCES  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
+        include_directories(
+            "${CMAKE_CURRENT_SOURCE_DIR}/test"
+            ${PDENGINE_INCLUDE_DIR}
+            )
 
-    include_directories(
-        "${CMAKE_CURRENT_SOURCE_DIR}/test"
-        ${PDENGINE_INCLUDE_DIR}
-        )
+        add_executable(test_pdEngine ${T_SOURCES})
 
-    add_executable(test_pdEngine ${T_SOURCES})
+        target_link_libraries(test_pdEngine ${CppUnit_LIBRARIES} pdEngine)
 
-    target_link_libraries(test_pdEngine ${CppUnit_LIBRARIES} pdEngine)
-
-    add_test(NAME pdEngine COMMAND test_pdEngine)
+        add_test(NAME pdEngine COMMAND test_pdEngine)
+    endif()
 endif()
 
 # message("SDL2_INCLUDE_DIR ${SDL2_INCLUDE_DIR}")
