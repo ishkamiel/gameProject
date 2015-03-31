@@ -1,21 +1,19 @@
 #ifndef PDENGINE_UTILS_H_
 #define PDENGINE_UTILS_H_
 
+#ifdef WIN32 
+#define PDENGINE_WIN32 true
+#else
+#define PDENGINE_WIN32 false
+#endif /* WIN32 */
+
 #include "spdlog/spdlog.h"
 
-#include <cassert>
 #include <memory>
-
-// #define PD_DELETE(x) if (x != nullptr) delete x
 
 namespace pdEngine
 {
-#ifdef WIN32 
-    constexpr bool win32 = true;
-#else
-    constexpr bool win32 = false;
-#endif /* WIN32 */
-
+    constexpr bool win32 = PDENGINE_WIN32;
 
     template<typename T> inline void safeDelete(T*& p)
     {
@@ -31,23 +29,8 @@ namespace pdEngine
 
     using Logger = std::shared_ptr<spdlog::logger>;
 
-    inline std::string getLowercase(const std::string& str)
-    {
-        std::string retval {str};
-        std::transform(retval.begin(), retval.end(), retval.begin(), ::tolower); 
-        return retval;
-    }
-
-    inline void toLowercase(std::string& str)
-    {
-        std::transform(str.begin(), str.end(), str.begin(), ::tolower); 
-    }
-
-    inline Logger getLogger()
-    {
-        static Logger log = spdlog::stderr_logger_mt("pdengine");
-        return log;
-    }
+    void setLogger(Logger);
+    Logger getLogger();
 }
 
 #define DLOG( ... ) getLogger()->debug(__VA_ARGS__)

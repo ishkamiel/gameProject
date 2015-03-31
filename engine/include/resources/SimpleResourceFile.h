@@ -17,8 +17,14 @@ namespace pdEngine
         std::ifstream* file;
 
     public:
-        SimpleResourceFile(const std::string&);
-        virtual ~SimpleResourceFile();
+        /** 
+         *
+         * @brief Creates a new iResourceFile consisting of a single file with
+         * a single resource.
+         *
+         * @param std::string filename 
+         */
+        SimpleResourceFile(const std::string&); virtual ~SimpleResourceFile();
 
         virtual bool vOpen(void) override;
         virtual int vGetNumResources(void) const override;

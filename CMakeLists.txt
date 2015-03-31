@@ -10,7 +10,7 @@ set(CMAKE_MODULE_PATH
 	"${CMAKE_SOURCE_DIR}/cmake" 
 )
 
-SET(pd_debug_cmake true)
+SET(pd_debug_cmake false)
 SET(pd_test true)
 SET(pd_demo false)
 

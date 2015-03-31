@@ -98,7 +98,7 @@ flags = [
 '-I',
 './demo/include',
 '-I',
-'./lib/spdlog/include',
+"/usr/local/ish/spdlog/include",
 '-I',
 '/usr/include/SDL2',
 ]
