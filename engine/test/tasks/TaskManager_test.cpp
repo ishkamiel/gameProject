@@ -8,8 +8,8 @@
 class TaskManager_test : public ::testing::Test
 {
 protected:
-    std::shared_ptr<pdEngine::Task> t1;
-    std::shared_ptr<pdEngine::Task> t2;
+    std::shared_ptr<pdEngine::MockTask> t1;
+    std::shared_ptr<pdEngine::MockTask> t2;
     std::shared_ptr<pdEngine::Task> t3;
     std::shared_ptr<pdEngine::Task> t4;
     std::shared_ptr<pdEngine::Task> t_failInit;
@@ -22,15 +22,13 @@ protected:
 
     virtual void SetUp();
     virtual void TearDown();
-
-    void failNextUpdate(std::shared_ptr<pdEngine::Task> ptr);
 };
 
-void TaskManager_test::failNextUpdate(std::shared_ptr<pdEngine::Task> ptr)
-{
-    std::shared_ptr<pdEngine::MockTask> mt = std::static_pointer_cast<pdEngine::MockTask>(ptr);
-    mt->failOnUpdate = true;
-}
+// void TaskManager_test::failNextUpdate(std::shared_ptr<pdEngine::Task> ptr)
+// {
+//     std::shared_ptr<pdEngine::MockTask> mt = std::static_pointer_cast<pdEngine::MockTask>(ptr);
+//     mt->failOnUpdate = true;
+// }
 
 void TaskManager_test::SetUp()
 {
@@ -144,10 +142,25 @@ TEST_F(TaskManager_test, testFailingUpdates)
     tm->updateTasks(1);
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
     tm->updateTasks(1);
-    failNextUpdate(t1);
+    t1->failOnUpdate = true;
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
     tm->updateTasks(1);
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::failed);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+}
+
+TEST_F(TaskManager_test, testSucceedingUpdates)
+{
+    tm->addTask(t1);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    tm->updateTasks(1);
+    t1->succeedOnUpdate = true;
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::succeeded);
     tm->updateTasks(1);
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
 }
