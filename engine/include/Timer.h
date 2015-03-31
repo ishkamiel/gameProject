@@ -24,7 +24,7 @@ namespace pdEngine
         TimerDefaultDelta   timeSlice;
 
     public:
-        Timer(TimerFrequency);
+        Timer(TimerFrequency stepsPerSecond);
         TimeDelta stepAndSleep();
         TimerDefaultDelta setFrequencey(TimerFrequency);
 

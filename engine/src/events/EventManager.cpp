@@ -72,12 +72,12 @@ namespace pdEngine
         eventQueueIn.push(eventPtr);
     }
 
-    void EventManager::addListener(
-            const EventTypeName eventName, 
-            EventListener listener)
+    /*
+    void EventManager::addListener( const EventTypeName eventName, EventListener listener)
     {
         addListener(getEventID(eventName), listener);
     }
+    */
 
     void EventManager::addListener(
             const EventTypeID eventID,

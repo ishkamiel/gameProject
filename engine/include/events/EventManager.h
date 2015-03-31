@@ -45,9 +45,7 @@ namespace pdEngine
         void queueEvent(const Event_sptr);
         void queueEvent(const EventTypeID);
 
-        void addListener(const EventTypeName, EventListener);
         void addListener(const EventTypeID, EventListener);
-        //void removeListener(const EventTypeID, EventListener);
 
     private:
         EventListenerList* findEventList(EventTypeID, bool = false);

@@ -26,10 +26,6 @@ void Timer_test::SetUp()
 void Timer_test::TearDown()
 {}
 
-TEST_F(Timer_test, ByDefaultBazTrueIsTrue) {
-    EXPECT_EQ(true, true);
-}
-
-TEST_F(Timer_test, ByDefaultBazFalseIsFalse) {
-    EXPECT_EQ(true, true);
+TEST_F(Timer_test, notImplemented) {
+    EXPECT_TRUE(false);
 }

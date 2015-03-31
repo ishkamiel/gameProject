@@ -8,22 +8,19 @@ namespace pdEngine
 {
     class iEvent;
     using Event_sptr = std::shared_ptr<iEvent>;
-    using EventTypeName = const char*;
     using EventTypeID = std::size_t;
 
     class iEvent
     {
     public:
         virtual const EventTypeID& getTypeID(void) const =0;
-        virtual const EventTypeName& getTypeName(void) const =0;
         virtual float getTimestamp(void) const =0;
-    private:
     };
 
-    constexpr EventTypeID getEventID(const EventTypeName);
+    constexpr EventTypeID getEventID(const char*);
 
-    const EventTypeID ev_RequestQuit = getEventID("RequestQuit");
-    const EventTypeID ev_Shutdown = getEventID("Shutdown");
+    const EventTypeID ev_RequestQuit    = getEventID("RequestQuit");
+    const EventTypeID ev_Shutdown       = getEventID("Shutdown");
 }
 
 namespace pdEngine
@@ -39,7 +36,7 @@ namespace pdEngine
     template<>
     constexpr uint32_t crc32<size_t(-1)>(const char*);
 
-    constexpr EventTypeID getEventID(const EventTypeName eventName)
+    constexpr EventTypeID getEventID(const char* eventName)
     {
         return (crc32<sizeof(eventName) - 2>(eventName) ^ 0xFFFFFFFF);
     }

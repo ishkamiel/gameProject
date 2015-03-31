@@ -24,12 +24,6 @@ protected:
     virtual void TearDown();
 };
 
-// void TaskManager_test::failNextUpdate(std::shared_ptr<pdEngine::Task> ptr)
-// {
-//     std::shared_ptr<pdEngine::MockTask> mt = std::static_pointer_cast<pdEngine::MockTask>(ptr);
-//     mt->failOnUpdate = true;
-// }
-
 void TaskManager_test::SetUp()
 {
     t1.reset(new pdEngine::MockTask());

@@ -8,7 +8,6 @@ namespace pdEngine
     class DefaultEvent : public iEvent
     {
         const EventTypeID typeID;
-        const EventTypeName typeName;
         const float timestamp;
 
     public:
@@ -17,7 +16,6 @@ namespace pdEngine
         virtual ~DefaultEvent();
 
         virtual inline const EventTypeID& getTypeID(void) const override final;
-        virtual inline const EventTypeName& getTypeName(void) const override final;
         virtual float getTimestamp(void) const override;
     };
 }
@@ -27,11 +25,6 @@ namespace pdEngine
     inline const EventTypeID& DefaultEvent::getTypeID(void) const 
     {
         return typeID;
-    }
-
-    inline const EventTypeName& DefaultEvent::getTypeName(void) const
-    {
-        return typeName;
     }
 }
 
