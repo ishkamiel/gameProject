@@ -137,6 +137,21 @@ TEST_F(TaskManager_test, testSuccessfullTaskCycle)
     ASSERT_EQ(tm->taskCount(), 0);
 }
 
+TEST_F(TaskManager_test, testFailingUpdates) 
+{
+    tm->addTask(t1);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    tm->updateTasks(1);
+    failNextUpdate(t1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::failed);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+}
+
 
 // bool initAll();
 // void abortAllNow();
