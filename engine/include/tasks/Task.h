@@ -15,10 +15,11 @@ namespace pdEngine
     enum class TaskState
     {
         uninitialized,
-        removed,
+        ready,
         running,
         paused,
         succeeded,
+        removed,
         failed,
         aborted
     };
@@ -42,11 +43,11 @@ namespace pdEngine
         inline TaskState getState(void) const;
         inline bool isAlive(void) const;
         inline bool isDead(void) const;
-        inline bool isRemoveD(void) const;
+        inline bool isRemoved(void) const;
         inline bool isPaused(void) const;
         inline bool isUninitialized(void) const;
 
-        void AttachChild(Task_sptr child);
+        void addChild(Task_sptr child);
         Task_sptr removeChild(void);
         Task_sptr peekChild(void);
 
@@ -82,7 +83,9 @@ namespace pdEngine
 
     bool Task::isAlive(void) const 
     { 
-        return (state == TaskState::running || state == TaskState::paused); 
+        return (state == TaskState::running || 
+                state == TaskState::ready ||
+                state == TaskState::paused); 
     }
 
     bool Task::isDead(void) const 
@@ -90,7 +93,7 @@ namespace pdEngine
         return (state == TaskState::failed || state == TaskState::aborted); 
     }
 
-    bool Task::isRemoveD(void) const { 
+    bool Task::isRemoved(void) const { 
         return (state == TaskState::removed); 
     }
 

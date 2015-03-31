@@ -12,8 +12,8 @@
 #include "tasks/Task.h"
 #include "Timer.h"
 
+#include <list>
 #include <memory>
-#include <vector>
 
 namespace pdEngine
 {
@@ -22,26 +22,26 @@ namespace pdEngine
 
     class TaskManager
     {
-        std::vector<Task_sptr>      taskList;
+        std::list<Task_sptr>      taskList;
         TimeDelta                   previous;
         bool                        paused;
-        bool                        removals;
 
     public:
-        TaskManager();
-        ~TaskManager();
+        TaskManager(void);
+        ~TaskManager(void);
 
-        bool initAll();
+        bool initAll(void);
 
-        void abortAllNow();
+        void abortAllNow(void);
 
         void addTask(Task_sptr);
 
         void updateTasks(TimeDelta);
-        void pauseTasks();
-        void unPauseTasks();
+        void pauseTasks(void);
+        void unPauseTasks(void);
 
-        bool areAnyDead();
+        int taskCount(void);
+        bool areAnyDead(void);
 
     private:
     };

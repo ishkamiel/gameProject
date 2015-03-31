@@ -5,9 +5,7 @@ namespace pdEngine
     Task::~Task() {}
 
     void Task::onInit(void)
-    {
-        state = TaskState::running;
-    }
+    {}
 
     void Task::onSuccess(void)
     {}
@@ -18,7 +16,7 @@ namespace pdEngine
     void Task::onAbort(void)
     {}
 
-    void Task::AttachChild(Task_sptr child)
+    void Task::addChild(Task_sptr child)
     {
         childTask = child;
     }

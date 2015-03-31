@@ -35,17 +35,6 @@ namespace pdEngine
         }
     }
 
-
-    bool TaskManager::areAnyDead() 
-    {
-        for (auto t : taskList)
-        {
-            if (t->isDead()) {
-                return true;
-            }
-        }
-        return false;
-    }
 	
 	void TaskManager::updateTasks(TimeDelta timeDelta)
 	{
@@ -56,6 +45,9 @@ namespace pdEngine
                 case TaskState::running:
                     t->onUpdate(timeDelta);
                     break;
+                case TaskState::ready:
+                    t->state = TaskState::running;
+                    break;
                 case TaskState::paused:
                     break;
                 case TaskState::succeeded:
@@ -64,18 +56,18 @@ namespace pdEngine
                 case TaskState::failed:
                     t->onFail();
                     t->state = TaskState::removed;
-                    removals = true;
+                    taskList.remove(t);
                     break;
                 case TaskState::aborted:
                     t->onAbort();
                     t->state = TaskState::removed;
-                    removals = true;
+                    taskList.remove(t);
                     break;
                 case TaskState::uninitialized:
                     t->onInit();
                     break;
                 case TaskState::removed:
-                    assert(removals);
+                    assert(false && "TaskManager should never see removed tasks");
                     break;
             }
         }
@@ -100,5 +92,22 @@ namespace pdEngine
     void TaskManager::addTask(Task_sptr newTask)
     {
         taskList.push_back(newTask);
+    }
+
+
+    bool TaskManager::areAnyDead() 
+    {
+        for (auto t : taskList)
+        {
+            if (t->isDead()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int TaskManager::taskCount()
+    {
+        return taskList.size();
     }
 }
