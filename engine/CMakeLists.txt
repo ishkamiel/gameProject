@@ -29,7 +29,6 @@ target_link_libraries(pdEngine
     )
 
 if(${pd_test})
-    # find_package(Gmock)
     include(GetGmock)
 
     file(GLOB_RECURSE sources  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
@@ -40,6 +39,7 @@ if(${pd_test})
         )
 
     add_executable(test_pdEngine ${sources})
+    add_dependencies(test_pdEngine libgmock libgtest)
 
     target_link_libraries(test_pdEngine 
         libgmock

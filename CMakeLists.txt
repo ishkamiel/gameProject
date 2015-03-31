@@ -26,8 +26,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(pd_test)
-    # include(GetGmock)
-    message("Going to building tests")
     enable_testing()
 endif()
 
