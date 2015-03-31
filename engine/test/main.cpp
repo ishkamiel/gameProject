@@ -1,16 +1,7 @@
-#include "resources/SimpleResourceFile_test.h"
-#include "Timer_test.h"
+#include "gmock/gmock.h"
 
-#include <cppunit/ui/text/TestRunner.h>
-#include <cppunit/CompilerOutputter.h>
+int main(int argc, char** argv) {
+    testing::InitGoogleMock(&argc, argv);
 
-int main()
-{
-    CppUnit::TextUi::TestRunner runner;
-
-    runner.addTest(Timer_test::suite());
-    runner.addTest(SimpleResourceFile_test::suite());
-
-    runner.run();
-    return(0);
+    return RUN_ALL_TESTS();
 }

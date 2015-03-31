@@ -1,18 +1,15 @@
 project(pdEngine)
 
-# file(GLOB_RECURSE MY_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
-file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 find_package(GLEW)
 find_package(SDL2)
 find_package(SDL2_ttf)
 find_package(Spdlog)
 
-# set(PDENGINE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
- 
+file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
 include_directories( 
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    # ${PDENGINE_INCLUDE_DIR}
     ${SDL2_INCLUDE_DIR} 
     ${SDL2TTF_INCLUDE_DIR} 
     ${Spdlog_INCLUDE_DIR}
@@ -31,30 +28,37 @@ target_link_libraries(pdEngine
     #${CEGUI_LIBRARIES}
     )
 
-if(${PD_TEST})
-    find_package(CppUnit)
-    if(${CppUnit_FOUND})
-        file(GLOB_RECURSE T_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h")
-        file(GLOB_RECURSE T_SOURCES  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
+if(${pd_test})
+    # find_package(Gmock)
+    include(GetGmock)
 
-        include_directories(
-            "${CMAKE_CURRENT_SOURCE_DIR}/test"
-            ${PDENGINE_INCLUDE_DIR}
-            )
+    file(GLOB_RECURSE sources  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
 
-        add_executable(test_pdEngine ${T_SOURCES})
+    include_directories(
+        "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/test"
+        )
 
-        target_link_libraries(test_pdEngine ${CppUnit_LIBRARIES} pdEngine)
+    add_executable(test_pdEngine ${sources})
 
-        add_test(NAME pdEngine COMMAND test_pdEngine)
-    endif()
+    target_link_libraries(test_pdEngine 
+        libgmock
+        libgtest
+        pdEngine)
+
+    install(TARGETS test_pdEngine DESTINATION bin)
+    add_test(NAME pdEngine COMMAND test_pdEngine)
 endif()
 
-if (pd_debug_cmake)
+if (${pd_debug_cmake})
     message("Spdlog_INCLUDE_DIR ${Spdlog_INCLUDE_DIR}")
     message("Spdlog_LIBRARY ${Spdlog_LIBRARY}")
     message("SDL2_INCLUDE_DIR ${SDL2_INCLUDE_DIR}")
     message("SDL2_LIBRARY ${SDL2_LIBRARY}")
     message("GLEW_INCLUDE_DIR ${GLEW_INCLUDE_DIR}")
     message("GLEW_LIBRARY ${GLEW_LIBRARY}")
+    if (${pd_test})
+        message("GTEST_LIBRARIES ${GTEST_LIBRARIES}")
+        message("GMOCK_LIBRARIES ${GMOCK_LIBRARIES}")
+    endif()
 endif()
