@@ -31,7 +31,7 @@ namespace pdEngine
         TaskManager();
         ~TaskManager();
 
-        void initAll();
+        bool initAll();
 
         void abortAllNow();
 

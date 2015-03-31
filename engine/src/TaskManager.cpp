@@ -13,7 +13,12 @@ namespace pdEngine
         {
             t->onInit();
             if (t->state == TaskState::uninitialized)
+            {
                 t->state = TaskState::running;
+            }
+            else {
+                return false;
+            }
         }
     }
 

@@ -55,9 +55,7 @@ namespace pdEngine
         // beforeTaskInit();
         
         log->debug("Calling TaskManager->init() to initialize all subsystems");
-        taskManager->initAll();
-
-        if (taskManager->areAnyDead())
+        if (!taskManager->initAll())
         {
             log->error("Some tasks failed initialization");
             return(false);

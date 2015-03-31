@@ -27,7 +27,6 @@ namespace pdEngine
         GLuint          gVBO                    { 0 };
         GLuint          gIBO                    { 0 };
 
-
     public:
         OpenglRenderer(std::string = "pdEngine");
         ~OpenglRenderer();
