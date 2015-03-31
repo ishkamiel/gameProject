@@ -2,9 +2,7 @@ gameProject
 ===========
 
 
-Eclipse
--------
+Personal
+--------
 
-To make a elcipse project use:
-
-`cmake -G"Eclipse CDT4 - Unix Makefiles" PATH_TO_SOURCES`
+This is a personal project and as such, you probably shouldn't be here.
