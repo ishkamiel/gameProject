@@ -11,13 +11,16 @@ namespace pdEngine
     {
         for (auto t : taskList)
         {
-            t->onInit();
-            if (t->state == TaskState::uninitialized)
+            if (t->isUninitialized())
             {
-                t->state = TaskState::running;
-            }
-            else {
-                return false;
+                t->onInit();
+                if (t->state == TaskState::uninitialized)
+                {
+                    t->state = TaskState::ready;
+                }
+                else {
+                    return false;
+                }
             }
         }
         return true;
@@ -35,37 +38,42 @@ namespace pdEngine
         }
     }
 
-	
-	void TaskManager::updateTasks(TimeDelta timeDelta)
-	{
-        for (auto t : taskList)
+
+    void TaskManager::updateTasks(TimeDelta timeDelta)
+    {
+        auto i = taskList.begin();
+        while (i != taskList.end())
         {
-            switch (t->state)
+            switch ((*i)->state)
             {
                 case TaskState::running:
-                    t->onUpdate(timeDelta);
-                    break;
+                    (*i)->onUpdate(timeDelta);
+                    ++i; break;
                 case TaskState::ready:
-                    t->state = TaskState::running;
-                    break;
+                    (*i)->state = TaskState::running;
+                    ++i; break;
                 case TaskState::paused:
-                    break;
+                    ++i; break;
                 case TaskState::succeeded:
-                    t->onSuccess();
+                    (*i)->onSuccess();
+                    (*i)->state = TaskState::removed;
+                    taskList.remove(*i++);
                     break;
                 case TaskState::failed:
-                    t->onFail();
-                    t->state = TaskState::removed;
-                    taskList.remove(t);
+                    (*i)->onFail();
+                    (*i)->state = TaskState::removed;
+                    taskList.remove(*i++);
                     break;
                 case TaskState::aborted:
-                    t->onAbort();
-                    t->state = TaskState::removed;
-                    taskList.remove(t);
+                    (*i)->onAbort();
+                    (*i)->state = TaskState::removed;
+                    taskList.remove(*i++);
                     break;
                 case TaskState::uninitialized:
-                    t->onInit();
-                    break;
+                    (*i)->onInit();
+                    if ((*i)->state == TaskState::uninitialized)
+                        (*i)->state = TaskState::ready;
+                    ++i; break;
                 case TaskState::removed:
                     assert(false && "TaskManager should never see removed tasks");
                     break;

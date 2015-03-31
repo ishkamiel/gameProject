@@ -9,11 +9,14 @@ namespace pdEngine
     {
     public:
         int updateCount { 0 };
+        bool failOnInit { false };
+        bool failOnUpdate { false };
 
         MockTask(void) {};
         virtual ~MockTask(void) {};
 
-        virtual void onUpdate(TimeDelta) { ++updateCount; };
+        virtual void onInit() { if (failOnInit) fail(); }
+        virtual void onUpdate(TimeDelta) { ++updateCount; if (failOnUpdate) fail(); };
     };
 }
 
