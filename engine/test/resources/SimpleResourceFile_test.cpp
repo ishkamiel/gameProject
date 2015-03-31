@@ -42,27 +42,23 @@ protected:
 
         { // create file with 123 bytes
             file.open(fn_bin123);
-            for (auto i = 1; i < 124; ++i)
+            char *outbuffer = new char[123];
+
+            for (auto i = 0; i < 123; ++i)
             {
-                file << (char)i;
+                outbuffer[i] = (char)i;
             }
+            file.write(outbuffer, 123);
             file.close();
+            delete[] outbuffer;
         }
-        
-        // srf_ef.reset(new pdEngine::SimpleResourceFile(*fn_ef));
-        // srf_ne.reset(new pdEngine::SimpleResourceFile(*fn_ne));
-        // srf_bin123.reset(new pdEngine::SimpleResourceFile(*fn_bin123));
-        //
-        // res_ef.reset(new pdEngine::Resource(*fn_ef));
-        // res_ne.reset(new pdEngine::Resource(*fn_ne));
-        // res_bin123.reset(new pdEngine::Resource(*fn_bin123));
     };
 
     virtual void TearDown()
     {
         std::remove(fn_ne.c_str());
         std::remove(fn_ef.c_str());
-        std::remove(fn_bin123.c_str());
+        // std::remove(fn_bin123.c_str());
     };
 };
 
@@ -89,8 +85,9 @@ TEST_F(SimpleResourceFile_test, vGetNumResources)
 TEST_F(SimpleResourceFile_test, vGetResourceName) 
 {
     auto srf = std::make_shared<pdEngine::SimpleResourceFile>(fn_bin123);
+    auto res = pdEngine::Resource(fn_bin123);
     ASSERT_TRUE(srf->vOpen());
-    ASSERT_EQ(srf->vGetResourceName(0), fn_bin123);
+    ASSERT_EQ(srf->vGetResourceName(0), res.getName());
 }
 
 TEST_F(SimpleResourceFile_test, vGetRawResourceSize) 
@@ -98,7 +95,6 @@ TEST_F(SimpleResourceFile_test, vGetRawResourceSize)
     auto srf = std::make_shared<pdEngine::SimpleResourceFile>(fn_bin123);
     auto res = pdEngine::Resource(fn_bin123);
     srf->vOpen();
-
     ASSERT_EQ(srf->vGetRawResourceSize(res), 123);
 }
 
@@ -110,8 +106,8 @@ TEST_F(SimpleResourceFile_test, vGetRawResource)
     char* buffer = new char[srf->vGetRawResourceSize(res)];
 
     ASSERT_EQ(srf->vGetRawResource(res, buffer), 123);
-    ASSERT_EQ(buffer[120], 121);
-    ASSERT_EQ(buffer[0], 1);
+    ASSERT_EQ(buffer[120], (char)120);
+    ASSERT_EQ(buffer[0], (char)0);
 
     delete buffer;
 }

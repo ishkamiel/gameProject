@@ -14,8 +14,7 @@ namespace pdEngine
         std::string filename;
         std::string resourceName;
         int rawSize;
-        std::ifstream file;
-        bool isOpen { false };
+        std::ifstream* file;
 
     public:
         SimpleResourceFile(const std::string&);
