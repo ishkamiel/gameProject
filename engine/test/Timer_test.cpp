@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
+#include "Timer.h"
+
 class Timer_test : public ::testing::Test 
 {
 

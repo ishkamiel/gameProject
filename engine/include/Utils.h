@@ -31,6 +31,18 @@ namespace pdEngine
 
     using Logger = std::shared_ptr<spdlog::logger>;
 
+    inline std::string getLowercase(const std::string& str)
+    {
+        std::string retval {str};
+        std::transform(retval.begin(), retval.end(), retval.begin(), ::tolower); 
+        return retval;
+    }
+
+    inline void toLowercase(std::string& str)
+    {
+        std::transform(str.begin(), str.end(), str.begin(), ::tolower); 
+    }
+
     inline Logger getLogger()
     {
         static Logger log = spdlog::stderr_logger_mt("pdengine");

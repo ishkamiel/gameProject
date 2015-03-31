@@ -10,7 +10,10 @@ namespace pdEngine
 {
     SimpleResourceFile::SimpleResourceFile (const std::string& filename)
         : filename(filename)
-    {}
+    {
+        Resource res { filename };
+        resourceName = res.getName();
+    }
 
     SimpleResourceFile::~SimpleResourceFile(void)
     {
@@ -26,6 +29,7 @@ namespace pdEngine
         if (file.is_open())
         {
             rawSize = file.tellg();
+            isOpen = true;
             return true;
         }
         getLogger()->warn("Unable to open file {0} for reading", filename);
@@ -34,7 +38,12 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetRawResourceSize(const Resource &r)
     {
-        assert(r.getName() == filename);
+        if (!isOpen) throw std::logic_error("Resource not opened");
+        if (r.getName() != resourceName) 
+        {
+            getLogger()->warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
+            throw std::out_of_range("Unknown resource");
+        }
         (void)r;
 
         return rawSize;
@@ -42,9 +51,14 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetRawResource(const Resource &r, char *buffer)
     {
-        assert(r.getName() == filename);
-        (void)r;
+        if (!isOpen) throw std::logic_error("Resource not opened");
+        if (r.getName() != resourceName) 
+        {
+            getLogger()->warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
+            throw std::out_of_range("Unknown resource");
+        }
 
+        (void)r;
         file.seekg(0, std::ios::beg);
         file.read(buffer, rawSize);
         return rawSize;
@@ -52,11 +66,17 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetNumResources() const
     {
-        return 1;
+        if (!isOpen) throw std::logic_error("Resource not opened");
+        if (isOpen)
+        {
+            return 1;
+        }
+        return 0;
     }
 
     std::string SimpleResourceFile::vGetResourceName(int num) const
     {
+        if (!isOpen) throw std::logic_error("Resource not opened");
         assert(num == 0);
         (void)num;
         return filename;
