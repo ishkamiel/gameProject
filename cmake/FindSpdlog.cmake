@@ -1,9 +1,8 @@
 find_path(Spdlog_INCLUDE_DIR spdlog/spdlog.h
     HINTS
-    $ENV{SDL2DIR}
+    $ENV{SPDLOG_HOME}
     PATH_SUFFIXES spdlog/include include
     PATHS
-    "${PD_EXTERNAL_LIBRARIES}/spdlog"
     /usr/local/include/spdlog
     /usr/include/spdlog
     /opt/local # DarwinPorts
