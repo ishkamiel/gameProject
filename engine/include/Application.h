@@ -36,6 +36,8 @@ namespace pdEngine
         InputManager_sptr getInputManager(void);
 
     protected:
+        virtual void initLogging(void);
+
         virtual TaskManager_sptr createTaskManager(void);
         virtual EventManager_sptr createEventManager(void);
         virtual Renderer_sptr createRenderer(void) =0;

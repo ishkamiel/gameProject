@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH
 
 SET(pd_debug_cmake false)
 SET(pd_test true)
-SET(pd_demo false)
+SET(pd_demo true)
 
 # set(PD_EXTERNAL_LIBRARIES "${CMAKE_SOURCE_DIR}/lib")
 # set(PD_ENGINE_INCLUDES "${CMAKE_SOURCE_DIR}/engine/includes")

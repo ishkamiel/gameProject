@@ -17,7 +17,8 @@
 namespace pdEngine
 {
     Application::Application() 
-    {}
+    {
+    }
 
     Application::~Application()
     {}
@@ -29,9 +30,8 @@ namespace pdEngine
 
     bool Application::init(void)
     {
+        initLogging();
         auto log = getLogger();
-        log->set_level(spdlog::level::debug);
-
 
         log->info("Initializing Appllication");
 
@@ -116,6 +116,28 @@ namespace pdEngine
 
         // afterShutdown();
     }
+
+    void Application::initLogging(void)
+    {
+        if (true)
+        {
+            std::shared_ptr<spdlog::logger> log { 
+                spdlog::stderr_logger_mt("pdengine")
+            };
+            setLogger(log);
+        }
+        else
+        {
+            size_t q_size = 1048576; //queue size must be power of 2
+            spdlog::set_async_mode(q_size);
+            std::shared_ptr<spdlog::logger> log { 
+                spdlog::daily_logger_mt("pdengine", "pdeninge") };
+            setLogger(log);
+        }
+
+        getLogger()->set_level(spdlog::level::debug);
+    }
+
 
     InputManager_sptr  Application::getInputManager(void)
     {
