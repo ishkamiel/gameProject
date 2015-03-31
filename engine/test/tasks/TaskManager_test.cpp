@@ -10,10 +10,10 @@ class TaskManager_test : public ::testing::Test
 protected:
     std::shared_ptr<pdEngine::MockTask> t1;
     std::shared_ptr<pdEngine::MockTask> t2;
-    std::shared_ptr<pdEngine::Task> t3;
-    std::shared_ptr<pdEngine::Task> t4;
-    std::shared_ptr<pdEngine::Task> t_failInit;
-    std::shared_ptr<pdEngine::Task> t_failUpdate;
+    std::shared_ptr<pdEngine::MockTask> t3;
+    std::shared_ptr<pdEngine::MockTask> t4;
+    std::shared_ptr<pdEngine::MockTask> t_failInit;
+    std::shared_ptr<pdEngine::MockTask> t_failUpdate;
 
     std::shared_ptr<pdEngine::TaskManager> tm;
 
@@ -67,7 +67,7 @@ TEST_F(TaskManager_test, addTasks)
     ASSERT_EQ(tm->taskCount(), 4);
 }
 
-TEST_F(TaskManager_test, testInitAll) 
+TEST_F(TaskManager_test, InitAll) 
 {
     tm->addTask(t1);
     tm->addTask(t2);
@@ -81,7 +81,7 @@ TEST_F(TaskManager_test, testInitAll)
     ASSERT_EQ(t4->getState(), pdEngine::TaskState::ready);
 }
 
-TEST_F(TaskManager_test, testInitAllWithFails) 
+TEST_F(TaskManager_test, InitAllWithFails) 
 {
     tm->addTask(t4);
     tm->addTask(t1);
@@ -92,7 +92,7 @@ TEST_F(TaskManager_test, testInitAllWithFails)
     ASSERT_EQ(t_failInit->getState(), pdEngine::TaskState::failed);
 }
 
-TEST_F(TaskManager_test, testSuccessfullTaskCycle) 
+TEST_F(TaskManager_test, SuccessfullTaskCycle) 
 {
     tm->addTask(t1);
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::uninitialized);
@@ -135,34 +135,107 @@ TEST_F(TaskManager_test, testSuccessfullTaskCycle)
     ASSERT_EQ(tm->taskCount(), 0);
 }
 
-TEST_F(TaskManager_test, testFailingUpdates) 
+TEST_F(TaskManager_test, FailingUpdates) 
 {
     tm->addTask(t1);
     tm->updateTasks(1);
     tm->updateTasks(1);
-    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
     tm->updateTasks(1);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+
+    int uc = t1->updateCount;
     t1->failOnUpdate = true;
-    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+
+    // Run an update during which a fail occurs
     tm->updateTasks(1);
+    ASSERT_EQ(t1->updateCount, uc+1);
+    ASSERT_EQ(t1->failCount, 0);
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::failed);
+
+    // Process onFail and remove
     tm->updateTasks(1);
+    ASSERT_EQ(t1->failCount, 1);
+    ASSERT_EQ(t1->updateCount, uc+1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+    ASSERT_EQ(tm->taskCount(), 0);
+}
+
+TEST_F(TaskManager_test, SucceedingUpdates)
+{
+    tm->addTask(t1);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+
+    t1->succeedOnUpdate = true;
+
+    // Next update will cause success
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::succeeded);
+    ASSERT_EQ(t1->succeedCount, 0);
+
+    // Next update will run onSuccess and remove
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->succeedCount, 1);
     ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
 }
 
-TEST_F(TaskManager_test, testSucceedingUpdates)
+TEST_F(TaskManager_test, Abort)
 {
     tm->addTask(t1);
+    tm->addTask(t2);
+    tm->addTask(t3);
+    tm->addTask(t4);
     tm->updateTasks(1);
     tm->updateTasks(1);
-    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
     tm->updateTasks(1);
-    t1->succeedOnUpdate = true;
-    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
     tm->updateTasks(1);
-    ASSERT_EQ(t1->getState(), pdEngine::TaskState::succeeded);
     tm->updateTasks(1);
-    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+    tm->abortAllNow();
+    ASSERT_EQ(t1->abortCount, 1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::aborted);
+    ASSERT_EQ(t2->abortCount, 1);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::aborted);
+    ASSERT_EQ(t3->abortCount, 1);
+    ASSERT_EQ(t3->getState(), pdEngine::TaskState::aborted);
+    ASSERT_EQ(t4->abortCount, 1);
+    ASSERT_EQ(t4->getState(), pdEngine::TaskState::aborted);
+}
+
+TEST_F(TaskManager_test, AlotWithPause)
+{
+    tm->addTask(t1);
+    tm->addTask(t2);
+    tm->addTask(t3);
+    tm->addTask(t4);
+    tm->updateTasks(1);
+    tm->updateTasks(1);
+    t4->pause();
+    for (auto i = 0; i < 1000000; i++)
+    {
+        if (i == 500000)
+            t4->unPause();
+        tm->updateTasks(1);
+    }
+    ASSERT_EQ(t1->updateCount, 1000000);
+    ASSERT_EQ(t2->updateCount, 1000000);
+    ASSERT_EQ(t3->updateCount, 1000000);
+    ASSERT_EQ(t4->updateCount, 500000);
+}
+
+TEST_F(TaskManager_test, AnyDead)
+{
+    t1->failOnInit = true;
+    tm->addTask(t1);
+    tm->addTask(t2);
+    tm->addTask(t3);
+    tm->addTask(t4);
+    tm->initAll();
+    ASSERT_TRUE(tm->areAnyDead());
 }
 
 

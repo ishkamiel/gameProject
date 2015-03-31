@@ -23,8 +23,26 @@ namespace pdEngine
 
         virtual void onInit() 
         { 
+            ++initCount;
             if (failOnInit) fail(); 
         }
+
+        virtual void onSuccess()
+        {
+            ++succeedCount;
+        }
+
+        virtual void onAbort()
+        {
+            ++abortCount;
+        }
+
+        virtual void onFail() 
+        { 
+            ++failCount;
+            if (failOnInit) fail(); 
+        }
+
         virtual void onUpdate(TimeDelta) 
         { 
             ++updateCount; 
