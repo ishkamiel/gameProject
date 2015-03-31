@@ -1,7 +1,7 @@
 #ifndef PDENGINE_INPUTMANAGER_H_
 #define PDENGINE_INPUTMANAGER_H_
 
-#include "Task.h"
+#include "tasks/Task.h"
 
 #include <memory>
 

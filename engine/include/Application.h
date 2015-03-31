@@ -2,9 +2,9 @@
 #define APPLICATION_H_
 
 #include "InputManager.h"
-#include "TaskManager.h"
 #include "events/iEvent.h"
 #include "events/EventManager.h"
+#include "tasks/TaskManager.h"
 #include "resources/ResourceManager.h"
 #include "renderer/Renderer.h"
 

@@ -9,7 +9,7 @@
 #define PDENGINE_TASKMANAGER_H_
 
 #include "events/EventManager.h"
-#include "Task.h"
+#include "tasks/Task.h"
 #include "Timer.h"
 
 #include <memory>

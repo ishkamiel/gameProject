@@ -1,4 +1,4 @@
-#include "TaskManager.h"
+#include "tasks/TaskManager.h"
 
 namespace pdEngine
 {
@@ -7,7 +7,7 @@ namespace pdEngine
 	
 	TaskManager::~TaskManager() {}
 
-    void TaskManager::initAll()
+    bool TaskManager::initAll()
     {
         for (auto t : taskList)
         {
@@ -20,6 +20,7 @@ namespace pdEngine
                 return false;
             }
         }
+        return true;
     }
 
     void TaskManager::abortAllNow()

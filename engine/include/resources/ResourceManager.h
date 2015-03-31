@@ -2,7 +2,7 @@
 #define PDENGINE_RESOURCEMANAGER_H_
 
 #include "events/EventManager.h"
-#include "Task.h"
+#include "tasks/Task.h"
 
 namespace pdEngine
 {
