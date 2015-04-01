@@ -28,14 +28,13 @@ namespace pdEngine
         bool m_FailI { false };
     };
 
-    class MockTask : public SimpleTask
+    class MockTask : public Task
     {
     public:
         MOCK_METHOD0(onInit, void(void));
         MOCK_METHOD0(onAbort, void(void));
         MOCK_METHOD0(onFail, void(void));
         MOCK_METHOD0(onSuccess, void(void));
-        // MOCK_METHOD0(fail, void(void));
         MOCK_METHOD1(onUpdate, void(TimeDelta));
     };
 }

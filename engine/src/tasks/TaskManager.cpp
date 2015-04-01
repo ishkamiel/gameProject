@@ -32,7 +32,6 @@ namespace pdEngine
         {
             if (t->isAlive()) 
             {
-                t->onAbort();
                 t->state = TaskState::aborted;
             }
         }
