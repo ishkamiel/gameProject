@@ -3,8 +3,6 @@
 
 #include "tasks/Task.h"
 
-#include "tasks/MockTask.h"
-
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
@@ -19,6 +17,14 @@ namespace  pdEngine
         void onFail(Task_sptr t) { t->onFail(); }
         void onAbort(Task_sptr t) { t->onAbort(); }
         void setState(Task_sptr t, pdEngine::TaskState state) { t->state = state; }
+    };
+
+    class SimpleTask : public Task
+    {
+    public:
+        SimpleTask() {};
+        virtual ~SimpleTask() {};
+        virtual void onUpdate(TimeDelta t) override { (void)t; }
     };
 }
 

@@ -1,13 +1,11 @@
 #include "tasks/Task_test.h"
-#include "tasks/Task.h"
-
 
 void Task_test::SetUp()
 {
-    t.reset(new pdEngine::MockTask());
-    t2.reset(new pdEngine::MockTask());
-    t3.reset(new pdEngine::MockTask());
-    t4.reset(new pdEngine::MockTask());
+    t.reset(new pdEngine::SimpleTask());
+    t2.reset(new pdEngine::SimpleTask());
+    t3.reset(new pdEngine::SimpleTask());
+    t4.reset(new pdEngine::SimpleTask());
 
     tm = new pdEngine::TaskManager();
 }
