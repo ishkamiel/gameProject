@@ -3,55 +3,40 @@
 
 #include "tasks/Task.h"
 
+#include "gmock/gmock.h"
+
 namespace pdEngine
 {
-    class MockTask : public Task
+    class SimpleTask : public Task
     {
     public:
-        int updateCount { 0 };
-        int abortCount { 0 };
-        int failCount { 0 };
-        int succeedCount { 0 };
-        int initCount { 0 };
-
-        bool failOnInit { false };
-        bool failOnUpdate { false };
-        bool succeedOnUpdate { false };
-
-        MockTask(void) {};
-        virtual ~MockTask(void) {};
-
-        virtual void onInit() 
+        SimpleTask() {};
+        virtual ~SimpleTask() {};
+        virtual void onUpdate(TimeDelta t) override 
         { 
-            ++initCount;
-            if (failOnInit) fail(); 
+            (void)t; 
+            if (m_FailU) fail(); 
         }
-
-        virtual void onSuccess()
-        {
-            ++succeedCount;
-        }
-
-        virtual void onAbort()
-        {
-            ++abortCount;
-        }
-
-        virtual void onFail() 
+        virtual void onInit() override 
         { 
-            ++failCount;
-            if (failOnInit) fail(); 
+            if (m_FailI) fail();
         }
+        
+        void t_failNextUpdate() { m_FailU = true; };
+        void t_failInit() { m_FailI = true; };
+        bool m_FailU { false };
+        bool m_FailI { false };
+    };
 
-        virtual void onUpdate(TimeDelta) 
-        { 
-            ++updateCount; 
-
-            if (failOnUpdate) 
-                fail(); 
-            else if (succeedOnUpdate) 
-                succeed(); 
-        };
+    class MockTask : public SimpleTask
+    {
+    public:
+        MOCK_METHOD0(onInit, void(void));
+        MOCK_METHOD0(onAbort, void(void));
+        MOCK_METHOD0(onFail, void(void));
+        MOCK_METHOD0(onSuccess, void(void));
+        MOCK_METHOD0(fail, void(void));
+        MOCK_METHOD1(onUpdate, void(TimeDelta));
     };
 }
 
