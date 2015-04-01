@@ -35,7 +35,7 @@ namespace pdEngine
         MOCK_METHOD0(onAbort, void(void));
         MOCK_METHOD0(onFail, void(void));
         MOCK_METHOD0(onSuccess, void(void));
-        MOCK_METHOD0(fail, void(void));
+        // MOCK_METHOD0(fail, void(void));
         MOCK_METHOD1(onUpdate, void(TimeDelta));
     };
 }

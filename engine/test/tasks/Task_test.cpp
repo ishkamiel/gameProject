@@ -91,18 +91,13 @@ TEST_F(Task_test, testStatesAndPause)
 
 TEST_F(Task_test, testFail) 
 {
-    tm->onInit(t);
-    ASSERT_TRUE(t->isDead() || t->isUninitialized());
-    if (t->isUninitialized())
-    {
-        t->fail();
-        ASSERT_EQ(t->getState(), pdEngine::TaskState::failed);
-        ASSERT_FALSE(t->isAlive());
-        ASSERT_TRUE(t->isDead());
-        ASSERT_FALSE(t->isRemoved());
-        ASSERT_FALSE(t->isPaused());
-        ASSERT_FALSE(t->isUninitialized());
-    }
+    t->fail();
+    ASSERT_EQ(t->getState(), pdEngine::TaskState::failed);
+    ASSERT_FALSE(t->isAlive());
+    ASSERT_TRUE(t->isDead());
+    ASSERT_FALSE(t->isRemoved());
+    ASSERT_FALSE(t->isPaused());
+    ASSERT_FALSE(t->isUninitialized());
 }
 
 TEST_F(Task_test, testSucceed) 

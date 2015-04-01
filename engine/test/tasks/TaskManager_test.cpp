@@ -6,6 +6,7 @@
 #include "gmock/gmock.h"
 
 using ::testing::AtMost;
+using ::testing::Invoke;
 
 class TaskManager_test : public ::testing::Test
 {
@@ -46,10 +47,10 @@ void TaskManager_test::TearDown()
     tm.reset();
 }
 
-TEST_F(TaskManager_test, MakeSureTestingFacilitiesWork)
+TEST_F(TaskManager_test, MakeSureTestingFacilitiesWorkAsExpected)
 {
-    //EXPECT_CALL(*t1, fail()).Times(1);
     EXPECT_EQ(t1->getState(), pdEngine::TaskState::uninitialized);
+    EXPECT_CALL(*t1, onInit()).WillOnce(Invoke(&*t1, &pdEngine::MockTask::fail));
     t1->t_failInit();
     t1->onInit();
     EXPECT_EQ(t1->getState(), pdEngine::TaskState::failed);
@@ -96,10 +97,9 @@ TEST_F(TaskManager_test, InitAllWithFails)
     tm->addTask(t1);
     tm->addTask(t2);
 
-    EXPECT_CALL(*t3, fail()).Times(1);
-    t3->t_failInit();
     tm->addTask(t3);
 
+    EXPECT_CALL(*t3, onInit()).WillOnce(Invoke(&*t3, &pdEngine::MockTask::fail));
     ASSERT_FALSE(tm->initAll());
     ASSERT_EQ(t3->getState(), pdEngine::TaskState::failed);
 }
