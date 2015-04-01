@@ -4,7 +4,8 @@ project(pdEngine)
 find_package(GLEW)
 find_package(SDL2)
 find_package(SDL2_ttf)
-find_package(Spdlog)
+# find_package(Spdlog)
+include(GetSpdlog)
 
 file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
@@ -21,6 +22,8 @@ add_library(pdEngine SHARED
     ${sources} 
     )
 
+add_dependencies(pdEngine libspdlog)
+
 target_link_libraries(pdEngine
     ${SDL2_LIBRARY}
     ${SDL2TTF_LIBRARY}
@@ -28,7 +31,7 @@ target_link_libraries(pdEngine
     #${CEGUI_LIBRARIES}
     )
 
-if(${pd_test})
+if(${BUILD_TESTS})
     include(GetGmock)
 
     file(GLOB_RECURSE sources  "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
