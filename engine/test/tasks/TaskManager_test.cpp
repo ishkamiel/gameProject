@@ -6,6 +6,7 @@
 #include "gmock/gmock.h"
 
 using ::testing::AtMost;
+using ::testing::AtLeast;
 using ::testing::Invoke;
 
 class TaskManager_test : public ::testing::Test
@@ -104,48 +105,51 @@ TEST_F(TaskManager_test, InitAllWithFails)
     ASSERT_EQ(t3->getState(), pdEngine::TaskState::failed);
 }
 
-// TEST_F(TaskManager_test, SuccessfullTaskCycle) 
-// {
-//     tm->addTask(t1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::uninitialized);
-//     tm->initAll();
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::ready);
-//     ASSERT_EQ(tm->taskCount(), 1);
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
-//     tm->addTask(t2);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::uninitialized);
-//     ASSERT_EQ(tm->taskCount(), 2);
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::ready);
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
-//     ASSERT_EQ(tm->taskCount(), 2);
-//     t1->succeed();
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::succeeded);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
-//     t1->succeed();
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
-//     ASSERT_EQ(tm->taskCount(), 1);
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
-//     t2->succeed();
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::succeeded);
-//     tm->updateTasks(1);
-//     ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
-//     ASSERT_EQ(t2->getState(), pdEngine::TaskState::removed);
-//     ASSERT_EQ(tm->taskCount(), 0);
-// }
+TEST_F(TaskManager_test, SuccessfullTaskCycle) 
+{
+    EXPECT_CALL(*t1, onInit()).Times(1);
+    EXPECT_CALL(*t1, onSuccess()).Times(1);
+    EXPECT_CALL(*t1, onUpdate(1)).Times(AtMost(1));
+
+    tm->addTask(t1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::uninitialized);
+    tm->initAll();
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::ready);
+    ASSERT_EQ(tm->taskCount(), 1);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::uninitialized);
+    ASSERT_EQ(tm->taskCount(), 2);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::ready);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(tm->taskCount(), 2);
+    t1->succeed();
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::succeeded);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
+    t1->succeed();
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
+    ASSERT_EQ(tm->taskCount(), 1);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::running);
+    t2->succeed();
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::succeeded);
+    tm->updateTasks(1);
+    ASSERT_EQ(t1->getState(), pdEngine::TaskState::removed);
+    ASSERT_EQ(t2->getState(), pdEngine::TaskState::removed);
+    ASSERT_EQ(tm->taskCount(), 0);
+}
 //
 // TEST_F(TaskManager_test, FailingUpdates) 
 // {
