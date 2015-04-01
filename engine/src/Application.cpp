@@ -7,6 +7,7 @@
 
 #include "Application.h"
 
+#include "Logger.h"
 #include "Utils.h"
 #include "Timer.h"
 #include "InputManagerSDL.h"

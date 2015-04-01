@@ -25,6 +25,44 @@ protected:
 
     virtual void SetUp();
     virtual void TearDown();
+    std::shared_ptr<pdEngine::MockTask> getFailing()
+    {
+        auto t = std::make_shared<pdEngine::MockTask>();
+
+        EXPECT_CALL(*t1, onInit()).Times(1);
+        EXPECT_CALL(*t1, onUpdate(_)).Times(AtLeast(1));
+        EXPECT_CALL(*t1, onSuccess()).Times(0);
+        EXPECT_CALL(*t1, onAbort()).Times(0);
+        EXPECT_CALL(*t1, onFail()).Times(1);
+
+        return t;
+    }
+
+    std::shared_ptr<pdEngine::MockTask> getSucceeding()
+    {
+        auto t = std::make_shared<pdEngine::MockTask>();
+
+        EXPECT_CALL(*t1, onInit()).Times(1);
+        EXPECT_CALL(*t1, onUpdate(_)).Times(AtLeast(1));
+        EXPECT_CALL(*t1, onSuccess()).Times(1);
+        EXPECT_CALL(*t1, onAbort()).Times(0);
+        EXPECT_CALL(*t1, onFail()).Times(0);
+
+        return t;
+    }
+
+    std::shared_ptr<pdEngine::MockTask> getEndless()
+    {
+        auto t = std::make_shared<pdEngine::MockTask>();
+
+        EXPECT_CALL(*t1, onInit()).Times(1);
+        EXPECT_CALL(*t1, onUpdate(_)).Times(AtLeast(1));
+        EXPECT_CALL(*t1, onSuccess()).Times(0);
+        EXPECT_CALL(*t1, onAbort()).Times(0);
+        EXPECT_CALL(*t1, onFail()).Times(0);
+
+        return t;
+    }
 };
 
 void TaskManager_test::SetUp()
@@ -257,66 +295,36 @@ TEST_F(TaskManager_test, AlotWithPause)
     auto tasks = 100;
     auto iterations  = 100000;
 
+    auto f = getFailing();
+    auto s = getSucceeding();
+
     EXPECT_CALL(*t1, onInit()).Times(1);
-    EXPECT_CALL(*t1, onUpdate(_)).Times(AtLeast(1));
-    EXPECT_CALL(*t1, onSuccess()).Times(1);
+    EXPECT_CALL(*t1, onUpdate(_)).Times(iterations*8);
+    EXPECT_CALL(*t1, onSuccess()).Times(0);
     EXPECT_CALL(*t1, onAbort()).Times(0);
     EXPECT_CALL(*t1, onFail()).Times(0);
-
-    EXPECT_CALL(*t2, onInit()).Times(1);
-    EXPECT_CALL(*t2, onUpdate(_)).Times(AtLeast(1));
-    EXPECT_CALL(*t2, onSuccess()).Times(1);
-    EXPECT_CALL(*t2, onAbort()).Times(0);
-    EXPECT_CALL(*t2, onFail()).Times(0);
-
-    EXPECT_CALL(*t3, onInit()).Times(1);
-    EXPECT_CALL(*t3, onUpdate(_)).Times(AtLeast(1));
-    EXPECT_CALL(*t3, onSuccess()).Times(0);
-    EXPECT_CALL(*t3, onAbort()).Times(0);
-    EXPECT_CALL(*t3, onFail()).Times(1);
-
-    EXPECT_CALL(*t4, onInit()).Times(1);
-    EXPECT_CALL(*t4, onUpdate(_)).Times(AtLeast(1));
-    EXPECT_CALL(*t4, onSuccess()).Times(1);
-    EXPECT_CALL(*t4, onAbort()).Times(0);
-    EXPECT_CALL(*t4, onFail()).Times(0);
-
-    for (auto i = 0; i < tasks; ++i)
-    {
-        auto t = std::make_shared<pdEngine::MockTask>();
-        EXPECT_CALL(*t, onInit()).Times(1);
-        EXPECT_CALL(*t, onUpdate(_)).Times(AtLeast(1));
-        EXPECT_CALL(*t, onSuccess()).Times(0);
-        EXPECT_CALL(*t, onAbort()).Times(0);
-        EXPECT_CALL(*t, onFail()).Times(0);
-    }
     tm->addTask(t1);
-    tm->addTask(t2);
-    tm->addTask(t3);
-    tm->addTask(t4);
-    for (auto i = 0; i < tasks; ++i)
-    {
-        auto t = std::make_shared<pdEngine::MockTask>();
-        EXPECT_CALL(*t, onInit()).Times(1);
-        EXPECT_CALL(*t, onUpdate(_)).Times(AtLeast(1));
-        EXPECT_CALL(*t, onSuccess()).Times(0);
-        EXPECT_CALL(*t, onAbort()).Times(0);
-        EXPECT_CALL(*t, onFail()).Times(0);
-    }
 
-    tm->updateTasks(1);
-    tm->updateTasks(1);
-    t4->pause();
-    for (auto i = 0; i < 1000000; i++)
-    {
-        if (i == 500000)
-            t4->unPause();
-        tm->updateTasks(1);
-    }
-    ASSERT_EQ(t1->updateCount, 1000000);
-    ASSERT_EQ(t2->updateCount, 1000000);
-    ASSERT_EQ(t3->updateCount, 1000000);
-    ASSERT_EQ(t4->updateCount, 500000);
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    for (auto i = 0; i < tasks; ++i) tm->addTask(getEndless());
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    tm->addTask(f);
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    for (auto i = 0; i < tasks; ++i) tm->addTask(getEndless());
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    tm->addTask(s);
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    for (auto i = 0; i < tasks; ++i) tm->addTask(getEndless());
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+
+    auto taskCount = tm->taskCount();
+    EXPECT_CALL(*f, onUpdate(_)).WillOnce(InvokeWithoutArgs(&*f, &pdEngine::Task::fail));
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    EXPECT_EQ(tm->taskCount(), taskCount-1);
+
+    EXPECT_CALL(*f, onUpdate(_)).WillOnce(InvokeWithoutArgs(&*f, &pdEngine::Task::succeed));
+    for (auto i = 0; i < iterations; ++i) tm->updateTasks(1);
+    EXPECT_EQ(tm->taskCount(), taskCount-2);
 }
 
 // TEST_F(TaskManager_test, AnyDead)

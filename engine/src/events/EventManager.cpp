@@ -1,5 +1,6 @@
 #include "events/DefaultEvent.h"
 #include "events/EventManager.h"
+#include "Logger.h"
 #include "Utils.h"
 
 #include <cassert>

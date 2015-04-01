@@ -1,6 +1,6 @@
 #include "resources/SimpleResourceFile.h"
 
-#include "Utils.h"
+#include "Logger.h"
 
 #include <algorithm>
 #include <cassert>

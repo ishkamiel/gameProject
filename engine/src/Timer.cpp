@@ -1,5 +1,6 @@
 #include "Timer.h"
 
+#include "Logger.h"
 #include "Utils.h"
 
 #include <chrono>

@@ -1,7 +1,7 @@
 #ifndef PDENGINE_IEVENT_H_
 #define PDENGINE_IEVENT_H_
 
-#include "Utils.h"
+// #include "Utils.h"
 
 #include <memory>
 #include <string>
@@ -21,8 +21,10 @@ namespace pdEngine
 
     constexpr EventTypeID getEventID(const char*);
 
-    const EventTypeID VARIABLE_IS_NOT_USED ev_RequestQuit    = getEventID("RequestQuit");
-    const EventTypeID VARIABLE_IS_NOT_USED ev_Shutdown       = getEventID("Shutdown");
+    // const EventTypeID VARIABLE_IS_NOT_USED ev_RequestQuit    = getEventID("RequestQuit");
+    // const EventTypeID VARIABLE_IS_NOT_USED ev_Shutdown       = getEventID("Shutdown");
+    const EventTypeID ev_RequestQuit    = getEventID("RequestQuit");
+    const EventTypeID ev_Shutdown       = getEventID("Shutdown");
 }
 
 namespace pdEngine

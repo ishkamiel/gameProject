@@ -1,5 +1,6 @@
 #include "renderer/OpenglRenderer.h"
 
+#include "Logger.h"
 #include "Utils.h"
 #include "renderer/ShaderProgram.h"
 #include "renderer/OpenglUtils.h"

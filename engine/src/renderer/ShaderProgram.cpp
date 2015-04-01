@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "Logger.h"
 #include "renderer/OpenglUtils.h"
 
 #include <GL/glew.h> 
