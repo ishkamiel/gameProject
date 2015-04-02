@@ -2,7 +2,7 @@
 #define APPLICATION_H_
 
 #include "InputManager.h"
-#include "events/iEvent.h"
+#include "events/I_Event.h"
 #include "events/EventManager.h"
 #include "tasks/TaskManager.h"
 #include "resources/ResourceManager.h"
