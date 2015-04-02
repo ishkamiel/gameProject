@@ -9,10 +9,10 @@
 namespace pdEngine
 {
 
-class iEvent;
-using Event_sptr = std::shared_ptr<iEvent>;
+class I_Event;
+using Event_sptr = std::shared_ptr<I_Event>;
 
-class iEvent
+class I_Event
 {
 public:
     virtual const EventTypeID& getTypeID(void) const =0;

@@ -5,7 +5,7 @@
 
 namespace pdEngine
 {
-    class DefaultEvent : public iEvent
+    class DefaultEvent : public I_Event
     {
         const EventTypeID typeID;
         const float timestamp;
