@@ -9,13 +9,6 @@
 namespace pdEngine
 {
     using EventListener = std::function<bool(Event_sptr)>;
-    // using EventListener_sptr = std::shared_ptr<EventListener>;
-    // using EventListener_wptr = std::weak_ptr<EventListener>;
-    //
-    // inline EventListener_sptr createListenerPtr(EventListener);
-    //
-    // template<typename C, typename F>
-    // EventListener createEventListenerPtr(F&, C&);
 
     template<typename C, typename F>
     EventListener createEventListener(C&, F&);

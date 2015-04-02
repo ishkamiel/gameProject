@@ -7,6 +7,8 @@
 
 #include "Application.h"
 
+#include "events/EventManager.h"
+
 #include "Logger.h"
 #include "Utils.h"
 #include "Timer.h"
@@ -17,53 +19,43 @@
 
 namespace pdEngine
 {
-    Application::Application() 
-    {
-    }
-
-    Application::~Application()
-    {}
-
-    void Application::addSubsystem(Task_sptr ptr)
-    {
-        taskManager->addTask(ptr);
-    }
+    Application::Application() {}
+    Application::~Application() {}
 
     bool Application::init(void)
     {
         initLogging();
         auto log = getLogger();
 
-        log->info("Initializing Appllication");
+        log->info("Initializing application");
 
-        log->info("creating TaskManager");
-        taskManager = createTaskManager();
-        log->info("creating EventManager");
-        eventManager = createEventManager();
-        log->info("creating InputManager");
+        log->info("creating task manager");
+        taskManager = std::make_shared<TaskManager>();
+
+        log->info("creating event manager");
+		taskManager->addTask(std::dynamic_pointer_cast<Task>(EventManager::getSingleton()));
+
+        log->info("creating input manager");
         inputManager = createInputManager();
-        log->info("creating Renderer");
+
+        log->info("creating renderer");
         renderer = createRenderer();
 
-        log->debug("Registering application level event listeners");
+        log->debug("Registering application level event listeners.");
         registerListeners();
 
         log->debug("adding tasks to main TaskManager");
-        taskManager->addTask(eventManager);
         taskManager->addTask(inputManager);
         taskManager->addTask(renderer);
 
-        // beforeTaskInit();
-        
-        log->debug("Calling TaskManager->init() to initialize all subsystems");
+        log->debug("Requesting task manager to initialize all tasks.");
         if (!taskManager->initAll())
         {
-            log->error("Some tasks failed initialization");
+            log->error("Some tasks failed initialization.");
             return(false);
         }
 
         initOk = true;
-        // afterInitDone();
         return(true);
     }
 
@@ -71,7 +63,7 @@ namespace pdEngine
     {
         auto log = getLogger();
 
-        if (!initOk) throw std::runtime_error("Applicatoin::start before successfull init");
+        if (!initOk) throw std::runtime_error("Application not successfully initialized before start!");
 
         auto timer = new Timer(updateFrequency);
         log->info("Entering main loop");
@@ -94,26 +86,20 @@ namespace pdEngine
     {
         auto log = getLogger();
         if (!doShutdown)
-            throw std::runtime_error("shutdown() called while mainloop running");
+            throw std::runtime_error("shutdown() called while main loop running");
 
         log->info("Shutting down");
 
-        // beforeShutdown();
-        
         taskManager->abortAllNow();
+		taskManager->updateTasks(0);
 
-        // afterTaskAbort();
-        
         log->info("deleting Renderer");
         deleteRenderer();
         log->info("deleting InputManager");
         deleteInputManager();
-        log->info("deleting EventManager");
-        deleteEventManager();
-        log->info("deleting TaskManager");
-        deleteTaskManager();
 
-        // afterShutdown();
+        log->info("Destroying task manager.");
+		taskManager.reset();
     }
 
     void Application::initLogging(void)
@@ -130,7 +116,7 @@ namespace pdEngine
             size_t q_size = 1048576; //queue size must be power of 2
             spdlog::set_async_mode(q_size);
             std::shared_ptr<spdlog::logger> log { 
-                spdlog::daily_logger_mt("pdengine", "pdeninge") };
+                spdlog::daily_logger_mt("pdengine", "pdengine") };
             setLogger(log);
         }
 
@@ -138,61 +124,19 @@ namespace pdEngine
     }
 
 
-    InputManager_sptr  Application::getInputManager(void)
+    std::shared_ptr<Task> Application::createInputManager(void)
     {
-        if (!inputManager)
-            throw std::logic_error("getInputManager called before setupInputManager");
-        return inputManager;
+        return std::make_shared<InputManagerSDL>(EventManager::getSingleton());
     }
 
-    EventManager_sptr Application::getEventManager(void)
-    {
-        if (!eventManager)
-            throw std::logic_error("getEventManager called before setupEventManager");
-        return eventManager;
-    }
-
-    TaskManager_sptr Application::createTaskManager(void)
-    {
-        return std::make_shared<TaskManager>();
-    }
-
-    EventManager_sptr Application::createEventManager(void)
-    {
-        return std::make_shared<EventManager>();
-    }
-
-    InputManager_sptr Application::createInputManager(void)
-    {
-        return std::make_shared<InputManagerSDL>(getEventManager());
-    }
-
-    ResourceManager_sptr Application::createResourceManager(void)
-    {
-        //return std::make_shared<ResourceManager>(getEventManager());
-        return nullptr;
-    }
-
-    void Application::deleteResourceManager(void)
-    {}
-
-    void Application::deleteTaskManager(void)
-    {}
-
-    void Application::deleteRenderer(void)
-    {}
-
-    void Application::deleteEventManager(void)
-    {}
-
-    void Application::deleteInputManager(void)
-    {}
+    void Application::deleteRenderer(void) {}
+    void Application::deleteInputManager(void) {}
 
     void Application::registerListeners(void)
     {
         using namespace std::placeholders;
 
-        auto em = getEventManager();
+        auto em = EventManager::getSingleton();
         em->addListener(ev_RequestQuit, std::bind(&Application::onRequestQuit, this, _1));
         em->addListener(ev_Shutdown, std::bind(&Application::onShutdown, this, _1));
     }
@@ -200,7 +144,7 @@ namespace pdEngine
     bool Application::onShutdown(Event_sptr e)
     {
         (void) e;
-        DLOG("Recieved ev_Shutdown event, shutting down");
+        DLOG("Received ev_Shutdown event, shutting down");
         doShutdown = true;
         return false;
     }
@@ -208,8 +152,8 @@ namespace pdEngine
     bool Application::onRequestQuit(Event_sptr e)
     {
         (void) e;
-        DLOG("Recieved ev_RequestQuit, sending ev_Shutdown");
-        eventManager->queueEvent(ev_Shutdown);
+        DLOG("Received ev_RequestQuit, sending ev_Shutdown");
+		EventManager::getSingleton()->queueEvent(ev_Shutdown);
         return true;
     }
 

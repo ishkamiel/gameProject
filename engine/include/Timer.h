@@ -9,8 +9,6 @@ namespace pdEngine
     using TimeMilli = unsigned long int;
     using TimeSeconds = unsigned int;
 
-    using TimeDelta = TimeMicro;
-
     using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
     using TimerDefaultDelta = std::chrono::high_resolution_clock::duration;
     using TimerFrequency = unsigned int;
@@ -26,7 +24,7 @@ namespace pdEngine
 
     public:
         Timer(const TimerFrequency stepsPerSecond);
-        TimeDelta stepAndSleep(void);
+        TimeMicro stepAndSleep(void);
 
         // TimeNanoseconds deltaNanoseconds(void) const;
         // TimeMilliseconds deltaMilliseconds(void) const;

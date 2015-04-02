@@ -1,16 +1,16 @@
 #ifndef TASK_H_
 #define TASK_H_
 
-#include "Timer.h"
-
 #include <assert.h>
 #include <memory>
 
 namespace pdEngine
 {
     class Task;
-    typedef std::shared_ptr<Task> Task_sptr;
-    typedef std::weak_ptr<Task> Task_wptr;
+	using Task_sptr = std::shared_ptr<Task>;
+    using Task_wptr = std::weak_ptr<Task>;
+
+	using TimeDelta = unsigned int;
 
     enum class TaskState
     {

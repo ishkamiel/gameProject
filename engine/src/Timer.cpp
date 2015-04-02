@@ -32,7 +32,7 @@ namespace pdEngine
     }
     */
 
-    TimeDelta Timer::stepAndSleep(void)
+    TimeMicro Timer::stepAndSleep(void)
     {
         auto sleepTime = timeSlice - (now() - prev);
         if (sleepTime.count() > 0)

@@ -1,55 +1,31 @@
-#ifndef PDENGINE_EVENTMANAGER_H_
-#define PDENGINE_EVENTMANAGER_H_
+/* 
+ * File:   I_EventManager.h
+ * Author: ishkamiel
+ *
+ * Created on April 2, 2015, 10:47 PM
+ */
 
-#include "Timer.h"
-#include "events/I_Event.h"
+#ifndef I_EVENTMANAGER_H
+#define	I_EVENTMANAGER_H
+
 #include "events/EventListener.h"
-#include "tasks/Task.h"
 
-#include <functional>
-#include <map>
-#include <memory>
-#include <queue>
-#include <string>
-#include <utility>
-#include <vector>
+namespace pdEngine {
 
-namespace pdEngine
-{
-    class EventManager;
-    using EventManager_sptr = std::shared_ptr<EventManager>;
-    using EventListenerList = std::vector<EventListener>;
-    using EventQueue = std::queue<Event_sptr>;
+class EventManager;
+using EventManager_sptr = std::shared_ptr<EventManager>;
 
-    static EventManager_sptr TheEventManager;
+class EventManager {
+public:
+    static EventManager_sptr getSingleton();
 
-    class EventManager : public Task
-    {
-        using EventMap = std::map<EventTypeID, EventListenerList*>;
-        using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
+    virtual void queueEvent(const Event_sptr) = 0;
+    virtual void queueEvent(const EventTypeID) = 0;
+    virtual void addListener(const EventTypeID, EventListener) = 0;
+};
 
-        EventMap eventMap               {};
-        EventQueue eventQueueIn         {};
-        EventQueue eventsProcessing     {};
-        TimeDelta updateInterval        { 10 };
-        TimeDelta lastUpdate            { 0 };
 
-    public:
-        EventManager();
-        EventManager(TimeDelta updateInterval);
-        ~EventManager();
-
-        void onInit() override;
-        void onUpdate(TimeDelta) override;
-
-        void queueEvent(const Event_sptr);
-        void queueEvent(const EventTypeID);
-
-        void addListener(const EventTypeID, EventListener);
-
-    private:
-        EventListenerList* findEventList(EventTypeID, bool = false);
-    };
 }
 
-#endif /* PDENGINE_EVENTMANAGER_H_ */
+#endif	/* I_EVENTMANAGER_H */
+

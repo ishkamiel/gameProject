@@ -41,7 +41,7 @@ namespace pdEngineTest
   TEST_F(Timer_test, TimerTotalTimes) 
   {
     pdEngine::Timer t {1000};
-    pdEngine::TimeDelta delta = t.stepAndSleep();
+	auto delta = t.stepAndSleep();
     EXPECT_TRUE(delta > 0);
     
     pdEngine::TimeMicro micro = t.totalMicro();

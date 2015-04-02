@@ -2,7 +2,7 @@
 #define PDENGINE_INPUTMANAGERSDL_H_
 
 #include "InputManager.h"
-#include "events/EventManager.h"
+#include "events/EventManagerImpl.h"
 
 #include "SDL_events.h"
 

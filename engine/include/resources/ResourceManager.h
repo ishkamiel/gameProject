@@ -1,7 +1,7 @@
 #ifndef PDENGINE_RESOURCEMANAGER_H_
 #define PDENGINE_RESOURCEMANAGER_H_
 
-#include "events/EventManager.h"
+#include "events/EventManagerImpl.h"
 #include "tasks/Task.h"
 
 namespace pdEngine

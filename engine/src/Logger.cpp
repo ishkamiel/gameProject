@@ -6,6 +6,7 @@ namespace pdEngine
 
     void setLogger(Logger logger)
     {
+		assert(g_TheLogger == nullptr);
         g_TheLogger = logger;
     }
 
