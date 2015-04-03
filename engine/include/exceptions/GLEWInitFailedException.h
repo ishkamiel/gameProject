@@ -16,7 +16,7 @@ namespace pdEngine
 class GLEWInitFailedException : public InitFailedException
 {
 public:
-	GLEWInitFailedException(GLenum&);
+	//GLEWInitFailedException(GLenum&);
 	GLEWInitFailedException(const GLEWInitFailedException&);
 	virtual ~GLEWInitFailedException();
 		

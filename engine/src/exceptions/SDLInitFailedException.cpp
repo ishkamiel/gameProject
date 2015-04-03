@@ -1,5 +1,6 @@
 #include "exceptions/SDLInitFailedException.h"
 
+/*
 namespace pdEngine
 {
 
@@ -24,3 +25,4 @@ SDLInitFailedException::what()
 }
 
 }
+*/

@@ -15,8 +15,8 @@ namespace pdEngine
 
 class InitFailedException : public std::runtime_error
 {
+public:
 	virtual ~InitFailedException() =0;
-
 	virtual const char* what() =0;
 };
 

@@ -1,5 +1,8 @@
 #include "exceptions/GLShaderCompileError.h"
 
+#include <string>
+
+/*
 namespace pdEngine {
 
 GLShaderCompileError::GLShaderCompileError(const GLuint logTarget) {
@@ -14,29 +17,31 @@ GLShaderCompileError::GLShaderCompileError(const GLuint logTarget) {
         throw std::logic_error("Unrecognized logTarget");
     }
 
-    m_what = new char[maxLength];
+    char* what = new char[maxLength];
 
     if (glIsProgram(logTarget)) {
-        glGetProgramInfoLog(logTarget, maxLength, &length, m_what);
+        glGetProgramInfoLog(logTarget, maxLength, &length, what);
     } else if (glIsShader(logTarget)) {
-        glGetShaderInfoLog(logTarget, maxLength, &length, m_what);
-    }
-    else
+        glGetShaderInfoLog(logTarget, maxLength, &length, what);
+    } else
         throw std::logic_error("Unrecognized logTarget");
+	
+	std::ostringstream cnvt;
+	cnvt << "Shader compile error: " << what;
+	m_what = cnvt.str();
 }
 
 GLShaderCompileError::GLShaderCompileError(const GLShaderCompileError& other) 
 {
-	m_what = other->m_what;
+    //m_what = other.m_what;
 }
 
-GLShaderCompileError::~GLShaderCompileError() {
+GLShaderCompileError::~GLShaderCompileError() 
+{}
 
-    delete m_what;
+
+const char* GLShaderCompileError::what(void) {
+    return m_what.c_str();
 }
 
-char* GLShaderCompileError::what(void) {
-    return m_what;
-}
-
-}
+}*/

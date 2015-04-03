@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 
+/*
 namespace pdEngine
 {
 
@@ -29,3 +30,4 @@ GLEWInitFailedException::what()
 }
 
 }
+ */

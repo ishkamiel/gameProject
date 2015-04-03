@@ -20,11 +20,11 @@ SDLWindow::~SDLWindow()
 
 void SDLWindow::init(void) {
     if (SDL_Init(0) != 0) {
-        throw SDLInitFailedException();
+        throw std::runtime_error("throw SDLInitFailedException();");
     }
 
     if (SDL_VideoInit(0) != 0) {
-        throw SDLInitFailedException();
+        throw std::runtime_error("throw SDLInitFailedException();");
     }
 }
 
@@ -37,17 +37,17 @@ void SDLWindow::openWindow(void) {
 
 Renderer_sptr SDLWindow::getRenderer(void) {
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) != 0) 
-			throw SDLInitFailedException();
+			throw std::runtime_error("throw SDLInitFailedException();");
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1) != 0)
-			throw SDLInitFailedException();
+			throw std::runtime_error("throw SDLInitFailedException();");
 	if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) != 0)
-			throw SDLInitFailedException();
+			throw std::runtime_error("throw SDLInitFailedException();");
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) != 0)
-			throw SDLInitFailedException();
+			throw std::runtime_error("throw SDLInitFailedException();");
 
     auto context = SDL_GL_CreateContext(m_Window);
     if (context == nullptr) {
-		throw SDLInitFailedException();
+		throw std::runtime_error("throw SDLInitFailedException();");
     }
 
     // initialize GLEW
@@ -55,12 +55,12 @@ Renderer_sptr SDLWindow::getRenderer(void) {
 
     GLenum glewError = glewInit();
     if (glewError != 0) {
-		throw GLEWInitFailedException(glewError);
+		throw std::runtime_error("throw GLEWInitFailedException(glewError);");
     }
 
     // Enable vSync
     if (SDL_GL_SetSwapInterval(1) < 0) {
-		throw SDLInitFailedException();
+		throw std::runtime_error("throw SDLInitFailedException();");
     }
 
 	auto renderer = std::make_shared<OpenglRenderer>();
