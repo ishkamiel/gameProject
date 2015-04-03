@@ -1,7 +1,6 @@
 #ifndef PDENGINE_EVENTMANAGER_H_
 #define PDENGINE_EVENTMANAGER_H_
 
-
 #include "events/I_Event.h"
 #include "events/EventManager.h"
 #include "events/EventListener.h"
@@ -15,37 +14,38 @@
 #include <utility>
 #include <vector>
 
-namespace pdEngine
-{
+namespace pdEngine {
+
+class EventManagerImpl : public Task, public EventManager {
     using EventListenerList = std::vector<EventListener>;
+    using EventMap = std::map<EventTypeID, EventListenerList*>;
+    using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
     using EventQueue = std::queue<Event_sptr>;
 
-    class EventManagerImpl : public Task, public EventManager
-    {
-        using EventMap = std::map<EventTypeID, EventListenerList*>;
-        using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
+    EventMap eventMap{};
+    EventQueue eventQueueIn{};
+    EventQueue eventsProcessing{};
+    TimeDelta updateInterval{10};
+    TimeDelta lastUpdate{0};
 
-        EventMap eventMap               {};
-        EventQueue eventQueueIn         {};
-        EventQueue eventsProcessing     {};
-        TimeDelta updateInterval        { 10 };
-        TimeDelta lastUpdate            { 0 };
+public:
+    EventManagerImpl();
+    ~EventManagerImpl();
 
-    public:
-        EventManagerImpl();
-        ~EventManagerImpl();
+    EventManagerImpl(const EventManagerImpl&) = delete;
+    EventManagerImpl& operator=(const EventManagerImpl&) = delete;
 
-        //void onInit() override;
-        void onUpdate(TimeDelta) override;
+    //void onInit() override;
+    void onUpdate(TimeDelta) override;
 
-        void queueEvent(const Event_sptr) override;
-        void queueEvent(const EventTypeID) override;
+    void queueEvent(const Event_sptr) override;
+    void queueEvent(const EventTypeID) override;
 
-        void addListener(const EventTypeID, EventListener) override;
+    void addListener(const EventTypeID, EventListener) override;
 
-    private:
-        EventListenerList* findEventList(EventTypeID, bool = false);
-    };
+private:
+    EventListenerList* findEventList(EventTypeID, bool = false);
+};
+
 }
-
 #endif /* PDENGINE_EVENTMANAGER_H_ */

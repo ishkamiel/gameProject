@@ -14,9 +14,9 @@ namespace pdEngine
 	{
         TimerFrequency                  updateFrequency {240};
 
+        std::shared_ptr<Renderer>		renderer;
         std::shared_ptr<Task>			inputManager;  
 		std::shared_ptr<TaskManager>	taskManager;
-        std::shared_ptr<Renderer>		renderer;
 
         bool initOk                     { false };
         bool doShutdown                 { false };

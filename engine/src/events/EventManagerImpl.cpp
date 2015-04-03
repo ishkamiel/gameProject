@@ -92,7 +92,8 @@ namespace pdEngine
         log->debug("Added listener for event, EventTypeID {}", eventID, "\n");
     }
 
-    EventListenerList* EventManagerImpl::findEventList(EventTypeID id, bool create)
+	auto EventManagerImpl::findEventList(EventTypeID id, bool create)
+		-> EventListenerList*
     {
         auto f = eventMap.find(id);
         if (f == eventMap.end()) 
