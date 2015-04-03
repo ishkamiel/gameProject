@@ -5,17 +5,22 @@
 #include <SDL_opengl.h> 
 
 
-namespace pdEngine
-{
+namespace pdEngine {
 
-SimpleFragmentShader::SimpleFragmentShader() {}
-SimpleFragmentShader::~SimpleFragmentShader() {}
+SimpleFragmentShader::SimpleFragmentShader() {
+}
 
-bool SimpleFragmentShader::compile(void)
-{
-    return compileBuffer(GL_FRAGMENT_SHADER,
-            {
-            "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 1.0, 1.0, 1.0 ); }"
-            });
+SimpleFragmentShader::~SimpleFragmentShader() {
+}
+
+bool SimpleFragmentShader::compile(void) {
+    return compileBuffer(GL_FRAGMENT_SHADER,{
+        "#version 140\n"
+        "out vec4 LFragment;\n"
+        "void main()\n"
+        "{\n"
+        "	LFragment = vec4( 1.0, 1.0, 1.0, 1.0 );\n"
+        "}"
+    });
 }
 }

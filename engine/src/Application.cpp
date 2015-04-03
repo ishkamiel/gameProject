@@ -69,6 +69,8 @@ bool Application::start(void)
         taskManager->updateTasks(deltaTime);
 
         renderer->render();
+
+		window->swapFrame();
     }
     log->info("Leaving main loop after {0} milliseconds", timer->totalMilli());
     delete timer;

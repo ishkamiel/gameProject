@@ -6,64 +6,47 @@
 #include "renderer/SimpleFragmentShader.h"
 #include "renderer/OpenglUtils.h"
 
-namespace pdEngine 
-{
-OpenglRenderer::OpenglRenderer()
-{}
+namespace pdEngine {
 
-OpenglRenderer::~OpenglRenderer()
-{}
+OpenglRenderer::OpenglRenderer() {
+}
 
-void OpenglRenderer::render(void) const
-{
+OpenglRenderer::~OpenglRenderer() {
+}
+
+void OpenglRenderer::render(void) const {
     //Clear color buffer 
-    glClear( GL_COLOR_BUFFER_BIT ); 
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    //Render quad 
-    if (gRenderQuad) { 
-        //Bind program 
-        glUseProgram( m_programID ); 
+    glUseProgram(m_programID);
+    glEnableVertexAttribArray(gVertexPos2DLocation);
+    glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+    glVertexAttribPointer(gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof (GLfloat), NULL);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
 
-        //Enable vertex position 
-        glEnableVertexAttribArray( gVertexPos2DLocation ); 
+    glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
+    glDisableVertexAttribArray(gVertexPos2DLocation);
 
-        //Set vertex data 
-        glBindBuffer( GL_ARRAY_BUFFER, gVBO ); 
-        glVertexAttribPointer( gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL ); 
-
-        //Set index data and render 
-        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO ); 
-
-        glDrawElements( GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL ); 
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        //Disable vertex position 
-        glDisableVertexAttribArray( gVertexPos2DLocation ); 
-
-        //Unbind program 
-        glUseProgram(0); 
-    }
+    glUseProgram(0);
 }
 
-void OpenglRenderer::printDebugMsg(const std::string& msg) const
-{
-	DLOG(msg);
+void OpenglRenderer::printDebugMsg(const std::string& msg) const {
+    DLOG(msg);
 }
 
-void OpenglRenderer::init(void)
-{
+void OpenglRenderer::init(void) {
     auto log = getLogger();
 
     m_programID = glCreateProgram();
 
     log->debug("Compiling vertex shader");
-    SimpleVertexShader vertexShader {};
+    SimpleVertexShader vertexShader{};
     vertexShader.load();
     vertexShader.compile();
 
     log->debug("Compiling fragment shader");
 
-    SimpleFragmentShader fragmentShader {};
+    SimpleFragmentShader fragmentShader{};
     fragmentShader.load();
     fragmentShader.compile();
 
@@ -75,16 +58,14 @@ void OpenglRenderer::init(void)
     // check program
     GLint programSuccess = GL_TRUE;
     glGetProgramiv(m_programID, GL_LINK_STATUS, &programSuccess);
-    if (programSuccess != GL_TRUE)
-    {
+    if (programSuccess != GL_TRUE) {
         log->error("Error linking opengGL program {0}", m_programID);
         //printGLLog(m_programID);
         throw std::runtime_error("openGL linking error");
     }
 
     gVertexPos2DLocation = glGetAttribLocation(m_programID, "LVertexPos2D");
-    if (gVertexPos2DLocation == -1)
-    {
+    if (gVertexPos2DLocation == -1) {
         log->error("LVertexPos2DLocation is not a valid glsl program variable");
         throw std::runtime_error("glsl error");
     }
@@ -93,23 +74,26 @@ void OpenglRenderer::init(void)
 
     // VBO data
     GLfloat vertexData[] = {
-        -0.5f, -0.5f, 
-        0.5f, -0.5f, 
-        0.5f, 0.5f, 
-        -0.5f, 0.5f };
+        -0.5f, -0.5f,
+        0.5f, -0.5f,
+        0.5f, 0.5f,
+        -0.5f, 0.5f
+    };
 
     // IBO data 
-    GLuint indexData[] = { 0, 1, 2, 3 };
+    GLuint indexData[] = {0, 1, 2, 3};
 
     //Create VBO 
-    glGenBuffers( 1, &gVBO ); 
-    glBindBuffer( GL_ARRAY_BUFFER, gVBO ); 
-    glBufferData( GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData, GL_STATIC_DRAW ); 
+    glGenBuffers(1, &gVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+    glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof (GLfloat), vertexData, GL_STATIC_DRAW);
 
     //Create IBO 
-    glGenBuffers( 1, &gIBO ); 
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO ); 
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW );
+    glGenBuffers(1, &gIBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof (GLuint), indexData, GL_STATIC_DRAW);
+
+	log->info("Renderer initialization done");
 }
 
 }
