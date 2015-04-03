@@ -40,7 +40,7 @@ void OpenglRenderer::onInit(void)
     window = SDL_CreateWindow(windowTitle.c_str(),
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             window_width, window_height,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+            SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL );
 
     //Create context
     glContext = SDL_GL_CreateContext(window);

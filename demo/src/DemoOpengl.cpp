@@ -3,14 +3,8 @@
 
 namespace pdEngineDemo
 {
-    DemoOpengl::DemoOpengl()
-    {}
 
-    DemoOpengl::~DemoOpengl()
-    {}
+DemoOpengl::DemoOpengl() {}
+DemoOpengl::~DemoOpengl() {}
 
-    pdEngine::Renderer_sptr DemoOpengl::createRenderer()
-    {
-        return std::make_shared<pdEngine::OpenglRenderer>();
-    }
 }

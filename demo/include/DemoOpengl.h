@@ -10,8 +10,6 @@ namespace pdEngineDemo
     public:
         DemoOpengl();
         ~DemoOpengl();
-    protected:
-        virtual pdEngine::Renderer_sptr createRenderer() override;
     };
 }
 

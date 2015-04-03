@@ -32,7 +32,7 @@ namespace pdEngine
         virtual void initLogging(void);
 
         virtual std::shared_ptr<Task> createInputManager(void);
-        virtual std::shared_ptr<Renderer> createRenderer(void) =0;
+        virtual std::shared_ptr<Renderer> createRenderer(void);
 		//virtual std::list<Task> createTasks(void);
 
         virtual void deleteInputManager(void);

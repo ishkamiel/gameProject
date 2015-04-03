@@ -8,6 +8,7 @@
 #include "Application.h"
 
 #include "events/EventManager.h"
+#include "renderer/OpenglRenderer.h"
 
 #include "Logger.h"
 #include "Utils.h"
@@ -123,6 +124,10 @@ namespace pdEngine
         getLogger()->set_level(spdlog::level::debug);
     }
 
+    pdEngine::Renderer_sptr Application::createRenderer()
+    {
+        return std::make_shared<pdEngine::OpenglRenderer>();
+    }
 
     std::shared_ptr<Task> Application::createInputManager(void)
     {
