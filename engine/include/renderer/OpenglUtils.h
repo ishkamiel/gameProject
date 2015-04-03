@@ -8,9 +8,11 @@
 
 namespace pdEngine
 {
+namespace OpenglUtils
+{
 
-//std::string getGLLog(const GLuint);
-//void printGLLog(const GLuint);
+std::string getGLLog(const GLuint);
 
+}
 }
 #endif

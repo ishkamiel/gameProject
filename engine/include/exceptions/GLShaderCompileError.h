@@ -26,8 +26,7 @@ public:
 	virtual const char* what();	
 
 private:
-	const std::string m_what;
-
+	std::string m_what;
 };
 
 }

@@ -1,28 +1,30 @@
 #include "exceptions/SDLInitFailedException.h"
 
-/*
+#include <SDL.h>
+
+#include <sstream>
+
 namespace pdEngine
 {
 
-SDLInitFailedException::SDLInitFailedException()
+SDLInitFailedException::SDLInitFailedException(std::string str)
 {
 	std::ostringstream cnvt;
-	cnvt << "SDL initialization error: " << SDL_GetError();
+	cnvt << str << ", SDL Error: " << SDL_GetError();
 	m_what = cnvt.str();
 }
 
 SDLInitFailedException::SDLInitFailedException(const SDLInitFailedException& other)
 {
-	m_what = ohter->m_what;
+	//m_what = ohter->m_what;
 }
 
 SDLInitFailedException::~SDLInitFailedException()
 {}
 
-SDLInitFailedException::what()
+const char* SDLInitFailedException::what()
 {
 	return m_what.c_str();
 }
 
 }
-*/

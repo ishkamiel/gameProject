@@ -10,20 +10,22 @@
 
 #include "exceptions/InitFailedException.h"
 
+#include <GL/glew.h>
+
 namespace pdEngine
 {
 
 class GLEWInitFailedException : public InitFailedException
 {
 public:
-	//GLEWInitFailedException(GLenum&);
+	GLEWInitFailedException(GLenum&);
 	GLEWInitFailedException(const GLEWInitFailedException&);
 	virtual ~GLEWInitFailedException();
 		
 	virtual const char* what();	
 		
 private:
-	const std::string m_what;
+	std::string m_what;
 };
 
 

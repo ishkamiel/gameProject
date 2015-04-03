@@ -5,6 +5,7 @@
 #include "renderer/SimpleVertexShader.h"
 #include "renderer/SimpleFragmentShader.h"
 #include "renderer/OpenglUtils.h"
+#include "exceptions/OpenglException.h"
 
 namespace pdEngine {
 
@@ -59,9 +60,10 @@ void OpenglRenderer::init(void) {
     GLint programSuccess = GL_TRUE;
     glGetProgramiv(m_programID, GL_LINK_STATUS, &programSuccess);
     if (programSuccess != GL_TRUE) {
-        log->error("Error linking opengGL program {0}", m_programID);
+		throw OpenglException(m_programID);
+        //log->error("Error linking opengGL program {0}", m_programID);
         //printGLLog(m_programID);
-        throw std::runtime_error("openGL linking error");
+        //throw std::runtime_error("openGL linking error");
     }
 
     gVertexPos2DLocation = glGetAttribLocation(m_programID, "LVertexPos2D");

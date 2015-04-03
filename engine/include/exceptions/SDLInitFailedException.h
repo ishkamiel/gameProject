@@ -17,14 +17,14 @@ class SDLInitFailedException : public InitFailedException
 {
 
 public:
-	SDLInitFailedException();
+	SDLInitFailedException(std::string str);
 	SDLInitFailedException(const SDLInitFailedException&);
 	virtual ~SDLInitFailedException();
 
-	virtual const char* what();	
+	virtual const char* what() override;	
 private:
 
-	const std::string m_what;
+	std::string m_what;
 };
 
 }

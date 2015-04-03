@@ -1,8 +1,8 @@
 #include "exceptions/GLEWInitFailedException.h"
 
 #include <GL/glew.h>
+#include <sstream>
 
-/*
 namespace pdEngine
 {
 
@@ -15,19 +15,16 @@ GLEWInitFailedException::GLEWInitFailedException(GLenum& glewError)
 
 GLEWInitFailedException::GLEWInitFailedException(const GLEWInitFailedException& other)
 {
-	m_what = other->m_what;
+	m_what = other.m_what;
 }
 
 
 GLEWInitFailedException::~GLEWInitFailedException()
-{
-	delete m_what;
-}
+{}
 
-GLEWInitFailedException::what()
+const char* GLEWInitFailedException::what()
 {
 	return m_what.c_str();
 }
 
 }
- */
