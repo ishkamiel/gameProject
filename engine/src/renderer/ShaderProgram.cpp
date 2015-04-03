@@ -1,5 +1,6 @@
 #include "renderer/ShaderProgram.h"
 
+#include "exceptions/GLShaderCompileError.h"
 #include "renderer/OpenglUtils.h"
 
 #include "Logger.h"
@@ -23,8 +24,9 @@ bool ShaderProgram::compileBuffer(const GLenum type, const GLchar* source)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
     if (compileOk != GL_TRUE)
     {
-        log->error("Unable to compile shader {0}, {1}", shader, getGLLog(shader));
-        throw std::runtime_error("shader compilation fail");
+		throw GLShaderCompileError(shader);
+        //log->error("Unable to compile shader {0}, {1}", shader, getGLLog(shader));
+        //throw std::runtime_error("shader compilation fail");
     }
 
     setID(shader);

@@ -15,36 +15,33 @@
 #include <list>
 #include <memory>
 
-namespace pdEngine
-{
-    class TaskManager;
-    using TaskManager_sptr = std::shared_ptr<TaskManager>;
+namespace pdEngine {
 
-    class TaskManager
-    {
-        std::list<Task_sptr>      taskList;
-        TimeDelta                   previous;
-        bool                        paused;
+class TaskManager {
+    std::list<Task_sptr> taskList;
+    TimeDelta previous;
+    bool paused;
 
-    public:
-        TaskManager(void);
-        ~TaskManager(void);
+public:
+    TaskManager(void);
+    ~TaskManager(void);
 
-        bool initAll(void);
+    bool initAll(void);
 
-        void abortAllNow(void);
+    void abortAllNow(void);
 
-        void addTask(Task_sptr);
+    void addTask(Task_sptr);
 
-        void updateTasks(TimeDelta);
-        void pauseTasks(void);
-        void unPauseTasks(void);
+    void updateTasks(TimeDelta);
+    void pauseTasks(void);
+    void unPauseTasks(void);
 
-        int taskCount(void);
-        bool areAnyDead(void);
+    int taskCount(void);
+    bool areAnyDead(void);
 
-    private:
-    };
+private:
+};
+
+using TaskManager_sptr = std::shared_ptr<TaskManager>;
 }
-
 #endif /* PDENGINE_TASKMANAGER_H_ */

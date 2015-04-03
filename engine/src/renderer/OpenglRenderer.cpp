@@ -8,76 +8,11 @@
 
 namespace pdEngine 
 {
-OpenglRenderer::OpenglRenderer(std::string windowTitle)
-    : windowTitle(windowTitle)
+OpenglRenderer::OpenglRenderer()
 {}
 
 OpenglRenderer::~OpenglRenderer()
-{
-    if (window != nullptr)
-        SDL_DestroyWindow(window);
-}
-
-void OpenglRenderer::onInit(void)
-{
-    auto log = getLogger();
-
-    if (SDL_Init(0) != 0) {
-        printf("Error initializing SDL:  %s\n", SDL_GetError());
-        return fail();
-    }
-
-    if (SDL_VideoInit(0) != 0) {
-        printf("Error initializing SDL video:  %s\n", SDL_GetError());
-        return fail();
-    }
-
-    setGLAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); 
-    setGLAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1); 
-    setGLAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-    setGLAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-    window = SDL_CreateWindow(windowTitle.c_str(),
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            window_width, window_height,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL );
-
-    //Create context
-    glContext = SDL_GL_CreateContext(window);
-    if (glContext == nullptr)
-    {
-        log->error("Failed to create OpenGL context. SDL Error: {0}", SDL_GetError());
-        return fail();
-    }
-
-    // init GLEW
-    glewExperimental = GL_TRUE;
-    GLenum  glewError = glewInit();
-
-    if (glewError != 0)
-    {
-        log->error("Failed to initialize GLEW: {0}", glewGetErrorString(glewError));
-        return fail();
-    }
-
-    // Enable vSync
-    if (SDL_GL_SetSwapInterval(1)  < 0)
-    {
-        log->warn("Cannot enable vSync. SDL error: {0}", SDL_GetError());
-    }
-
-    // init openGL
-    if (!initOpengl())
-    {
-        log->error("Failed to initialize openGL");
-        return fail();
-    }
-}
-
-void OpenglRenderer::onUpdate(TimeDelta delta)
-{
-    (void)delta;
-}
+{}
 
 void OpenglRenderer::render(void) const
 {
@@ -87,7 +22,7 @@ void OpenglRenderer::render(void) const
     //Render quad 
     if (gRenderQuad) { 
         //Bind program 
-        glUseProgram( programID ); 
+        glUseProgram( m_programID ); 
 
         //Enable vertex position 
         glEnableVertexAttribArray( gVertexPos2DLocation ); 
@@ -108,20 +43,18 @@ void OpenglRenderer::render(void) const
         //Unbind program 
         glUseProgram(0); 
     }
-
-    SDL_GL_SwapWindow(window);
 }
 
-void OpenglRenderer::printDebugMsg(std::string msg)
+void OpenglRenderer::printDebugMsg(const std::string& msg) const
 {
-    (void)msg;
+	DLOG(msg);
 }
 
-bool OpenglRenderer::initOpengl(void)
+void OpenglRenderer::init(void)
 {
     auto log = getLogger();
 
-    programID = glCreateProgram();
+    m_programID = glCreateProgram();
 
     log->debug("Compiling vertex shader");
     SimpleVertexShader vertexShader {};
@@ -135,21 +68,21 @@ bool OpenglRenderer::initOpengl(void)
     fragmentShader.compile();
 
     // Link program
-    glAttachShader(programID, vertexShader.getID());
-    glAttachShader(programID, fragmentShader.getID());
-    glLinkProgram(programID);
+    glAttachShader(m_programID, vertexShader.getID());
+    glAttachShader(m_programID, fragmentShader.getID());
+    glLinkProgram(m_programID);
 
     // check program
     GLint programSuccess = GL_TRUE;
-    glGetProgramiv(programID, GL_LINK_STATUS, &programSuccess);
+    glGetProgramiv(m_programID, GL_LINK_STATUS, &programSuccess);
     if (programSuccess != GL_TRUE)
     {
-        log->error("Error linking opengGL program {0}", programID);
-        printGLLog(programID);
+        log->error("Error linking opengGL program {0}", m_programID);
+        //printGLLog(m_programID);
         throw std::runtime_error("openGL linking error");
     }
 
-    gVertexPos2DLocation = glGetAttribLocation(programID, "LVertexPos2D");
+    gVertexPos2DLocation = glGetAttribLocation(m_programID, "LVertexPos2D");
     if (gVertexPos2DLocation == -1)
     {
         log->error("LVertexPos2DLocation is not a valid glsl program variable");
@@ -177,7 +110,6 @@ bool OpenglRenderer::initOpengl(void)
     glGenBuffers( 1, &gIBO ); 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO ); 
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW );
-
-    return true;
 }
+
 }

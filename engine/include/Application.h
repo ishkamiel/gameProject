@@ -3,48 +3,40 @@
 
 #include "tasks/TaskManager.h"
 #include "tasks/Task.h"
-#include "renderer/Renderer.h"	
+#include "renderer/I_Renderer.h"	
+#include "renderer/I_Window.h"	
 
 #include <memory>
 #include <list>
 
-namespace pdEngine
-{
-	class Application
-	{
-        TimerFrequency                  updateFrequency {240};
+namespace pdEngine {
 
-        std::shared_ptr<Renderer>		renderer;
-        std::shared_ptr<Task>			inputManager;  
-		std::shared_ptr<TaskManager>	taskManager;
+class Application {
+    TimerFrequency updateFrequency{240};
 
-        bool initOk                     { false };
-        bool doShutdown                 { false };
+    Renderer_sptr renderer;
+    Window_sptr window;
+    TaskManager_sptr taskManager;
 
-	public:
-		Application();
-		virtual ~Application();
+    bool initOk{false};
+    bool doShutdown{false};
 
-		bool init(void);
-		bool start(void);
+public:
+    Application();
+    virtual ~Application();
 
-    protected:
-        virtual void initLogging(void);
+    bool init(void);
+    bool start(void);
 
-        virtual std::shared_ptr<Task> createInputManager(void);
-        virtual std::shared_ptr<Renderer> createRenderer(void);
-		//virtual std::list<Task> createTasks(void);
+protected:
 
-        virtual void deleteInputManager(void);
-        virtual void deleteRenderer(void);
-		//virtual void deleteTasks(void);
-
-	private:
-        void registerListeners(void);
-		void shutdown(void);
-        bool onShutdown(Event_sptr e);
-        bool onRequestQuit(Event_sptr e);
-	};
+private:
+    void initLogging(void);
+    void initializeEventManager(void);
+    void shutdown(void);
+    bool onShutdown(Event_sptr e);
+    bool onRequestQuit(Event_sptr e);
+};
 }
 
 #endif

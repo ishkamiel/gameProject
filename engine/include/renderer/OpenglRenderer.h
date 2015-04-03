@@ -1,48 +1,31 @@
 #ifndef PDENGINE_RENDEREROPENGL_H_
 #define PDENGINE_RENDEREROPENGL_H_
 
-#include "renderer/Renderer.h"
+#include "renderer/I_Renderer.h"
 
 #include <GL/glew.h> 
 #include <GL/glu.h> 
-#include <SDL.h>
-#include <SDL_opengl.h> 
 
-namespace pdEngine
-{
-    class OpenglRenderer : public Renderer
-    {
-        int window_width                { 640 };
-        int window_height               { 480 };
-        std::string windowTitle         { "pdEngine" };
+namespace pdEngine {
 
-        SDL_Window* window              { nullptr };
+class OpenglRenderer : public I_Renderer {
 
-        SDL_GLContext   glContext;
-        SDL_Window*     glWindow;
-        GLuint          programID               { 0 }; 
+public:
+    OpenglRenderer();
+    ~OpenglRenderer();
 
-        bool            gRenderQuad             { true };
-        GLint           gVertexPos2DLocation    { -1 }; 
-        GLuint          gVBO                    { 0 };
-        GLuint          gIBO                    { 0 };
+    virtual void render(void) const override;
+    virtual void printDebugMsg(const std::string&) const override;
+    virtual void init() override;
 
-    public:
-        OpenglRenderer(std::string = "pdEngine");
-        ~OpenglRenderer();
+private:
+    GLuint m_programID{0};
 
-        virtual void render(void) const override;
-        virtual void printDebugMsg(std::string) override;
+    bool gRenderQuad{true};
+    GLint gVertexPos2DLocation{-1};
+    GLuint gVBO{0};
+    GLuint gIBO{0};
+};
 
-    protected:
-        virtual void onInit() override;
-        virtual void onUpdate(TimeDelta) override;
-
-    private:
-        bool initOpengl(void);
-    };
 }
-
-
-
 #endif /* PDENGINE_RENDEREROPENGL_H_ */

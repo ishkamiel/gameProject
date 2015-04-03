@@ -9,9 +9,8 @@
 namespace pdEngine
 {
 
-std::string getGLLog(const GLuint);
-void printGLLog(const GLuint);
-bool setGLAttribute(const SDL_GLattr, const int);
+//std::string getGLLog(const GLuint);
+//void printGLLog(const GLuint);
 
 }
 #endif

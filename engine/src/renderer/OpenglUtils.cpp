@@ -67,13 +67,5 @@ void printGLLog(GLuint const logTarget)
     delete infoLog;
 }
 
-bool setGLAttribute(const SDL_GLattr attr, const int value)
-{
-    if (SDL_GL_SetAttribute(attr, value) != 0) 
-    {
-        getLogger()->warn("Error  setting GL attirbute. SDL Error: {0}", SDL_GetError());
-        return false;
-    }
-    return true;
-}
+
 }
