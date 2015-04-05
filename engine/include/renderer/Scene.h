@@ -7,7 +7,7 @@
 
 namespace pdEngine {
 
-class Camera;
+class CameraNode;
 
 class Scene
 {
@@ -16,7 +16,7 @@ public:
     Scene ();
     virtual ~Scene ();
 
-    std::shared_ptr<Camera> getCamera();
+    std::shared_ptr<CameraNode> getCamera();
 
     void pushAndSetMatrix(const glm::mat4* toWorld);
     void popMatrix();
@@ -29,4 +29,5 @@ private:
 using Scene_sptr = std::shared_ptr<Scene>;
 
 }
+
 #endif /* SCENE_H_ */

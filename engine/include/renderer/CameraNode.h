@@ -3,19 +3,15 @@
 
 #include "renderer/SceneNode.h"
 
-#include <memory>
-
 namespace pdEngine
 {
 
-class Camera : public SceneNode
+class CameraNode : public SceneNode
 {
 public:
     //Camera() {};
-    virtual ~Camera () {};
+    virtual ~CameraNode () {};
 };
-
-using Camera_sprt = std::shared_ptr<Camera>;
 
 }
 #endif /* CAMERA_H_ */
