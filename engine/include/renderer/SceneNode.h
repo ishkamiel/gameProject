@@ -7,7 +7,9 @@
 #include "Actor.h"
 #include "Color.h"
 
+#include <glm/fwd.hpp>
 #include <glm/mat4x4.hpp>
+// #include <glm/vec3.hpp>
 
 #include <string>
 #include <vector>
@@ -19,7 +21,9 @@ class SceneNode : public I_SceneNode
     friend class Scene;
 
     using mat4 = glm::mat4;
-    using SceneNodeList = std::vector<I_SceneNode>;
+    using vec3 = glm::vec3;
+
+    using SceneNodeList = std::vector<SceneNode_sptr>;
 
 public:
     SceneNode (ActorID actorID,
@@ -46,19 +50,13 @@ public:
     virtual bool v_AddChild(std::shared_ptr<I_SceneNode>) override;
     virtual bool v_RemoveChild(ActorID id) override;
 
-    /*
-       void SetAlpha(float alpha) { m_Props.SetAlpha(alpha); }
-       float GetAlpha() const { return m_Props.Alpha(); }
+    virtual inline void setAlpha(const float alpha);
+    void setPosition(const vec3 &pos);
+    void setRadius(const float radius);
+    void setMaterial(const Material &mat);
 
-       Vec3 GetPosition() const { return m_Props.m_ToWorld.GetPosition(); }
-       void SetPosition(const Vec3 &pos) { m_Props.m_ToWorld.SetPosition(pos); }
-
-       Vec3 GetDirection(const Vec3 &pos) const
-       { return m_Props.m_ToWorld.GetDirection (pos); }
-
-       void SetRadius(const float radius) { m_Props.m_Radius = radius; }
-       void SetMaterial(const Material &mat) { m_Props.m_Material = mat; }
-       */
+    vec3 getDirection(const vec3 &pos) const;
+    virtual const vec3 getPosition() const override;
 
     virtual inline const ActorID& getActorID() const override;
     virtual inline const mat4& getToWorld() const override;
@@ -66,12 +64,11 @@ public:
     virtual inline const char* getName() const override;
     virtual inline bool hasAlpha() const override;
     virtual inline float getAlpha() const override;
-    virtual inline void transform(mat4* toWorld, mat4* fromWorld) const override;
+    virtual inline void getTransform(mat4* toWorld, mat4* fromWorld) const override;
     virtual inline RenderPass getRenderPass() const override;
     virtual inline float getRadius() const override;
     virtual inline const Material& getMaterial() const override;
 protected:
-    virtual inline void setAlpha(const float alpha);
 
 protected:
     ActorID m_ActorID;
@@ -86,6 +83,22 @@ protected:
     SceneNodeList m_Children;
     SceneNode *m_Parent;
 };
+
+inline void SceneNode::setAlpha(const float alpha)
+{
+    m_Material.setAlpha(alpha);
+}
+
+
+void SceneNode::setRadius(const float radius) 
+{ 
+    m_Radius = radius; 
+}
+
+void SceneNode::setMaterial(const Material &mat) 
+{ 
+    m_Material = mat; 
+}
 
 auto SceneNode::getActorID() const -> const ActorID&
 { 
@@ -102,7 +115,7 @@ auto SceneNode::getFromWorld() const -> const mat4&
     return m_FromWorld; 
 }
 
-const char* SceneNode::getName() const
+auto SceneNode::getName() const -> const char*
 { 
     return m_Name.c_str(); 
 }
@@ -117,7 +130,7 @@ float SceneNode::getAlpha() const
     return m_Material.getAlpha(); 
 }
 
-void SceneNode::transform(mat4* toWorld, mat4* fromWorld) const
+void SceneNode::getTransform(mat4* toWorld, mat4* fromWorld) const
 {
     if (toWorld != nullptr)
         *toWorld = m_ToWorld;
@@ -126,7 +139,7 @@ void SceneNode::transform(mat4* toWorld, mat4* fromWorld) const
         *fromWorld = m_FromWorld;
 }
 
-RenderPass SceneNode::getRenderPass() const 
+auto SceneNode::getRenderPass() const -> RenderPass
 { 
     return m_RenderPass; 
 }

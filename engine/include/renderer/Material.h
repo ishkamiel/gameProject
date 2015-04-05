@@ -8,7 +8,8 @@ namespace pdEngine
 
 enum class AlphaType
 {
-    Opaque
+    Opaque,
+    Transparent
 };
 
 class Material
@@ -21,6 +22,7 @@ public:
 
     bool hasAlpha() const;
     float getAlpha() const;
+    void setAlpha(const float);
 };
 
 }
