@@ -1,21 +1,22 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include "renderer/Camera.h"
-
 #include <glm/fwd.hpp>
 
 #include <memory>
 
 namespace pdEngine {
 
+class Camera;
+
 class Scene
 {
+
 public:
     Scene ();
     virtual ~Scene ();
 
-    Camera_sprt getCamera();
+    std::shared_ptr<Camera> getCamera();
 
     void pushAndSetMatrix(const glm::mat4* toWorld);
     void popMatrix();
