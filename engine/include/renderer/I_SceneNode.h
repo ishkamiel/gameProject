@@ -26,7 +26,7 @@ public:
     virtual bool v_OnRestore(Scene*) = 0;
     virtual void v_OnUpdate(Scene*, const TimeMicro) = 0;
 
-    virtual bool v_IsVisible(Scene*) = 0;
+    virtual bool v_IsVisible(Scene*) const = 0;
 
     virtual bool v_PreRender(Scene*) = 0;
     virtual bool v_Render(Scene*) = 0;

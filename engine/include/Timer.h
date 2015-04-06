@@ -13,6 +13,8 @@ namespace pdEngine
     using TimerDefaultDelta = std::chrono::high_resolution_clock::duration;
     using TimerFrequency = unsigned int;
 
+    using TimeDelta = std::chrono::high_resolution_clock::duration;
+
     static inline TimePoint now();
 
     class Timer

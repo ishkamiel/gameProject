@@ -39,7 +39,7 @@ public:
     virtual bool v_OnRestore(Scene* scene) override;
     virtual void v_OnUpdate(Scene* scene, const TimeMicro) override;
 
-    virtual bool v_IsVisible(Scene* scene) override;
+    virtual bool v_IsVisible(Scene* scene) const override;
 
     virtual bool v_PreRender(Scene*) override;
     virtual bool v_Render(Scene* scene) override;
