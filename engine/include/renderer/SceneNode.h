@@ -37,9 +37,9 @@ public:
     virtual void v_SetTransform(const mat4* toWorld, const mat4* fromWorld = nullptr) override;
 
     virtual bool v_OnRestore(Scene* scene) override;
-    virtual void v_OnUpdate(Scene* scene, const TimeMicro) override;
+    virtual bool v_OnUpdate(Scene* scene, const TimeDelta) override;
 
-    virtual bool v_IsVisible(Scene* scene) const override;
+    virtual bool v_IsVisible(Scene*) const override;
 
     virtual bool v_PreRender(Scene*) override;
     virtual bool v_Render(Scene* scene) override;
@@ -51,9 +51,9 @@ public:
     virtual bool v_RemoveChild(ActorID id) override;
 
     virtual inline void setAlpha(const float alpha);
-    void setPosition(const vec3 &pos);
-    void setRadius(const float radius);
-    void setMaterial(const Material &mat);
+    inline void setPosition(const vec3 &pos);
+    inline void setRadius(const float radius);
+    inline void setMaterial(const Material &mat);
 
     vec3 getDirection(const vec3 &pos) const;
     virtual const vec3 getPosition() const override;

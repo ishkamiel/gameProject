@@ -4,8 +4,8 @@
 #include "Actor.h"
 #include "Timer.h"
 #include "renderer/I_Renderer.h"
-#include "renderer/I_SceneNode.h"
-#include "renderer/SceneNode.h"
+// #include "renderer/I_SceneNode.h"
+// #include "renderer/SceneNode.h"
 
 #include <glm/fwd.hpp>
 
@@ -15,15 +15,20 @@
 
 namespace pdEngine {
 
+class I_SceneNode;
+class SceneNode;
 class CameraNode;
 class SKyNode;
 class LgithNode;
 class LightManager;
+
 using CameraNode_sptr = std::shared_ptr<CameraNode>;
 using LightManager_sptr = std::shared_ptr<LightManager>;
+using SceneNode_sptr = std::shared_ptr<I_SceneNode>;
 
 class Scene
 {
+
 
 public:
     Scene ();

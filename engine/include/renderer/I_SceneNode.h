@@ -24,7 +24,7 @@ public:
     virtual void v_SetTransform(const mat4* toWorld, const mat4* fromWorld = nullptr) = 0;
 
     virtual bool v_OnRestore(Scene*) = 0;
-    virtual void v_OnUpdate(Scene*, const TimeMicro) = 0;
+    virtual bool v_OnUpdate(Scene*, const TimeDelta) = 0;
 
     virtual bool v_IsVisible(Scene*) const = 0;
 

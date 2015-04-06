@@ -5,52 +5,53 @@
 
 namespace pdEngine
 {
-    using TimeMicro = unsigned long int;
-    using TimeMilli = unsigned long int;
-    using TimeSeconds = unsigned int;
+using TimeMicro = unsigned long int;
+using TimeMilli = unsigned long int;
+using TimeSeconds = unsigned int;
 
-    using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
-    using TimerDefaultDelta = std::chrono::high_resolution_clock::duration;
-    using TimerFrequency = unsigned int;
+using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
+using TimerDefaultDelta = std::chrono::high_resolution_clock::duration;
+using TimerFrequency = unsigned int;
 
-    using TimeDelta = std::chrono::high_resolution_clock::duration;
+using TimeDelta = unsigned int;
 
-    static inline TimePoint now();
+static inline TimePoint now();
 
-    class Timer
-    {
-        TimePoint           start;
-        TimePoint           prev;
-        TimerDefaultDelta   delta;
-        TimerDefaultDelta   timeSlice;
+class Timer
+{
+    TimePoint start;
+    TimePoint prev;
+    TimerDefaultDelta delta;
+    TimerDefaultDelta timeSlice;
 
-    public:
-        Timer(const TimerFrequency stepsPerSecond);
-        TimeMicro stepAndSleep(void);
+public:
+    Timer(const TimerFrequency stepsPerSecond);
+    TimeDelta stepAndSleep(void);
 
-        // TimeNanoseconds deltaNanoseconds(void) const;
-        // TimeMilliseconds deltaMilliseconds(void) const;
-        // TimeSeconds deltaSeconds(void) const;
+    // TimeNanoseconds deltaNanoseconds(void) const;
+    // TimeMilliseconds deltaMilliseconds(void) const;
+    // TimeSeconds deltaSeconds(void) const;
 
-        TimeMicro  totalMicro(void) const;
-        TimeMilli totalMilli(void) const;
-        TimeSeconds totalSeconds(void) const;
+    TimeMicro totalMicro(void) const;
+    TimeMilli totalMilli(void) const;
+    TimeSeconds totalSeconds(void) const;
 
-        TimeMicro  deltaMicro(void) const;
-        TimeMilli deltaMilli(void) const;
-        TimeSeconds deltaSeconds(void) const;
+    TimeMicro deltaMicro(void) const;
+    TimeMilli deltaMilli(void) const;
+    TimeSeconds deltaSeconds(void) const;
 
-    private:
-    };
+private:
+};
 }
 
 namespace pdEngine
 {
-    TimePoint now() 
-    {
-        return std::chrono::high_resolution_clock::now();
-    }
+
+TimePoint now()
+{
+    return std::chrono::high_resolution_clock::now();
 }
-    
+}
+
 
 #endif /* PDENGINE_TIMER_H_ */

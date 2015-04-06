@@ -3,8 +3,6 @@
 #include "renderer/SceneNode.h"
 #include "renderer/RenderPass.h"
 
-#include <cstatic>
-
 namespace pdEngine
 {
 static const glm::mat4 identity = glm::mat4();
@@ -53,7 +51,7 @@ bool RootNode::v_AddChild(SceneNode_sptr child)
             rootSky->v_AddChild(child);
             break;
         default:
-            assert("Hmm, maybe we should implement this " && child->getRenderPass());
+            assert("Hmm, maybe we should implement this " && static_cast<int>(child->getRenderPass()));
     }
     return true;
 }

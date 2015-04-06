@@ -88,7 +88,6 @@ void Application::shutdown(void)
     log->info("Shutting down");
 
     taskManager->abortAllNow();
-    taskManager->updateTasks(0);
 
 	renderer.reset();
 	window.reset();

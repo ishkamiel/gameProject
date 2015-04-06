@@ -49,7 +49,7 @@ bool SceneNode::v_OnRestore(Scene* scene)
     return true;
 }
 
-void SceneNode::v_OnUpdate(Scene* scene, const TimeMicro delta)
+bool SceneNode::v_OnUpdate(Scene* scene, const TimeDelta delta)
 {
     auto i = m_Children.begin();
     auto end = m_Children.end();
@@ -58,6 +58,8 @@ void SceneNode::v_OnUpdate(Scene* scene, const TimeMicro delta)
         (*i)->v_OnUpdate(scene, delta);
         ++i;
     }
+
+	return true;
 }
 
 bool SceneNode::v_PreRender(Scene* scene)
@@ -78,7 +80,7 @@ bool SceneNode::v_Render(Scene* scene)
     return true;
 }
 
-bool SceneNode::v_IsVisible(Scene* scene)
+bool SceneNode::v_IsVisible(Scene* scene) const
 {
     glm::mat4 toWorld, fromWorld;
     auto camera = scene->getCamera();
