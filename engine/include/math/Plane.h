@@ -20,10 +20,13 @@ public:
     bool isOn(const Vector3& point) const;
     bool isInside(const Vector3& point) const;
 
+    bool operator==(const Plane&);
 
 private:
     glm::vec4* m_Vec;
 };
+
+
 
 
 }
