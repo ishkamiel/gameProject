@@ -58,4 +58,15 @@ bool RootNode::v_AddChild(SceneNode_sptr child)
     return true;
 }
 
+bool RootNode::v_RenderChildren(Scene* scene)
+{
+    rootStatic->v_RenderChildren(scene);
+    rootActor->v_RenderChildren(scene);
+
+    // FIXME
+    //rootSky->v_RenderChildren(scene);
+
+    return true;
+}
+
 }
