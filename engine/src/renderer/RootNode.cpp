@@ -34,6 +34,11 @@ RootNode::~RootNode()
     // TODO
 }
 
+bool RootNode::v_IsVisible(Scene* scene) const
+{
+	return true;
+}
+
 bool RootNode::v_AddChild(SceneNode_sptr child)
 {
     switch(child->getRenderPass())
