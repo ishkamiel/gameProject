@@ -24,7 +24,15 @@ Vector3::Vector3(Vector3&& vec)
 {
 	vec.m_Vec = nullptr;
 }
- 
+
+Vector3::Vector3(const glm::vec3& vec)
+: m_Vec(new glm::vec3(vec))
+{}
+
+Vector3::Vector3(glm::vec3&& vec)
+: m_Vec(new glm::vec3(vec))
+{} 
+
  Vector3::~Vector3()
  {
 	 safeDelete(m_Vec);

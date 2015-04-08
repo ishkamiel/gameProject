@@ -38,38 +38,61 @@ float Vector3::getZ(void) const noexcept
 
 float Vector3::length(void) const noexcept
 {
-	return glm::length(*m_Vec);
+    return glm::length(*m_Vec);
+}
+
+Vector3& Vector3::normalize(void) noexcept
+{
+    if ((*m_Vec)[0] != 0.0f ||
+            (*m_Vec)[1] != 0.0f ||
+            (*m_Vec)[2] != 0.0f)
+    {
+        auto tmp = glm::normalize(*m_Vec);
+        std::swap(*m_Vec, tmp);
+    }
+    return *this;
+}
+
+inline Vector3 Vector3::getNormalized(void) noexcept
+{
+    if ((*m_Vec)[0] == 0.0f &&
+            (*m_Vec)[1] == 0.0f &&
+            (*m_Vec)[2] == 0.0f)
+    {
+        return Vector3(0.0f, 0.0f, 0.0f);
+    }
+
+    auto tmp = Vector3(glm::normalize(*m_Vec));
+    return tmp;
 }
 
 inline Vector3& Vector3::operator=(const Vector3& o) noexcept
 {
-	m_Vec[0] = o.m_Vec[0];
-	m_Vec[1] = o.m_Vec[1];
-	m_Vec[2] = o.m_Vec[2];
-	return *this;
+    m_Vec[0] = o.m_Vec[0];
+    m_Vec[1] = o.m_Vec[1];
+    m_Vec[2] = o.m_Vec[2];
+    return *this;
 }
 
 inline Vector3& Vector3::operator=(Vector3&& o) noexcept
 {
-	m_Vec = o.m_Vec;
-	o.m_Vec = nullptr;
-	return *this;
+    m_Vec = o.m_Vec;
+    o.m_Vec = nullptr;
+    return *this;
 }
 
-
-inline bool Vector3::operator==(const Vector3& o) const noexcept
+inline bool operator!=(const Vector3& lhs, const Vector3& rhs)
 {
-	return ((*m_Vec)[0] == (*o.m_Vec)[0]
-				&& (*m_Vec)[1] == (*o.m_Vec)[1]
-				&& (*m_Vec)[2] == (*o.m_Vec)[2]);
+    return !(lhs==rhs);
 }
 
-inline bool Vector3::operator!=(const Vector3& o) const noexcept
+inline bool operator==(const Vector3& lhs, const Vector3& rhs)
 {
-	return !(*this == o);
+    return ((*lhs.m_Vec)[0] == (*rhs.m_Vec)[0]
+            && (*lhs.m_Vec)[1] == (*rhs.m_Vec)[1]
+            && (*lhs.m_Vec)[2] == (*rhs.m_Vec)[2]);
 }
 
 }
-
 #endif	/* VECTOR3_H */
 
