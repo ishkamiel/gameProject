@@ -31,6 +31,9 @@ target_link_libraries(pdEngine
     #${CEGUI_LIBRARIES}
     )
 
+set_property(TARGET pdEngine PROPERTY CXX_STANDARD 14)
+set_property(TARGET pdEngine PROPERTY CXX_STANDARD_REQUIRED ON)
+
 if(${BUILD_TESTS})
     include(GetGmock)
 
