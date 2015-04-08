@@ -2,13 +2,15 @@
 #define PLANE_H_
 
 #include <math/Vector3_fwd.h>
-//#include <glm/fwd.hpp>
 
 namespace pdEngine
 {
 
 class Plane
 {
+	friend inline bool operator==(const Plane& lhs, const Plane& rhs) noexcept;
+	friend inline bool operator!=(const Plane& lhs, const Plane& rhs) noexcept;
+
 public:
 	Plane(const Plane&);
 	Plane(Plane&&);
@@ -23,8 +25,6 @@ public:
     inline bool isOn(const Vector3& point) const noexcept;
     inline bool isInside(const Vector3& point) const noexcept;
 
-	inline bool operator==(const Plane&) const noexcept;
-	inline bool operator!=(const Plane&) const noexcept;
 
 private:
 	Vector3 n;

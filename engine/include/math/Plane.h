@@ -24,14 +24,14 @@ bool Plane::isInside(const Vector3& point) const noexcept
 	return false;
 }
 
-bool Plane::operator==(const Plane& o) const noexcept
-{ 
-    return (d == d && n == o.n);
+inline bool operator==(const Plane& lhs, const Plane& rhs) noexcept
+{
+    return (lhs.d == rhs.d && lhs.n == rhs.n);
 }
 
-bool Plane::operator!=(const Plane& o) const noexcept
-{ 
-	return !(*this == o);
+inline bool operator!=(const Plane& lhs, const Plane& rhs) noexcept
+{
+    return !(lhs == rhs);
 }
 
 }

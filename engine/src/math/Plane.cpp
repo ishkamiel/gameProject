@@ -12,16 +12,23 @@ namespace pdEngine
 
 Plane::Plane (float x, float y, float z, float d)
     : n(x, y, z), d(d)
-{}
+{
+    assert(n.length() != 0.0f && "zero length normal :(");
+    n.normalize();
+}
 
 Plane::Plane (const Vector3& point, const Vector3& normal)
+: n(normal), d(dot(n, point))
 {
-    // TODO
+    assert(n.length() != 0.0f && "zero length normal :(");
 }
 
 Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)
 {
-    // TODO
+    assert(false && "not implemented");
+    (void)a;
+    (void)b;
+    (void)c;
 }
 
 Plane::~Plane()

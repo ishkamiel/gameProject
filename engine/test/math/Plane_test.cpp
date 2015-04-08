@@ -1,4 +1,4 @@
-#include "math/Plane_fwd.h"
+#include "math/Plane.h"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -27,11 +27,11 @@ class Plane_test : public ::testing::Test
 
 TEST_F(Plane_test, ConstrucorsAndEquality)
 {
-    //Vector3 vec0 { 0.0f, 0.0f, 0.0f };
-    //Vector3 vec11 { 1.0f, 0.0f, 0.0f };
-    //Plane coords { 1.0f, 0.0f, 0.0f, 0.0f };
-    //Plane vecs { vec0, vec11 };
-    //ASSERT_EQ(coords, vecs);
+    Vector3 vec0 { 0.0f, 0.0f, 0.0f };
+    Vector3 vec11 { 1.0f, 0.0f, 0.0f };
+    Plane coords { 1.0f, 0.0f, 0.0f, 0.0f };
+    Plane vecs { vec0, vec11 };
+    ASSERT_TRUE(coords == vecs);
 }
 
 }
