@@ -81,16 +81,32 @@ inline Vector3& Vector3::operator=(Vector3&& o) noexcept
     return *this;
 }
 
-inline bool operator!=(const Vector3& lhs, const Vector3& rhs)
+inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept
 {
     return !(lhs==rhs);
 }
 
-inline bool operator==(const Vector3& lhs, const Vector3& rhs)
+inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept
 {
     return ((*lhs.m_Vec)[0] == (*rhs.m_Vec)[0]
             && (*lhs.m_Vec)[1] == (*rhs.m_Vec)[1]
             && (*lhs.m_Vec)[2] == (*rhs.m_Vec)[2]);
+}
+
+inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept
+{
+    return glm::dot(*lhs.m_Vec, *rhs.m_Vec);
+}
+
+inline Vector3 operator*(const Vector3& lhs, const float s) noexcept
+{
+    return Vector3((*lhs.m_Vec)*s);
+}
+
+inline Vector3& operator*=(Vector3& lhs, const float s) noexcept
+{
+    (*lhs.m_Vec) *= s;
+    return lhs;
 }
 
 }

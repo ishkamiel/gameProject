@@ -15,6 +15,13 @@ namespace pdEngine
 
 class Vector3
 {
+    friend inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept;
+    friend inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept;
+    friend inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept;
+
+    friend inline Vector3 operator*(const Vector3& lhs, const float) noexcept;
+    friend inline Vector3& operator*=(Vector3& lhs, const float) noexcept;
+
 public:
     Vector3(void);
     Vector3(const float, const float, const float);
@@ -42,8 +49,6 @@ private:
 
 public:
 
-    friend inline bool operator==(const Vector3& lhs, const Vector3& rhs);
-    friend inline bool operator!=(const Vector3& lhs, const Vector3& rhs);
 };
 
 }
