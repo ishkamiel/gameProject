@@ -28,4 +28,9 @@ Vector3::Vector3(const glm::vec3& vec)
 
 Vector3::~Vector3() = default;
 
+std::ostream& operator<<(std::ostream& os, const Vector3& v) noexcept
+{
+    return (os << "(" << v.getX() << ", " << v.getY() << ", " << v.getZ() << ")");
+}
+
 }

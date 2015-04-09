@@ -46,6 +46,7 @@ Vector3& Vector3::normalize(void) noexcept
             m_Vec->z != 0.0f)
     {
         m_Vec.reset(new glm::vec3(glm::normalize(*m_Vec)));
+        // assert(glm::length(*m_Vec) > 0.999f && glm::length(*m_Vec) < 1.0001f && "vector normalization fail");
     }
     return *this;
 }

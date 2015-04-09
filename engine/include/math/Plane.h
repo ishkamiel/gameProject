@@ -26,7 +26,7 @@ float Plane::getDistance(void) const noexcept
 
 float Plane::distanceTo(const Vector3& point) const noexcept
 {
-    return dot(n, point) + d;
+    return dot(n, point) - d;
 }
 
 bool Plane::isOn(const Vector3& point) const noexcept

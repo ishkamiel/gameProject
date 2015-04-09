@@ -11,6 +11,7 @@
 #include <glm/fwd.hpp>
 
 #include <memory>
+#include <ostream>
 
 namespace pdEngine
 {
@@ -23,6 +24,8 @@ class Vector3
 
     friend inline Vector3 operator*(const Vector3& lhs, const float) noexcept;
     friend inline Vector3& operator*=(Vector3& lhs, const float) noexcept;
+
+    friend std::ostream& operator<<(std::ostream& os, const Vector3& plane) noexcept;
 
 public:
     Vector3(void);

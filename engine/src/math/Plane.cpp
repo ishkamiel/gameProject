@@ -15,12 +15,14 @@ Plane::Plane (float x, float y, float z, float d)
 {
     assert(n.length() != 0.0f && "zero length normal :(");
     n.normalize();
+    assert(isValid());
 }
 
 Plane::Plane (const Vector3& point, const Vector3& normal)
 : n(normal.getNormalized()), d(dot(n, point))
 {
     assert(normal.length() != 0.0f && "zero length normal :(");
+    assert(isValid());
 }
 
 Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)
@@ -29,6 +31,7 @@ Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)
     (void)a;
     (void)b;
     (void)c;
+    assert(isValid());
 }
 
 Plane::~Plane()
@@ -47,5 +50,18 @@ Plane& Plane::operator=(Plane&& o) noexcept
 	d = o.d;
 	return *this;
 }
+
+bool Plane::isValid(void) const noexcept
+{
+    if (std::pow(n.length() - 1.0f, 2) > 0.00001f) return false;
+
+    return true;
+}
+
+std::ostream& operator<<(std::ostream& os, const Plane& plane) noexcept
+{
+    return (os << "{" << plane.n << ", " << plane.d << "}");
+}
+
 
 }

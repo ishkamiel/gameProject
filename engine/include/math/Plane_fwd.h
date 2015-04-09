@@ -3,6 +3,8 @@
 
 #include <math/Vector3_fwd.h>
 
+#include <ostream>
+
 namespace pdEngine
 {
 
@@ -10,6 +12,7 @@ class Plane
 {
 	friend inline bool operator==(const Plane& lhs, const Plane& rhs) noexcept;
 	friend inline bool operator!=(const Plane& lhs, const Plane& rhs) noexcept;
+    friend std::ostream& operator<<(std::ostream& os, const Plane& plane) noexcept;
 
 public:
 	Plane(const Plane&);
@@ -29,6 +32,7 @@ public:
     inline bool isOn(const Vector3& point) const noexcept;
     inline bool isInside(const Vector3& point) const noexcept;
 
+    bool isValid(void) const noexcept;
 
 private:
 	Vector3 n;
