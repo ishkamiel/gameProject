@@ -3,6 +3,7 @@
 
 #include "resources/SimpleResourceFile.h"
 #include "resources/Resource.h"
+#include "Utils.h"
 
 #include <cstdio>
 #include <fstream>
@@ -137,13 +138,14 @@ TEST_F(SimpleResourceFile_test, vGetRawResource)
     auto srf = std::make_shared<pdEngine::SimpleResourceFile>(fn_bin123);
     auto res = pdEngine::Resource(fn_bin123);
     srf->vOpen();
+
     char* buffer = new char[srf->vGetRawResourceSize(res)];
 
     ASSERT_EQ(srf->vGetRawResource(res, buffer), 123);
     ASSERT_EQ(buffer[120], (char) 120);
     ASSERT_EQ(buffer[0], (char) 0);
 
-    delete buffer;
+    pdEngine::safeDeleteArray(buffer);
 }
 
 TEST_F(SimpleResourceFile_test, EmptyFile)
