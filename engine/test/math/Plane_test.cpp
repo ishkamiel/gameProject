@@ -36,10 +36,30 @@ TEST_F(Plane_test, ConstrucorsAndEquality)
     ASSERT_FLOAT_EQ(coords.getNormal().length(), 1.0f);
 }
 
+TEST_F(Plane_test, NormalAndDistanceValues)
+{
+    Plane p {
+        Vector3 { 0.0f, 0.0f, 0.0f },
+        Vector3 { 1.0f, 0.0f, 0.0f }
+    };
+
+    ASSERT_FLOAT_EQ(p.getDistance(), 1.0f);
+    ASSERT_FLOAT_EQ(p.getDistance(), 1.0f);
+    Vector3 n { 1.0f, 0.0f, 0.0f };
+    ASSERT_TRUE(p.getNormal() == n);
+
+    // Plane p1 {
+    //     Vector3 { 1.0f, 1.0f, 1.0f },
+    //     Vector3 { 1.0f, 1.0f, 1.0f }
+    // };
+    //
+    // ASSERT_FLOAT_EQ(p.getDistance(), 1.0f);
+    // ASSERT_FLOAT_EQ(p.getDistance(), 1.0f);
+
+}
+
 TEST_F(Plane_test, DistanceToPointOnPlane)
 {
-    Vector3 vec0 { 0.0f, 0.0f, 0.0f };
-    Vector3 vec1 { 1.0f, 0.0f, 0.0f };
     Plane p {
         Vector3 { 0.0f, 0.0f, 0.0f },
         Vector3 { 1.0f, 0.0f, 0.0f }
