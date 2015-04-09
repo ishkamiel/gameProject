@@ -22,6 +22,10 @@ public:
 	Plane& operator=(const Plane&) noexcept;
 	Plane& operator=(Plane&&) noexcept;
 
+    inline const Vector3& getNormal(void) const noexcept;
+    inline float getDistance(void) const noexcept;
+
+    inline float distanceTo(const Vector3& point) const noexcept;
     inline bool isOn(const Vector3& point) const noexcept;
     inline bool isInside(const Vector3& point) const noexcept;
 

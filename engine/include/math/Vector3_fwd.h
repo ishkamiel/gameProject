@@ -41,7 +41,7 @@ public:
 	inline float length(void) const noexcept;
 
     inline Vector3& normalize(void) noexcept;
-    inline Vector3 getNormalized(void) noexcept;
+    inline Vector3 getNormalized(void) const noexcept;
 
 	inline Vector3& operator=(const Vector3&) noexcept;
 	inline Vector3& operator=(Vector3&&) noexcept;

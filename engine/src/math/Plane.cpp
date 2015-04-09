@@ -18,9 +18,10 @@ Plane::Plane (float x, float y, float z, float d)
 }
 
 Plane::Plane (const Vector3& point, const Vector3& normal)
-: n(normal), d(dot(n, point))
+: n(normal.getNormalized()), d(dot(n, point))
 {
-    assert(n.length() != 0.0f && "zero length normal :(");
+    assert(normal.length() != 0.0f && "zero length normal :(");
+    assert(n.length() == 1.0f && "not unit-length normal");
 }
 
 Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)

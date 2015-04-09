@@ -16,7 +16,6 @@ Vector3::Vector3(const float x, const float y, const float z)
 {}
 
 Vector3::Vector3(const Vector3& vec)
-//: m_Vec(new glm::vec3( (*(vec.m_Vec))[0], (*(vec.m_Vec))[1], (*(vec.m_Vec))[2]))
 : m_Vec(new glm::vec3(*(vec.m_Vec)))
 {
 }
@@ -36,6 +35,5 @@ Vector3::Vector3(glm::vec3&& vec)
 {}
 
 Vector3::~Vector3() = default;
-//{}
 
 }

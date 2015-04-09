@@ -52,7 +52,7 @@ Vector3& Vector3::normalize(void) noexcept
     return *this;
 }
 
-inline Vector3 Vector3::getNormalized(void) noexcept
+inline Vector3 Vector3::getNormalized(void) const noexcept
 {
     if (m_Vec->x == 0.0f &&
             m_Vec->y == 0.0f &&

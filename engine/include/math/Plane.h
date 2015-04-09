@@ -14,6 +14,21 @@
 namespace pdEngine
 {
 
+auto Plane::getNormal(void) const noexcept -> const Vector3&
+{
+    return n;
+}
+
+float Plane::getDistance(void) const noexcept
+{
+    return d;
+}
+
+float Plane::distanceTo(const Vector3& point) const noexcept
+{
+    return dot(n, point) + d;
+}
+
 bool Plane::isOn(const Vector3& point) const noexcept
 {
 	return false;
