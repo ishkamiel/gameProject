@@ -135,6 +135,7 @@ TEST_F(Vector3_test, NormalizeVector)
     ASSERT_FLOAT_EQ(n.getZ(), v.getZ());
 }
 
+
 TEST_F(Vector3_test, DotProducts)
 {
     Vector3 a { 2.0f, 3.0f, 4.0f };
@@ -142,6 +143,15 @@ TEST_F(Vector3_test, DotProducts)
 
     auto res = 56.0f;
     ASSERT_FLOAT_EQ(dot(a,b), res);
+}
+
+TEST_F(Vector3_test, OperatorStarEquals)
+{
+    Vector3 a { 2.0f, 3.0f, 4.0f };
+    a *= 2;
+    ASSERT_FLOAT_EQ(a.getX(), 4.0f);
+    ASSERT_FLOAT_EQ(a.getY(), 6.0f);
+    ASSERT_FLOAT_EQ(a.getZ(), 8.0f);
 }
 
 TEST_F(Vector3_test, ScalarProduct)

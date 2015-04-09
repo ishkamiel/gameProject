@@ -23,17 +23,17 @@ namespace pdEngine
 float Vector3::getX(void) const noexcept
 {
 	DLOG("Here we are");
-	return (*m_Vec)[0];
+	return m_Vec->x;
 }
 
 float Vector3::getY(void) const noexcept
 {
-	return (*m_Vec)[1];
+	return m_Vec->y;
 }
 
 float Vector3::getZ(void) const noexcept
 {
-	return (*m_Vec)[2];
+	return m_Vec->z;
 }
 
 float Vector3::length(void) const noexcept
@@ -43,41 +43,40 @@ float Vector3::length(void) const noexcept
 
 Vector3& Vector3::normalize(void) noexcept
 {
-    if ((*m_Vec)[0] != 0.0f ||
-            (*m_Vec)[1] != 0.0f ||
-            (*m_Vec)[2] != 0.0f)
+    if (m_Vec->x != 0.0f ||
+            m_Vec->y != 0.0f ||
+            m_Vec->z != 0.0f)
     {
-        auto tmp = glm::normalize(*m_Vec);
-        std::swap(*m_Vec, tmp);
+        m_Vec.reset(new glm::vec3(glm::normalize(*m_Vec)));
     }
     return *this;
 }
 
 inline Vector3 Vector3::getNormalized(void) noexcept
 {
-    if ((*m_Vec)[0] == 0.0f &&
-            (*m_Vec)[1] == 0.0f &&
-            (*m_Vec)[2] == 0.0f)
+    if (m_Vec->x == 0.0f &&
+            m_Vec->y == 0.0f &&
+            m_Vec->z == 0.0f)
     {
         return Vector3(0.0f, 0.0f, 0.0f);
     }
 
-    auto tmp = Vector3(glm::normalize(*m_Vec));
-    return tmp;
+    auto n = glm::normalize(*m_Vec);
+
+    return Vector3(n);
 }
 
 inline Vector3& Vector3::operator=(const Vector3& o) noexcept
 {
-    m_Vec[0] = o.m_Vec[0];
-    m_Vec[1] = o.m_Vec[1];
-    m_Vec[2] = o.m_Vec[2];
+    m_Vec->x  = o.m_Vec->x;
+    m_Vec->y  = o.m_Vec->y;
+    m_Vec->z  = o.m_Vec->z;
     return *this;
 }
 
 inline Vector3& Vector3::operator=(Vector3&& o) noexcept
 {
-    m_Vec = o.m_Vec;
-    o.m_Vec = nullptr;
+    m_Vec = std::move(o.m_Vec);
     return *this;
 }
 
@@ -88,9 +87,9 @@ inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept
 
 inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept
 {
-    return ((*lhs.m_Vec)[0] == (*rhs.m_Vec)[0]
-            && (*lhs.m_Vec)[1] == (*rhs.m_Vec)[1]
-            && (*lhs.m_Vec)[2] == (*rhs.m_Vec)[2]);
+    return (lhs.m_Vec->x == rhs.m_Vec->x
+            && lhs.m_Vec->y == rhs.m_Vec->y
+            && lhs.m_Vec->z == rhs.m_Vec->z);
 }
 
 inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept
@@ -100,7 +99,7 @@ inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept
 
 inline Vector3 operator*(const Vector3& lhs, const float s) noexcept
 {
-    return Vector3((*lhs.m_Vec)*s);
+    return Vector3(lhs.m_Vec->x*s, lhs.m_Vec->y*s, lhs.m_Vec->z*s);
 }
 
 inline Vector3& operator*=(Vector3& lhs, const float s) noexcept
@@ -110,5 +109,6 @@ inline Vector3& operator*=(Vector3& lhs, const float s) noexcept
 }
 
 }
+
 #endif	/* VECTOR3_H */
 

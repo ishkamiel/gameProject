@@ -10,6 +10,8 @@
 
 #include <glm/fwd.hpp>
 
+#include <memory>
+
 namespace pdEngine
 {
 
@@ -45,9 +47,7 @@ public:
 	inline Vector3& operator=(Vector3&&) noexcept;
 
 private:
-    glm::vec3* m_Vec;
-
-public:
+    std::unique_ptr<glm::vec3> m_Vec;
 
 };
 
