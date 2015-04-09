@@ -6,30 +6,30 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <memory>
 
 namespace pdEngine
 {
     SimpleResourceFile::SimpleResourceFile (const std::string& filename)
-        : filename(filename), resourceName(filename), rawSize(0), file(nullptr)
+        : filename(filename), resourceName(filename), rawSize(0)
     {
         std::transform(resourceName.begin(), resourceName.end(), resourceName.begin(), ::tolower); 
     }
 
     SimpleResourceFile::~SimpleResourceFile(void)
     {
-        if (file != nullptr && file->is_open())
+        if (m_File && m_File->is_open())
         {
-            file->close();
-            delete file;
+            m_File->close();
         }
     }
 
     bool SimpleResourceFile::vOpen(void)
     {
-        file = new std::ifstream(filename, std::ios::in|std::ios::binary|std::ios::ate);
-        if (file->is_open())
+        m_File.reset(new std::ifstream(filename, std::ios::in|std::ios::binary|std::ios::ate));
+        if (m_File->is_open())
         {
-            rawSize = file->tellg();
+            rawSize = m_File->tellg();
             return true;
         }
         getLogger()->warn("Unable to open file {0} for reading", filename);
@@ -38,7 +38,7 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetRawResourceSize(const Resource &r)
     {
-        if (file == nullptr || !file->is_open()) throw std::logic_error("Resource not opened");
+        if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (r.getName() != resourceName) 
         {
             getLogger()->warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
@@ -51,7 +51,7 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetRawResource(const Resource &r, char *buffer)
     {
-        if (file == nullptr || !file->is_open()) throw std::logic_error("Resource not opened");
+        if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (r.getName() != resourceName) 
         {
             getLogger()->warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
@@ -59,11 +59,11 @@ namespace pdEngine
         }
 
         (void)r;
-        file->seekg(0, file->beg);
-        file->read(buffer, rawSize);
-        if (!file)
+        m_File->seekg(0, m_File->beg);
+        m_File->read(buffer, rawSize);
+        if (!m_File)
             getLogger()->error(
-                    "Error reading file {0}, got only {1} bytes", filename, file->gcount());
+                    "Error reading file {0}, got only {1} bytes", filename, m_File->gcount());
 
         // getLogger()->warn("reading {0}, got only {1}, bytes", filename, file.gcount());
         // getLogger()->warn("rawSize is {0}, buffer is '{1}'", rawSize, buffer);
@@ -72,13 +72,13 @@ namespace pdEngine
 
     int SimpleResourceFile::vGetNumResources() const
     {
-        if (file == nullptr || !file->is_open()) throw std::logic_error("Resource not opened");
+        if (!m_File || !m_File->is_open()) throw std::logic_error("Resource not opened");
         return 1;
     }
 
     std::string SimpleResourceFile::vGetResourceName(int num) const
     {
-        if (file == nullptr || !file->is_open()) throw std::logic_error("Resource not opened");
+        if (!m_File || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (num != 0)
             throw std::out_of_range("Unknown resource");
 

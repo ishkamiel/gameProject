@@ -5,6 +5,7 @@
 #include "resources/Resource.h"
 
 #include <fstream>
+#include <memory>
 #include <string>
 
 namespace pdEngine
@@ -14,7 +15,7 @@ namespace pdEngine
         std::string filename;
         std::string resourceName;
         int rawSize;
-        std::ifstream* file;
+        std::unique_ptr<std::ifstream> m_File;
 
     public:
         /** 
