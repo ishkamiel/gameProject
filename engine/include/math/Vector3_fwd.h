@@ -30,7 +30,6 @@ public:
     Vector3(const Vector3&);
     Vector3(Vector3&&);
     Vector3(const glm::vec3&);
-    Vector3(glm::vec3&&);
 
     virtual ~Vector3();
 
@@ -48,7 +47,6 @@ public:
 
 private:
     std::unique_ptr<glm::vec3> m_Vec;
-
 };
 
 }

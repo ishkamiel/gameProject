@@ -21,7 +21,6 @@ Plane::Plane (const Vector3& point, const Vector3& normal)
 : n(normal.getNormalized()), d(dot(n, point))
 {
     assert(normal.length() != 0.0f && "zero length normal :(");
-    assert(n.length() == 1.0f && "not unit-length normal");
 }
 
 Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)

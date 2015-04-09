@@ -18,8 +18,6 @@
 namespace pdEngine
 {
 
-
-
 float Vector3::getX(void) const noexcept
 {
 	DLOG("Here we are");
@@ -76,7 +74,8 @@ inline Vector3& Vector3::operator=(const Vector3& o) noexcept
 
 inline Vector3& Vector3::operator=(Vector3&& o) noexcept
 {
-    m_Vec = std::move(o.m_Vec);
+    m_Vec.swap(o.m_Vec);
+    //m_Vec = std::move(o.m_Vec);
     return *this;
 }
 

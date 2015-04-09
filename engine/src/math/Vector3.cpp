@@ -17,22 +17,14 @@ Vector3::Vector3(const float x, const float y, const float z)
 
 Vector3::Vector3(const Vector3& vec)
 : m_Vec(new glm::vec3(*(vec.m_Vec)))
-{
-}
+{}
 
-Vector3::Vector3(Vector3&& vec)
-{
-    m_Vec = std::move(vec.m_Vec);
-	vec.m_Vec = nullptr;
-}
+Vector3::Vector3(Vector3&& vec) = default;
 
 Vector3::Vector3(const glm::vec3& vec)
 : m_Vec(new glm::vec3(vec))
 {}
 
-Vector3::Vector3(glm::vec3&& vec)
-: m_Vec(&vec)
-{}
 
 Vector3::~Vector3() = default;
 
