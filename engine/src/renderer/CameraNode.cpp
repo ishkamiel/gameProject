@@ -1,17 +1,18 @@
 #include "renderer/CameraNode.h"
+#include "renderer/SceneNode.h"
 
 #define GLM_FORCE_RADIANS
 
 namespace pdEngine
 {
 
-CameraNode::CameraNode(const Vector4& t, const Frustum& frustum)
+CameraNode::CameraNode(const Matrix4* t, const Frustum& frustum)
    : SceneNode(NullActorID, "Camera", RenderPass::First, Color(), t),
    m_Frustum(frustum),
    m_IsActive(true),
-   m_DebugCamera(false),
+   m_DebugCamera(false)
    //m_pTarget(),
-   m_CamOffsetVector( 0.0f, 1.0f, -10.0f, 0.0f )
+   //m_CamOffsetVector( 0.0f, 1.0f, -10.0f, 0.0f )
 {}
 
 CameraNode::~CameraNode()
@@ -44,9 +45,9 @@ bool CameraNode::v_IsVisible(Scene*) const
 bool CameraNode::v_SetView(Scene* scene)
 {
     (void)scene;
+    /*
     auto mat = m_Target->getToWorld();
-    auto at = m_CamOffsetVector;
-    auto atWorld = glm::translate(mat, glm::vec3(at));
+    auto atWorld = mat->getTranslated(m_CamOffsetVector);
 
     auto lookAt = Matrix4(glm::lookAt(
             glm::vec3(glm::row(atWorld, 3)), 
@@ -54,6 +55,7 @@ bool CameraNode::v_SetView(Scene* scene)
             glm::vec3(0.0f,1.0f,0.0f)));
 
     v_SetTransform(&lookAt);
+    */
     return true;
 }
 
@@ -77,7 +79,7 @@ auto CameraNode::getTarget(void) -> SceneNode_sptr
     return m_Target;
 }
 
-auto CameraNode::getWorldViewProjection(Scene*) -> glm::mat4
+auto CameraNode::getWorldViewProjection(Scene*) -> Matrix4
 {
     return m_Projection;
 }

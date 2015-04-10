@@ -5,7 +5,7 @@
 
 namespace pdEngine
 {
-static const glm::mat4 identity = glm::mat4();
+static const Matrix4 identity = Matrix4();
 
 RootNode::RootNode()
     : SceneNode(0, "Root", RenderPass::First, Color(), &identity)

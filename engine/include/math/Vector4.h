@@ -17,7 +17,7 @@ class Vector4 : public glm::vec4
 {
 public:
 	Vector4();
-	Vector4(float, float, float, float);
+	Vector4(const float, const float, const float, const float);
 	virtual ~Vector4();
 
 };

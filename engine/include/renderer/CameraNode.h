@@ -14,7 +14,7 @@ class CameraNode : public SceneNode
 {
 
 public:
-    CameraNode(const Matrix4&, const Frustum&);
+    CameraNode(const Matrix4*, const Frustum&);
     virtual ~CameraNode();
 
     virtual bool v_Render(Scene*) override;

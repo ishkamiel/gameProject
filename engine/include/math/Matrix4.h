@@ -8,6 +8,8 @@
 #ifndef SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_MATRIX4_H_
 #define SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_MATRIX4_H_
 
+#include "math/Vector4.h"
+
 #include <glm/mat4x4.hpp>
 
 namespace pdEngine
@@ -25,6 +27,7 @@ public:
 	Matrix4& operator=(Matrix4&&);
 
 	Matrix4 getInverse(void) const noexcept;
+	Matrix4 getTranslated(const Vector4&) const noexcept;
 };
 
 }
