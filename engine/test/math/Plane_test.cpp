@@ -13,6 +13,8 @@ using Vector3 = glm::vec3;
 using Vector4 = glm::vec4;
 using Plane = pdEngine::Plane;
 
+using ::testing::FloatEq;
+
 class Plane_test : public ::testing::Test 
     {
 
@@ -135,7 +137,7 @@ TEST_F(Plane_test, DistanceToPointFromOrigoPlane)
     ASSERT_FLOAT_EQ(p.distanceTo(Vector3 { 1.1234f, 1.0f, 2.0f }), 1.1234f);
 }
 
-TEST_F(Plane_test, DistanceToPoint)
+TEST_F(Plane_test, DistanceToPoint3d)
 {
     Plane p {
         Vector3 { 1.0f, 1.0f, 1.0f },
@@ -153,6 +155,19 @@ TEST_F(Plane_test, DistanceToPoint)
     
     ASSERT_FLOAT_EQ(p.distanceTo(Vector3 { 200.0f, 1.0f, 2.0f }), 88.0f);
     ASSERT_FLOAT_EQ(p.distanceTo(Vector3 { -200.0f, 1.0f, 2.0f }), -312.0f);
+}
+
+TEST_F(Plane_test, DistanceToPointNegativeCoords)
+{
+    Plane p {
+        Vector3 { -1.0f, -1.0f, -1.0f },
+        Vector3 { 1.0f, 1.0f, 1.0f }
+    };
+
+    ASSERT_FLOAT_EQ(p.distanceTo(Vector3 { 0.0f, 0.0f, 0.0f }), std::sqrt(3.0f));
+    ASSERT_FLOAT_EQ(p.distanceTo(Vector3 { -1.0f, -1.0f, -1.0f }), 0.0f);
+    ASSERT_FLOAT_EQ(p.distanceTo(Vector3 { -2.0f, -2.0f, -2.0f }), -std::sqrt(3.0f));
+    ASSERT_THAT(p.distanceTo(Vector3 { 1.0f, 1.0f, 1.0f }), FloatEq(std::sqrt(12.0f)));
 }
 
 
