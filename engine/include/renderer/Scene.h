@@ -4,10 +4,7 @@
 #include "Actor.h"
 #include "Timer.h"
 #include "renderer/I_Renderer.h"
-// #include "renderer/I_SceneNode.h"
-// #include "renderer/SceneNode.h"
-
-#include <glm/fwd.hpp>
+#include "math/Matrix4.h"
 
 #include <map>
 #include <memory>
@@ -47,9 +44,9 @@ public:
     void setCamera(CameraNode_sptr) ;
     const CameraNode_sptr getCamera(void) const;
 
-    void pushAndSetMatrix(const glm::mat4* toWorld);
+    void pushAndSetMatrix(const Matrix4* toWorld);
     void popMatrix(void);
-    const glm::mat4* getTopMatrix(void);
+    const Matrix4* getTopMatrix(void);
 
     LightManager_sptr getLightManager();
 
@@ -62,7 +59,7 @@ protected:
     std::shared_ptr<I_Renderer> m_Renderer;
     std::shared_ptr<SceneNode> m_Root;
 
-    std::stack<glm::mat4> m_TranlsationMatrices;
+    std::stack<Matrix4> m_TranlsationMatrices;
     /* Alpha? */
 
     std::map<ActorID, SceneNode_sptr> m_ActorMap;

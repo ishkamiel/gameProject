@@ -4,6 +4,7 @@
 #include "math/Vector3.h"
 #include "math/Plane.h"
 
+#include <ostream>
 #include <vector>
 
 namespace pdEngine
@@ -11,8 +12,7 @@ namespace pdEngine
 
 class Frustum
 {
-	friend std::ostream& operator<<(std::ostream& os, const Frustum& f)
-			noexcept;
+	friend std::ostream& operator<<(std::ostream& os, const Frustum& f) noexcept;
 
 public:
 	Frustum();
@@ -45,7 +45,6 @@ bool Frustum::isInside(const Vector3 &p) const noexcept
 	{
 		if (!plane.isInside(p))
 		{
-			PD_debug("Point {} not inside {}", p, plane);
 			return false;
 		}
 	}

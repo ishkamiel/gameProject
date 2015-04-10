@@ -2,16 +2,10 @@
 
 #define GLM_FORCE_RADIANS
 
-#include <glm/mat4x4.hpp>
-#include <glm/matrix.hpp>
-#include <glm/geometric.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/matrix_access.hpp>
-
 namespace pdEngine
 {
 
-CameraNode::CameraNode(const glm::mat4* t, const Frustum& frustum)
+CameraNode::CameraNode(const Vector4& t, const Frustum& frustum)
    : SceneNode(NullActorID, "Camera", RenderPass::First, Color(), t),
    m_Frustum(frustum),
    m_IsActive(true),
@@ -54,10 +48,10 @@ bool CameraNode::v_SetView(Scene* scene)
     auto at = m_CamOffsetVector;
     auto atWorld = glm::translate(mat, glm::vec3(at));
 
-    auto lookAt = glm::lookAt(
+    auto lookAt = Matrix4(glm::lookAt(
             glm::vec3(glm::row(atWorld, 3)), 
             glm::vec3(at), 
-            glm::vec3(0.0f,1.0f,0.0f));
+            glm::vec3(0.0f,1.0f,0.0f)));
 
     v_SetTransform(&lookAt);
     return true;
@@ -88,17 +82,17 @@ auto CameraNode::getWorldViewProjection(Scene*) -> glm::mat4
     return m_Projection;
 }
 
-auto CameraNode::getProjection() -> glm::mat4
+auto CameraNode::getProjection() -> Matrix4
 { 
     return m_Projection; 
 }
 
-auto CameraNode::getView() -> glm::mat4
+auto CameraNode::getView() -> Matrix4
 { 
     return m_View; 
 }
 
-void CameraNode::setCameraOffset(const vec4&)
+void CameraNode::setCameraOffset(const Vector4&)
 {
 }
 

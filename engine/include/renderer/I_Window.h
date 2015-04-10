@@ -14,6 +14,7 @@ namespace pdEngine {
 
 class I_Window {
 public:
+	virtual ~I_Window() {}
     virtual void init(void) = 0;
     virtual void openWindow(void) =0;
 	virtual Renderer_sptr getRenderer() =0;

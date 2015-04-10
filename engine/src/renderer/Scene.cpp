@@ -12,7 +12,7 @@ Scene::Scene()
 {
     m_Root.reset(new RootNode());
     //m_LightManager.reset(new LightManager);
-    m_TranlsationMatrices.push(glm::mat4());
+    m_TranlsationMatrices.push(Matrix4());
 }
 
 Scene::~Scene()
@@ -114,7 +114,7 @@ const CameraNode_sptr Scene::getCamera(void) const
     return m_Camera;
 }
 
-void Scene::pushAndSetMatrix(const glm::mat4* toWorld)
+void Scene::pushAndSetMatrix(const Matrix4* toWorld)
 {
     m_TranlsationMatrices.push(*toWorld);
 
@@ -132,7 +132,7 @@ void Scene::popMatrix(void)
     // DXUTGetD3DDevice()->SetTransform(D3DTS_WORLD, m_MatrixStack->GetTop());
 }
 
-const glm::mat4* Scene::getTopMatrix(void)
+const Matrix4* Scene::getTopMatrix(void)
 {
     return &(m_TranlsationMatrices.top());
 }

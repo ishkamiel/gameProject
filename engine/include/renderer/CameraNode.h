@@ -4,20 +4,17 @@
 #include "renderer/SceneNode.h"
 #include "Actor.h"
 #include "math/Frustum.h"
-
-#include <glm/fwd.hpp>
+#include "math/Matrix4.h"
+#include "math/Vector4.h"
 
 namespace pdEngine
 {
 
 class CameraNode : public SceneNode
 {
-    using mat4 = glm::mat4;
-    using vec4 = glm::vec4;
-
 
 public:
-    CameraNode(const glm::mat4*, const Frustum&);
+    CameraNode(const Matrix4&, const Frustum&);
     virtual ~CameraNode();
 
     virtual bool v_Render(Scene*) override;
@@ -32,22 +29,22 @@ public:
     void clearTarget(void);
     SceneNode_sptr getTarget(void);
 
-    mat4 getWorldViewProjection(Scene*);
+    Matrix4 getWorldViewProjection(Scene*);
 
-    mat4 getProjection();
-    mat4 getView();
+    Matrix4 getProjection();
+    Matrix4 getView();
 
-    void setCameraOffset(const vec4&);
+    void setCameraOffset(const Vector4&);
 
 protected:
 
     Frustum m_Frustum;
-    mat4 m_Projection;
-    mat4 m_View;
+    Matrix4 m_Projection;
+    Matrix4 m_View;
     bool m_IsActive;
     bool m_DebugCamera;
     SceneNode_sptr m_Target;
-    vec4 m_CamOffsetVector;
+    Vector4 m_CamOffsetVector;
 };
 
 }

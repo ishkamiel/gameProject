@@ -13,6 +13,7 @@ class ShaderProgram
     GLuint m_id;
 
 public:
+    virtual ~ShaderProgram() {}
     virtual bool load(void) { return true; };
     virtual bool compile(void) =0;
     inline GLuint getID(void) const;

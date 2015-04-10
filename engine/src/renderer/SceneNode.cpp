@@ -10,8 +10,8 @@ SceneNode::SceneNode (ActorID actorID,
             std::string name,
             RenderPass renderPass,
             const Color &diffuseColor,
-            const mat4 *to,
-            const mat4 *from)
+            const Matrix4* to,
+            const Matrix4* from)
 {
     m_ActorID = actorID;
     m_Name = name;
@@ -26,11 +26,11 @@ SceneNode::SceneNode (ActorID actorID,
 SceneNode::~SceneNode()
 {}
 
-void SceneNode::v_SetTransform(const mat4* toWorld, const mat4* fromWorld)
+void SceneNode::v_SetTransform(const Matrix4* toWorld, const Matrix4* fromWorld)
 {
     m_ToWorld = *toWorld;
     if (!fromWorld)
-        m_FromWorld = glm::inverse(*toWorld);
+        m_FromWorld = toWorld->getInverse();
     else
         m_FromWorld = *fromWorld;
 }
@@ -82,7 +82,7 @@ bool SceneNode::v_Render(Scene* scene)
 
 bool SceneNode::v_IsVisible(Scene* scene) const
 {
-    glm::mat4 toWorld, fromWorld;
+    Vector4 toWorld, fromWorld;
     auto camera = scene->getCamera();
 
     //FIXME
@@ -148,9 +148,9 @@ bool SceneNode::v_AddChild(std::shared_ptr<I_SceneNode> child)
     // The radius of the sphere should be fixed right here
     
     auto childPosition = child->getPosition();
-    glm::vec3 direction = childPosition - getPosition();
+    Vector3 direction = childPosition - getPosition();
 
-    float newRadius = glm::length(direction) + child->getRadius();
+    float newRadius = direction.length()+ child->getRadius();
 
     if (newRadius > m_Radius) m_Radius = newRadius;
     return true;
@@ -173,7 +173,7 @@ bool SceneNode::v_RemoveChild(ActorID id)
     return false;
 }
 
-void SceneNode::setPosition(const glm::vec3 &pos) 
+void SceneNode::setPosition(const Vector3& pos)
 { 
     m_ToWorld[3][0] = pos[0];
     m_ToWorld[3][1] = pos[1];
@@ -181,14 +181,14 @@ void SceneNode::setPosition(const glm::vec3 &pos)
 }
 
 
-auto SceneNode::getDirection(const glm::vec3 &pos) const -> glm::vec3
+auto SceneNode::getDirection(const Vector3& pos) const -> Vector3
 { 
     // FIXME
     (void)pos;
     return glm::vec3();
 }
 
-auto SceneNode::getPosition() const -> const glm::vec3
+auto SceneNode::getPosition() const -> const Vector3
 { 
     return glm::vec3(m_ToWorld[3][0], m_ToWorld[3][1], m_ToWorld[3][2]);
 }

@@ -4,12 +4,9 @@
 #include "renderer/I_SceneNode.h"
 #include "renderer/RenderPass.h"
 #include "renderer/Material.h"
+#include "math/Matrix4.h"
 #include "Actor.h"
 #include "Color.h"
-
-#include <glm/fwd.hpp>
-#include <glm/mat4x4.hpp>
-// #include <glm/vec3.hpp>
 
 #include <string>
 #include <vector>
@@ -20,9 +17,6 @@ class SceneNode : public I_SceneNode
 {
     friend class Scene;
 
-    using mat4 = glm::mat4;
-    using vec3 = glm::vec3;
-
     using SceneNodeList = std::vector<SceneNode_sptr>;
 
 public:
@@ -30,11 +24,11 @@ public:
             std::string name,
             RenderPass renderPass,
             const Color &diffuseColor,
-            const mat4 *to,
-            const mat4 *from = nullptr);
+            const Matrix4* to,
+            const Matrix4* from = nullptr);
     virtual ~SceneNode();
 
-    virtual void v_SetTransform(const mat4* toWorld, const mat4* fromWorld = nullptr) override;
+    virtual void v_SetTransform(const Matrix4* toWorld, const Matrix4* fromWorld = nullptr) override;
 
     virtual bool v_OnRestore(Scene* scene) override;
     virtual bool v_OnUpdate(Scene* scene, const TimeDelta) override;
@@ -51,20 +45,20 @@ public:
     virtual bool v_RemoveChild(ActorID id) override;
 
     virtual inline void setAlpha(const float alpha);
-    inline void setPosition(const vec3 &pos);
+    inline void setPosition(const Vector3 &pos);
     inline void setRadius(const float radius);
     inline void setMaterial(const Material &mat);
 
-    vec3 getDirection(const vec3 &pos) const;
-    virtual const vec3 getPosition() const override;
+    Vector3 getDirection(const Vector3 &pos) const;
+    virtual const Vector3 getPosition() const override;
 
     virtual inline const ActorID& getActorID() const override;
-    virtual inline const mat4& getToWorld() const override;
-    virtual inline const mat4& getFromWorld() const override;
+    virtual inline const Matrix4& getToWorld() const override;
+    virtual inline const Matrix4& getFromWorld() const override;
     virtual inline const char* getName() const override;
     virtual inline bool hasAlpha() const override;
     virtual inline float getAlpha() const override;
-    virtual inline void getTransform(mat4* toWorld, mat4* fromWorld) const override;
+    virtual inline void getTransform(Matrix4* toWorld, Matrix4* fromWorld) const override;
     virtual inline RenderPass getRenderPass() const override;
     virtual inline float getRadius() const override;
     virtual inline const Material& getMaterial() const override;
@@ -73,8 +67,8 @@ protected:
 protected:
     ActorID m_ActorID;
     std::string m_Name;
-    glm::mat4 m_ToWorld;
-    glm::mat4 m_FromWorld;
+    Matrix4 m_ToWorld;
+    Matrix4 m_FromWorld;
     float m_Radius;
     RenderPass m_RenderPass;
     Material m_Material;
@@ -105,12 +99,12 @@ auto SceneNode::getActorID() const -> const ActorID&
     return m_ActorID; 
 }
 
-auto SceneNode::getToWorld() const -> const mat4&
+auto SceneNode::getToWorld() const -> const Matrix4&
 { 
     return m_ToWorld; 
 }
 
-auto SceneNode::getFromWorld() const -> const mat4&
+auto SceneNode::getFromWorld() const -> const Matrix4&
 { 
     return m_FromWorld; 
 }
@@ -130,7 +124,7 @@ float SceneNode::getAlpha() const
     return m_Material.getAlpha(); 
 }
 
-void SceneNode::getTransform(mat4* toWorld, mat4* fromWorld) const
+void SceneNode::getTransform(Matrix4* toWorld, Matrix4* fromWorld) const
 {
     if (toWorld != nullptr)
         *toWorld = m_ToWorld;
