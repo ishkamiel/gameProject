@@ -3,7 +3,7 @@
 
 #include "renderer/SceneNode.h"
 #include "Actor.h"
-#include "renderer/Frustum.h"
+#include "math/Frustum.h"
 
 #include <glm/fwd.hpp>
 

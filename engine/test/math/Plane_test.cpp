@@ -1,17 +1,15 @@
 #include "math/Plane.h"
 
+#include "math/Vector3.h"
+
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 
 namespace pdEngineTest 
 {
 
-using Vector3 = glm::vec3;
-using Vector4 = glm::vec4;
 using Plane = pdEngine::Plane;
+using Vector3 = pdEngine::Vector3;
 
 using ::testing::FloatEq;
 
@@ -239,6 +237,37 @@ TEST_F(Plane_test, IsInside)
     ASSERT_FALSE(p.isInside(Vector3(1,1,1)));
     ASSERT_TRUE(p.isInside(Vector3(100.0f,100.0f,100.0f)));
     ASSERT_TRUE(p.isInside(Vector3(1000,1000,1000)));
+
+}
+
+TEST_F(Plane_test, IsInsideFrustumFailCheck)
+{
+    Plane p = Plane {
+        Vector3 { 0.0f, 0.0f, 0.0f },
+        Vector3 { 0.0f, 0.0f, 1.0f }
+    };
+
+    Plane v {0, 0, 1, -0.0f};
+
+    ASSERT_EQ(v, p);
+    ASSERT_EQ(v.getNormal(), p.getNormal());
+
+    ASSERT_TRUE(p.isInside(Vector3(0,0,-10)));
+}
+
+TEST_F(Plane_test, IsInsideNegativeDirAndDist)
+{
+    Plane p = Plane {
+        Vector3 { 0.0f, 0.0f, -100.0f },
+        Vector3 { 0.0f, 0.0f, -1.0f }
+    };
+
+    Plane v {0, 0, -1, 100.0f};
+
+    ASSERT_EQ(v, p);
+    ASSERT_EQ(v.getNormal(), p.getNormal());
+
+    ASSERT_TRUE(p.isInside(Vector3(0,0,-11)));
 }
 
 TEST_F(Plane_test, IsOn)
@@ -256,6 +285,7 @@ TEST_F(Plane_test, IsOn)
         Vector3 { 10.0f, 10.0f, 10.0f },
         Vector3 { 1.0f, 1.0f, 0.0f }
     };
+
 
     ASSERT_TRUE(p.isOn(Vector3(11.0f,9.0f,0.0f)));
 }

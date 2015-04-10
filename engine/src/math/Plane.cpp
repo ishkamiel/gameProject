@@ -35,6 +35,9 @@ Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)
     assert(isValid());
 }
 
+Plane::Plane (const Plane&) = default;
+Plane::Plane (Plane&&) = default;
+
 Plane::~Plane()
 {}
 

@@ -18,6 +18,10 @@ namespace pdEngine
         }
         static Logger log = spdlog::rotating_logger_mt("default_logger", 
                 "log", 1048576 * 5, 3);
+
+#ifndef DONT_SET_DEBUG_STUFF
+        log->set_level(spdlog::level::debug);
+#endif
         return log;
     }
 }

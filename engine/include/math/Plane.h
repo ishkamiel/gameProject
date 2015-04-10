@@ -1,10 +1,3 @@
-/* 
- * File:   Plane.h
- * Author: ishkamiel
- *
- * Created on April 8, 2015, 4:13 PM
- */
-
 #ifndef PLANE_H
 #define	PLANE_H
 

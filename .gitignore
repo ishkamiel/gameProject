@@ -30,6 +30,7 @@
 # Build directories
 build
 ninja_build
+netbeans_build
 
 # IDE and editor config stuff
 .ycm_extra_conf.pyc
