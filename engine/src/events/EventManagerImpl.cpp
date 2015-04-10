@@ -29,7 +29,7 @@ namespace pdEngine
 
         if (eventQueueIn.size() == 0) return;
         auto log = getLogger();
-        log->debug("EventManager processinging queued events");
+        log->debug("EventManager processing queued events");
 
         std::swap(eventQueueIn, eventsProcessing);
 

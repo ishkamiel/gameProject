@@ -20,7 +20,7 @@ class SDLWindow : public I_Window
 	
 public:
 	SDLWindow();
-	~SDLWindow();
+	virtual ~SDLWindow();
 
 	virtual void init(void) override;
 	virtual void openWindow(void) override;

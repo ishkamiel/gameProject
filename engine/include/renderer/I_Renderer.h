@@ -8,6 +8,7 @@ namespace pdEngine {
 
 class I_Renderer {
 public:
+	virtual ~I_Renderer(void) = 0;
     virtual void init(void) = 0;
     virtual void render(void) const = 0;
     virtual void printDebugMsg(const std::string&) const = 0;

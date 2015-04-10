@@ -3,28 +3,28 @@
 namespace pdEngine 
 {
     InputManagerSDL::InputManagerSDL(EventManager_sptr em)
-        : eventManager(em), event(new SDL_Event())
+        : m_EventManager(em), m_Event(new SDL_Event())
     {
-		assert (event != nullptr);
-		assert (eventManager);
+		assert (m_Event != nullptr);
+		assert (m_EventManager);
 	}
 
     InputManagerSDL::~InputManagerSDL()
     {
-        delete event;
+        delete m_Event;
     }
 
     void InputManagerSDL::onUpdate(TimeDelta delta)
     {
         (void) delta;
 		
-		assert(eventManager);
+		assert(m_EventManager);
 
-        while (SDL_PollEvent(event) != 0)
+        while (SDL_PollEvent(m_Event) != 0)
         {
-            if (event->type == SDL_QUIT)
+            if (m_Event->type == SDL_QUIT)
             {
-                eventManager->queueEvent(ev_RequestQuit);
+                m_EventManager->queueEvent(ev_RequestQuit);
             }
         }
     }
