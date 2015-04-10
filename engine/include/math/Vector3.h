@@ -87,6 +87,11 @@ inline float dot (const Vector3& l, const Vector3& r) noexcept
     return glm::dot(static_cast<glm::vec3>(l), static_cast<glm::vec3>(r));
 }
 
+inline Vector3 cross (const Vector3& l, const Vector3& r) noexcept
+{
+    return Vector3(glm::cross(l, r));
+}
+
 inline Vector3 operator*(const Vector3& l, const float s) noexcept
 {
     return Vector3(l.x*s, l.y*s, l.z*s);

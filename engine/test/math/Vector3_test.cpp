@@ -171,4 +171,22 @@ TEST_F(Vector3_test, ScalarProduct)
     ASSERT_FLOAT_EQ(a.getZ(), 4.0f);
 }
 
+TEST_F(Vector3_test, CrossProduct)
+{
+    Vector3 a { 11.0f, 9.0f, 6.0f };
+    Vector3 b { 3.0f, 4.0f, 6.0f };
+    Vector3 r { 30.0f, -48.0f, 17.0f };
+
+    ASSERT_THAT(cross(a,b), r);
+}
+
+TEST_F(Vector3_test, VectorAdditionAndSubtraction)
+{
+    Vector3 a { 11.0f, 9.0f, 6.0f };
+    Vector3 b { 3.0f, 4.0f, 6.0f };
+
+    ASSERT_THAT(a-b, Vector3(8.0f,5.0f,0.0f));
+    ASSERT_THAT(a+b, Vector3(11.0f + 3.0f, 9.0f + 4.0f, 6.0f + 6.0f));
+}
+
 }

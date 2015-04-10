@@ -22,6 +22,7 @@ class Vector3 : public glm::vec3
     // friend inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept;
     // friend inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept;
     friend inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept;
+    friend inline Vector3 cross (const Vector3& lhs, const Vector3& rhs) noexcept;
 
     friend inline Vector3 operator*(const Vector3& lhs, const float) noexcept;
     friend inline Vector3& operator*=(Vector3& lhs, const float) noexcept;

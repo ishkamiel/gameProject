@@ -27,10 +27,11 @@ Plane::Plane (const Vector3& point, const Vector3& normal)
 
 Plane::Plane (const Vector3& a, const Vector3& b, const Vector3& c)
 {
-    assert(false && "not implemented");
-    (void)a;
-    (void)b;
-    (void)c;
+    n = cross(a - c, b - c);
+    assert(n.length() != 0.0f && "zero length normal :(");
+
+    n.normalize();
+    d = dot(n, a);
     assert(isValid());
 }
 

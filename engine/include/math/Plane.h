@@ -31,12 +31,12 @@ float Plane::distanceTo(const Vector3& point) const noexcept
 
 bool Plane::isOn(const Vector3& point) const noexcept
 {
-	return false;
+    return (distanceTo(point) == 0.0f);
 }
 
 bool Plane::isInside(const Vector3& point) const noexcept
 {
-	return false;
+    return (distanceTo(point) <= 0);
 }
 
 inline bool operator==(const Plane& lhs, const Plane& rhs) noexcept

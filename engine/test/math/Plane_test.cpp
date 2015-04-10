@@ -38,8 +38,58 @@ TEST_F(Plane_test, ConstrucorsAndEquality)
     ASSERT_FLOAT_EQ(coords.getNormal().length(), 1.0f);
 }
 
-TEST_F(Plane_test, NormalNormalization)
+TEST_F(Plane_test, ThreePointConstructor)
 {
+    Plane v {
+        Vector3 {0 ,0, 0},
+        Vector3 {1, 0, 0}
+    };
+
+    Plane t {
+        Vector3 {0 ,1, 0},
+        Vector3 {0, 0, 1},
+        Vector3 {0, -1, 0}
+    };
+
+    ASSERT_EQ(t, v);
+
+    v = {
+        Vector3 {0 ,0, 0},
+        Vector3 {-1, 0, 0}
+    };
+
+    t = {
+        Vector3 {0 ,-1, 0},
+        Vector3 {0, 0, 1},
+        Vector3 {0, 1, 0}
+    };
+
+    ASSERT_EQ(t, v);
+}
+
+TEST_F(Plane_test, ConstructorsProduceSameVector)
+{
+    Plane v {
+        Vector3 {0 ,0, 0},
+        Vector3 {1, 1, 1}
+    };
+
+    Plane c { 1, 1, 1, 0 };
+
+    ASSERT_EQ(c, v);
+    ASSERT_EQ(c.getNormal(), v.getNormal());
+    ASSERT_EQ(c.getDistance(), v.getDistance());
+
+    v = Plane {
+        Vector3 {0 ,0, 0},
+        Vector3 {123.123f, 134.34f, 1567.567f}
+    };
+
+    c = Plane  {123.123f, 134.34f, 1567.567f, 0.0f};
+
+    ASSERT_EQ(c, v);
+    ASSERT_EQ(c.getNormal(), v.getNormal());
+    ASSERT_EQ(c.getDistance(), v.getDistance());
 }
 
 TEST_F(Plane_test, NormalAndDistanceValues2d)
@@ -170,5 +220,44 @@ TEST_F(Plane_test, DistanceToPointNegativeCoords)
     ASSERT_THAT(p.distanceTo(Vector3 { 1.0f, 1.0f, 1.0f }), FloatEq(std::sqrt(12.0f)));
 }
 
+TEST_F(Plane_test, IsInside)
+{
+    Plane p {
+        Vector3 { 100.0f, 100.0f, 100.0f },
+        Vector3 { 1.0f, 1.0f, 1.0f }
+    };
+
+    ASSERT_TRUE(p.isInside(Vector3(1,1,1)));
+    ASSERT_TRUE(p.isInside(Vector3(100.0f,100.0f,100.0f)));
+    ASSERT_FALSE(p.isInside(Vector3(1000,1000,1000)));
+
+    p = Plane {
+        Vector3 { 100.0f, 100.0f, 100.0f },
+        Vector3 { -1.0f, -1.0f, -1.0f }
+    };
+
+    ASSERT_FALSE(p.isInside(Vector3(1,1,1)));
+    ASSERT_TRUE(p.isInside(Vector3(100.0f,100.0f,100.0f)));
+    ASSERT_TRUE(p.isInside(Vector3(1000,1000,1000)));
+}
+
+TEST_F(Plane_test, IsOn)
+{
+    Plane p {
+        Vector3 { 100.0f, 100.0f, 100.0f },
+        Vector3 { 1.0f, 1.0f, 1.0f }
+    };
+
+    ASSERT_FALSE(p.isOn(Vector3(1,1,1)));
+    ASSERT_TRUE(p.isOn(Vector3(100.0f,100.0f,100.0f)));
+    ASSERT_FALSE(p.isOn(Vector3(1000,1000,1000)));
+
+    p = Plane {
+        Vector3 { 10.0f, 10.0f, 10.0f },
+        Vector3 { 1.0f, 1.0f, 0.0f }
+    };
+
+    ASSERT_TRUE(p.isOn(Vector3(11.0f,9.0f,0.0f)));
+}
 
 }
