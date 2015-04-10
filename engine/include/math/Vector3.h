@@ -20,32 +20,30 @@ namespace pdEngine
 
 float Vector3::getX(void) const noexcept
 {
-	DLOG("Here we are");
-	return m_Vec->x;
+    return x;
 }
 
 float Vector3::getY(void) const noexcept
 {
-	return m_Vec->y;
+    return y;
 }
 
 float Vector3::getZ(void) const noexcept
 {
-	return m_Vec->z;
+    return z;
 }
 
 float Vector3::length(void) const noexcept
 {
-    return glm::length(*m_Vec);
+    return glm::length(static_cast<glm::vec3>(*this));
 }
 
 Vector3& Vector3::normalize(void) noexcept
 {
-    if (m_Vec->x != 0.0f ||
-            m_Vec->y != 0.0f ||
-            m_Vec->z != 0.0f)
+    if ( x != 0.0f || y != 0.0f || z != 0.0f)
     {
-        m_Vec.reset(new glm::vec3(glm::normalize(*m_Vec)));
+        (*this) = glm::normalize(static_cast<glm::vec3>(*this));
+        //m_Vec.reset(new glm::vec3(glm::normalize(*m_Vec)));
         // assert(glm::length(*m_Vec) > 0.999f && glm::length(*m_Vec) < 1.0001f && "vector normalization fail");
     }
     return *this;
@@ -53,59 +51,63 @@ Vector3& Vector3::normalize(void) noexcept
 
 inline Vector3 Vector3::getNormalized(void) const noexcept
 {
-    if (m_Vec->x == 0.0f &&
-            m_Vec->y == 0.0f &&
-            m_Vec->z == 0.0f)
-    {
+    if (x == 0.0f && y == 0.0f && z == 0.0f)
         return Vector3(0.0f, 0.0f, 0.0f);
-    }
 
-    auto n = glm::normalize(*m_Vec);
-
-    return Vector3(n);
+    return Vector3(glm::normalize(static_cast<glm::vec3>(*this)));
 }
 
 inline Vector3& Vector3::operator=(const Vector3& o) noexcept
 {
-    m_Vec->x  = o.m_Vec->x;
-    m_Vec->y  = o.m_Vec->y;
-    m_Vec->z  = o.m_Vec->z;
+    x  = o.x;
+    y  = o.y;
+    z  = o.z;
     return *this;
 }
 
 inline Vector3& Vector3::operator=(Vector3&& o) noexcept
 {
-    m_Vec.swap(o.m_Vec);
-    //m_Vec = std::move(o.m_Vec);
+    x  = o.x;
+    y  = o.y;
+    z  = o.z;
     return *this;
 }
 
-inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept
+// inline bool operator!=(const Vector3& l, const Vector3& r) noexcept
+// {
+//     return !(l == r);
+// }
+//
+// inline bool operator==(const Vector3& l, const Vector3& r) noexcept
+// {
+//     return (l.x == r.x && l.y == r.y && l.z == r.z); }
+
+inline float dot (const Vector3& l, const Vector3& r) noexcept
 {
-    return !(lhs==rhs);
+    return glm::dot(static_cast<glm::vec3>(l), static_cast<glm::vec3>(r));
 }
 
-inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept
+inline Vector3 operator*(const Vector3& l, const float s) noexcept
 {
-    return (lhs.m_Vec->x == rhs.m_Vec->x
-            && lhs.m_Vec->y == rhs.m_Vec->y
-            && lhs.m_Vec->z == rhs.m_Vec->z);
+    return Vector3(l.x*s, l.y*s, l.z*s);
 }
 
-inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept
+inline Vector3& operator*=(Vector3& l, const float s) noexcept
 {
-    return glm::dot(*lhs.m_Vec, *rhs.m_Vec);
+    l.x *= s;
+    l.y *= s;
+    l.z *= s;
+    return l;
 }
 
-inline Vector3 operator*(const Vector3& lhs, const float s) noexcept
+inline Vector3 operator*(const Vector3& l, const int s) noexcept
 {
-    return Vector3(lhs.m_Vec->x*s, lhs.m_Vec->y*s, lhs.m_Vec->z*s);
+    return (l*static_cast<float>(s));
 }
 
-inline Vector3& operator*=(Vector3& lhs, const float s) noexcept
+inline Vector3& operator*=(Vector3& l, const int s) noexcept
 {
-    (*lhs.m_Vec) *= s;
-    return lhs;
+    return (l *= static_cast<float>(s));
 }
 
 }

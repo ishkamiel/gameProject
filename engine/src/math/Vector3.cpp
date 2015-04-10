@@ -8,29 +8,30 @@ namespace pdEngine
 {
 
 Vector3::Vector3(void)
-: m_Vec(new glm::vec3())
+: glm::vec3()
 {}
 
 Vector3::Vector3(const float x, const float y, const float z)
-: m_Vec(new glm::vec3(x,y,z))
+: glm::vec3(x, y, z)
 {}
 
 Vector3::Vector3(const Vector3& vec)
-: m_Vec(new glm::vec3(*(vec.m_Vec)))
+: glm::vec3(vec.x, vec.y, vec.z)
 {}
 
 Vector3::Vector3(Vector3&& vec) = default;
 
 Vector3::Vector3(const glm::vec3& vec)
-: m_Vec(new glm::vec3(vec))
+: glm::vec3(vec)
 {}
 
 
-Vector3::~Vector3() = default;
+Vector3::~Vector3()
+{}
 
 std::ostream& operator<<(std::ostream& os, const Vector3& v) noexcept
 {
-    return (os << "(" << v.getX() << ", " << v.getY() << ", " << v.getZ() << ")");
+    return (os << "(" << v.x << ", " << v.y << ", " << v.z << ")");
 }
 
 }

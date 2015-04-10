@@ -8,6 +8,8 @@
 namespace pdEngineTest 
 {
 
+using ::testing::FloatEq;
+
 using Vector3 = pdEngine::Vector3;
 
 class Vector3_test : public ::testing::Test 
@@ -148,10 +150,10 @@ TEST_F(Vector3_test, DotProducts)
 TEST_F(Vector3_test, OperatorStarEquals)
 {
     Vector3 a { 2.0f, 3.0f, 4.0f };
-    a *= 2;
-    ASSERT_FLOAT_EQ(a.getX(), 4.0f);
-    ASSERT_FLOAT_EQ(a.getY(), 6.0f);
-    ASSERT_FLOAT_EQ(a.getZ(), 8.0f);
+    a *= 2.0f;
+    ASSERT_THAT(a.getX(), FloatEq(4.0f));
+    ASSERT_THAT(a.getY(), FloatEq(6.0f));
+    ASSERT_THAT(a.getZ(), FloatEq(8.0f));
 }
 
 TEST_F(Vector3_test, ScalarProduct)

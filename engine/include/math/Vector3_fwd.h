@@ -9,6 +9,7 @@
 #define	VECTOR3_FWD_H
 
 #include <glm/fwd.hpp>
+#include <glm/vec3.hpp>
 
 #include <memory>
 #include <ostream>
@@ -16,14 +17,16 @@
 namespace pdEngine
 {
 
-class Vector3
+class Vector3 : public glm::vec3
 {
-    friend inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept;
-    friend inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept;
+    // friend inline bool operator==(const Vector3& lhs, const Vector3& rhs) noexcept;
+    // friend inline bool operator!=(const Vector3& lhs, const Vector3& rhs) noexcept;
     friend inline float dot (const Vector3& lhs, const Vector3& rhs) noexcept;
 
     friend inline Vector3 operator*(const Vector3& lhs, const float) noexcept;
     friend inline Vector3& operator*=(Vector3& lhs, const float) noexcept;
+    friend inline Vector3 operator*(const Vector3& lhs, const int) noexcept;
+    friend inline Vector3& operator*=(Vector3& lhs, const int) noexcept;
 
     friend std::ostream& operator<<(std::ostream& os, const Vector3& plane) noexcept;
 
@@ -49,7 +52,7 @@ public:
 	inline Vector3& operator=(Vector3&&) noexcept;
 
 private:
-    std::unique_ptr<glm::vec3> m_Vec;
+    //std::unique_ptr<glm::vec3> m_Vec;
 };
 
 }
