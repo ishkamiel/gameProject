@@ -96,46 +96,47 @@ void Application::shutdown(void)
 }
 
 void Application::initLogging(void) {
-    if (true) {
-        std::shared_ptr<spdlog::logger> log{
-            spdlog::stderr_logger_mt("pdengine")
-        };
-        setLogger(log);
-    } else {
-        size_t q_size = 1048576; //queue size must be power of 2
-        spdlog::set_async_mode(q_size);
-        std::shared_ptr<spdlog::logger> log{
-            spdlog::daily_logger_mt("pdengine", "pdengine")
-        };
-        setLogger(log);
-    }
+	if (true) {
+		std::shared_ptr<spdlog::logger> log{
+			spdlog::stderr_logger_mt("pdengine")
+		};
+		log->set_level(spdlog::level::debug);
+		setLogger(log);
+	} else {
+		size_t q_size = 1048576; //queue size must be power of 2
+		spdlog::set_async_mode(q_size);
+		std::shared_ptr<spdlog::logger> log{
+			spdlog::daily_logger_mt("pdengine", "pdengine")
+		};
+		setLogger(log);
+	}
 
-    getLogger()->set_level(spdlog::level::debug);
+	auto l = getLogger();
 }
 
 void Application::initializeEventManager(void) {
-    auto em = EventManager::getSingleton();
-    taskManager->addTask(std::dynamic_pointer_cast<Task>(em));
-    taskManager->addTask(std::make_shared<InputManagerSDL>(em));
+	auto em = EventManager::getSingleton();
+	taskManager->addTask(std::dynamic_pointer_cast<Task>(em));
+	taskManager->addTask(std::make_shared<InputManagerSDL>(em));
 
-    using namespace std::placeholders;
+	using namespace std::placeholders;
 
-    em->addListener(ev_RequestQuit, std::bind(&Application::onRequestQuit, this, _1));
-    em->addListener(ev_Shutdown, std::bind(&Application::onShutdown, this, _1));
+	em->addListener(ev_RequestQuit, std::bind(&Application::onRequestQuit, this, _1));
+	em->addListener(ev_Shutdown, std::bind(&Application::onShutdown, this, _1));
 }
 
 bool Application::onShutdown(Event_sptr e) {
-    (void) e;
-    DLOG("Received ev_Shutdown event, shutting down");
-    doShutdown = true;
-    return false;
+	(void) e;
+	DLOG("Received ev_Shutdown event, shutting down");
+	doShutdown = true;
+	return false;
 }
 
 bool Application::onRequestQuit(Event_sptr e) {
-    (void) e;
-    DLOG("Received ev_RequestQuit, sending ev_Shutdown");
-    EventManager::getSingleton()->queueEvent(ev_Shutdown);
-    return true;
+	(void) e;
+	DLOG("Received ev_RequestQuit, sending ev_Shutdown");
+	EventManager::getSingleton()->queueEvent(ev_Shutdown);
+	return true;
 }
 
 }

@@ -5,6 +5,7 @@ namespace pdEngine
     class DefaultResourceLoader : public iResourceLoader
     {
     public:
+    	virtual ~DefaultResourceLoader() {}
         virtual std::regex vGetRegex() override;
         virtual bool vUseRawFile() override;
         virtual unsigned int vGetLoadedResourceSize(char*, unsigned int) override;
