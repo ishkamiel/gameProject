@@ -15,6 +15,7 @@ namespace pdEngine
     class iResourceLoader
     {
     public:
+    	virtual ~iResourceLoader() {};
         virtual std::regex vGetRegex() =0;
         virtual bool vUseRawFile() =0;
         virtual unsigned int vGetLoadedResourceSize(char*, unsigned int) =0;

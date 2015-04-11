@@ -5,12 +5,13 @@
 #include "exceptions/GLEWInitFailedException.h"
 #include "Logger.h"
 
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 
 namespace pdEngine {
 
 SDLWindow::SDLWindow() 
+: m_Window(nullptr)
 {}
 
 SDLWindow::~SDLWindow() 

@@ -17,11 +17,13 @@ using EventManager_sptr = std::shared_ptr<EventManager>;
 
 class EventManager {
 public:
-    static EventManager_sptr getSingleton();
+	virtual ~EventManager() {}
 
     virtual void queueEvent(const Event_sptr) = 0;
     virtual void queueEvent(const EventTypeID) = 0;
     virtual void addListener(const EventTypeID, EventListener) = 0;
+
+    static EventManager_sptr getSingleton();
 };
 
 

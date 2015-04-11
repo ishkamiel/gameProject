@@ -4,7 +4,7 @@
 #include "InputManager.h"
 #include "events/EventManagerImpl.h"
 
-#include "SDL_events.h"
+#include "SDL2/SDL_events.h"
 
 namespace pdEngine
 {

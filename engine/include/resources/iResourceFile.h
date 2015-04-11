@@ -8,6 +8,8 @@ namespace pdEngine
     class iResourceFile
     {
     public:
+    	virtual ~iResourceFile() {};
+
         /**
          * @brief Open the associated resource file.
          *

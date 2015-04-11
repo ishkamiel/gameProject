@@ -40,7 +40,7 @@ namespace pdEngineTest
 		std::shared_ptr<pdEngine::Task> t3;
 		std::shared_ptr<pdEngine::Task> t4;
 		
-		pdEngine::TaskManager* tm;
+		pdEngine::TaskManager* tm = nullptr;
 		
 		Task_test() {};
 		
