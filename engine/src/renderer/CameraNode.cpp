@@ -93,9 +93,9 @@ auto CameraNode::getView() -> Matrix4
 { 
     return m_View; 
 }
-
-void CameraNode::setCameraOffset(const Vector4&)
+void CameraNode::setCameraOffset(const Vector4& v)
 {
+	(void)v;
 }
 
 }
