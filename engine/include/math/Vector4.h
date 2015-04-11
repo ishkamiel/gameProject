@@ -9,6 +9,7 @@
 #define SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_VECTOR4_H_
 
 #include <glm/vec4.hpp>
+#include <glm/geometric.hpp>
 
 namespace pdEngine
 {
@@ -19,9 +20,7 @@ public:
 	Vector4();
 	Vector4(const float, const float, const float, const float);
 	virtual ~Vector4();
-
 };
-
 
 }
 #endif /* SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_VECTOR4_H_ */

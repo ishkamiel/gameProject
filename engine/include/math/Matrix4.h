@@ -11,6 +11,7 @@
 #include "math/Vector4.h"
 
 #include <glm/mat4x4.hpp>
+#include <glm/matrix.hpp>
 
 namespace pdEngine
 {
@@ -21,14 +22,22 @@ public:
 	Matrix4();
 	Matrix4(const Matrix4&);
 	Matrix4(Matrix4&&);
+	Matrix4(const glm::mat4&);
+	Matrix4(glm::mat4&&);
 	virtual ~Matrix4();
 
 	Matrix4& operator=(const Matrix4&);
 	Matrix4& operator=(Matrix4&&);
 
-	Matrix4 getInverse(void) const noexcept;
-	Matrix4 getTranslated(const Vector4&) const noexcept;
+	inline Matrix4 getInverse(void) const noexcept;
+	inline Matrix4 getTranslated(const Vector4&) const noexcept;
 };
+
+Matrix4 Matrix4::getInverse(void) const noexcept
+{
+	return Matrix4(glm::inverse(static_cast<glm::mat4>(*this)));
+}
+
 
 }
 
