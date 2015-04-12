@@ -6,23 +6,24 @@
 
 namespace pdEngine
 {
-    class ResourceManager;
-    using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
-    using ResourceManager_wptr = std::weak_ptr<ResourceManager>;
 
-    class ResourceManager : public Task
-    {
-        EventManager_sptr eventManager;
+class ResourceManager : public Task
+{
+public:
+	ResourceManager(EventManager_sptr usigned);
+	virtual ~ResourceManager();
 
-    public:
-        ResourceManager(EventManager_sptr usigned);
-        virtual ~ResourceManager();
+	void loadResource(const std::string& resource);
+	void getResource(const std::string& resource);
 
-    protected:
-        void onUpdate(TimeDelta) override;
-        void onInit(void) override;
-    private:
-    };
+protected:
+	void onUpdate(TimeDelta) override;
+	void onInit(void) override;
+private:
+};
+
+using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
+using ResourceManager_wptr = std::weak_ptr<ResourceManager>;
+
 }
-
 #endif
