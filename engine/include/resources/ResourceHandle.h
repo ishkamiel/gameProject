@@ -1,5 +1,5 @@
-#ifndef PDENGINE_RESOURCEHANDLE_H_
-#define PDENGINE_RESOURCEHANDLE_H_ value
+#ifndef RESOURCEHANDLE_H_
+#define RESOURCEHANDLE_H_
 
 // #include "resources/ResourceCache.h"
 #include "resources/Resource.h"
@@ -37,4 +37,4 @@ namespace pdEngine
     };
 }
 
-#endif
+#endif /* RESOURCEHANDLE_H_ */

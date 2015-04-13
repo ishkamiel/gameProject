@@ -1,16 +1,17 @@
 #ifndef SIMPLERESOURCEFILE_H_
 #define SIMPLERESOURCEFILE_H_ 
 
-#include "resources/iResourceFile.h"
 #include "resources/Resource.h"
 
 #include <fstream>
 #include <memory>
 #include <string>
 
+#include "I_ResourceContainer.h"
+
 namespace pdEngine
 {
-    class SimpleResourceFile : public iResourceFile
+    class SimpleResourceFile : public I_ResourceContainer
     {
         std::string filename;
         std::string resourceName;

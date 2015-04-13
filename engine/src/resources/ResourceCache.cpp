@@ -8,7 +8,7 @@
 
 namespace pdEngine
 {
-    ResourceCache::ResourceCache (const unsigned int s, iResourceFile* f)
+    ResourceCache::ResourceCache (const unsigned int s, I_ResourceContainer* f)
         : file(f), cacheSize(s*1024*1024), allocated(0)
     {}
 
@@ -27,13 +27,13 @@ namespace pdEngine
 
         if (file->vOpen())
         {
-            registerLoader(iResourceLoader_sptr(new DefaultResourceLoader()));
+            registerLoader(ResourceLoader_sptr(new DefaultResourceLoader()));
             retval = true;
         }
         return retval;
     }
 
-    void ResourceCache::registerLoader(iResourceLoader_sptr l)
+    void ResourceCache::registerLoader(ResourceLoader_sptr l)
     {
         loaders.push_back(l);
     }
@@ -84,7 +84,7 @@ namespace pdEngine
 
     ResourceHandle_sptr ResourceCache::load(Resource* r)
     {
-        iResourceLoader_sptr loader;
+        ResourceLoader_sptr loader;
         ResourceHandle_sptr handle;
 
         for (auto i = loaders.begin(); i != loaders.end(); ++i)

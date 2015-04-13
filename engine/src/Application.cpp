@@ -10,6 +10,7 @@
 #include "events/EventManager.h"
 #include "renderer/OpenglRenderer.h"
 #include "renderer/SDLWindow.h"
+#include "resources/ResourceManager.h"
 #include "Logger.h"
 #include "Utils.h"
 #include "Timer.h"
@@ -27,28 +28,28 @@ Application::~Application() {
 }
 
 bool Application::init(void) {
-    initLogging();
+    initializeLogging();
     auto log = getLogger();
 
     log->info("Starting application initialization sequence...");
 
     taskManager = std::make_shared<TaskManager>();
     initializeEventManager();
-
-
-    log->info("Creating and opening main window.");
-	window = std::make_shared<SDLWindow>();
-	window->init();
-	window->openWindow();
-	
-	log->info("Initializing rendering.");
-    renderer = window->getRenderer();
+    initializeResourceManager();
 
     log->debug("Initializing task manager tasks.");
     if (!taskManager->initAll()) {
         log->error("Some tasks failed initialization.");
         return (false);
     }
+
+    log->info("Creating and opening main window.");
+	window = std::make_shared<SDLWindow>();
+	window->init();
+	window->openWindow();
+
+	log->info("Initializing rendering.");
+    renderer = window->getRenderer();
 
     initOk = true;
 	log->info("Application successfully initialized!");
@@ -95,7 +96,7 @@ void Application::shutdown(void)
 	taskManager.reset();
 }
 
-void Application::initLogging(void) {
+void Application::initializeLogging(void) {
 	if (true) {
 		std::shared_ptr<spdlog::logger> log{
 			spdlog::stderr_logger_mt("pdengine")
@@ -123,6 +124,12 @@ void Application::initializeEventManager(void) {
 
 	em->addListener(ev_RequestQuit, std::bind(&Application::onRequestQuit, this, _1));
 	em->addListener(ev_Shutdown, std::bind(&Application::onShutdown, this, _1));
+}
+
+void Application::initializeResourceManager(void) {
+	auto rm = std::make_shared<ResourceManager>();
+
+	taskManager->addTask(std::shared_ptr<Task>(rm));
 }
 
 bool Application::onShutdown(Event_sptr e) {

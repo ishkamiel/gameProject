@@ -1,10 +1,14 @@
 #include "resources/ResourceManager.h"
+#include "resources/ResourceCache.h"
+
+#include <memory>
 
 namespace pdEngine
 {
-    ResourceManager::ResourceManager(EventManager_sptr em)
-        : eventManager(em)
-    {}
+    ResourceManager::ResourceManager()
+    {
+    	//rc = std::make_unique<ResourceCache>();
+    }
 
     ResourceManager::~ResourceManager()
     {}

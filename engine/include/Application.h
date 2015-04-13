@@ -31,8 +31,9 @@ public:
 protected:
 
 private:
-    void initLogging(void);
+    void initializeLogging(void);
     void initializeEventManager(void);
+    void initializeResourceManager(void);
     void shutdown(void);
     bool onShutdown(Event_sptr e);
     bool onRequestQuit(Event_sptr e);

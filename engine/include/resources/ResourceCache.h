@@ -1,14 +1,16 @@
 #ifndef RESOURCECACHE_H_
 #define RESOURCECACHE_H_ vlue
 
-#include "resources/iResourceFile.h"
-#include "resources/iResourceLoader.h"
+#include "resources/I_ResourceContainer.h"
 #include "resources/Resource.h"
 #include "resources/ResourceHandle.h"
 
 #include <list>
 #include <map>
 #include <memory>
+
+#include "I_ResourceLoader.h"
+
 
 namespace pdEngine
 {
@@ -18,7 +20,7 @@ namespace pdEngine
 
     using ResourceHandleList = std::list<ResourceHandle_sptr>;
     using ResourceHandleMap = std::map<std::string, ResourceHandle_sptr>;
-    using ResourceLoaderList = std::list<iResourceLoader_sptr>;
+    using ResourceLoaderList = std::list<ResourceLoader_sptr>;
 
     class ResourceCache
     {
@@ -29,7 +31,7 @@ namespace pdEngine
         ResourceHandleMap resources;
         ResourceLoaderList loaders;
 
-        iResourceFile* file;
+        I_ResourceContainer* file;
 
         unsigned int cacheSize;
         unsigned int allocated;
@@ -41,11 +43,11 @@ namespace pdEngine
          * @param int size in Mb
          * @param iResourceFile resource file
          */
-        ResourceCache (const unsigned int, iResourceFile*);
+        ResourceCache (const unsigned int, I_ResourceContainer*);
         virtual ~ResourceCache ();
 
         bool init();
-        void registerLoader(iResourceLoader_sptr);
+        void registerLoader(ResourceLoader_sptr);
 
         ResourceHandle_sptr getHandle(Resource*);
         int preLoad(const std::string pattern, void (*callback)(int, bool&));
@@ -64,8 +66,8 @@ namespace pdEngine
         void memoryHasBeenFreed(unsigned int);
     
     private:
-        ResourceHandle_sptr loadRawFile(iResourceLoader_sptr, Resource*);
-        ResourceHandle_sptr loadNonRawFile(iResourceLoader_sptr, Resource*);
+        ResourceHandle_sptr loadRawFile(ResourceLoader_sptr, Resource*);
+        ResourceHandle_sptr loadNonRawFile(ResourceLoader_sptr, Resource*);
     };
 }
 

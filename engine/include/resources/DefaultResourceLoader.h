@@ -1,8 +1,11 @@
-#include "resources/iResourceLoader.h"
+#ifndef I_DEFAULTRESOURCELOADER_H_
+#define I_DEFAULTRESOURCELOADER_H_
+
+#include "resources/I_ResourceLoader.h"
 
 namespace pdEngine 
 {
-    class DefaultResourceLoader : public iResourceLoader
+    class DefaultResourceLoader : public I_ResourceLoader
     {
     public:
     	virtual ~DefaultResourceLoader() {}
@@ -12,3 +15,5 @@ namespace pdEngine
         virtual bool vLoadResource(char*, unsigned int, ResourceHandle_sptr) override;
     };
 }
+
+#endif /* I_DEFAULTRESOURCELOADER_H_ */
