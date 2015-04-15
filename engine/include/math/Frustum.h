@@ -2,6 +2,7 @@
 #define FRUSTUM_H_
 
 #include "math/Vector3.h"
+#include "math/Matrix4.h"
 #include "math/Plane.h"
 
 #include <ostream>
@@ -21,8 +22,9 @@ public:
 	virtual ~Frustum();
 
 	inline bool isInside(const Vector3& point) const noexcept;
-	inline bool isInside(const Vector3& point, const float radius) const
-			noexcept;
+	inline bool isInside(const Vector3& point, const float radius) const noexcept;
+
+    Matrix4 getPerspective(void) const noexcept;
 
 	void setFov(float);
 	void setNear(float);
@@ -31,7 +33,7 @@ public:
 private:
 	void init(void) noexcept;
 
-	float m_Fov;
+	float m_VFov;
 	float m_Aspect;
 	float m_Near;
 	float m_Far;
