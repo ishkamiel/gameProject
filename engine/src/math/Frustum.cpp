@@ -32,7 +32,7 @@ Frustum::~Frustum()
 Matrix4 Frustum::getPerspective(void) const noexcept
 {
     float hFov = m_VFov/m_Aspect;
-    float left = m_Near*tan(hFov/2.f);
+    float left = m_Near*static_cast<float>(tan(hFov/2.f));
     float right = left;
     float top = m_Near*tan(m_VFov/2.f);
     float bottom = top;
@@ -54,7 +54,7 @@ void Frustum::init(void) noexcept
 
     assert((m_Near != 0.0f || m_Far != 0.0f) && "zero depth frustum");
 	assert(std::abs(m_Far) > std::abs(m_Near) && "bad Far and Near clips");
-    assert((x == x && y==y && hz==hz && vz==vz) && "something is NaN");
+    assert(x == x && y==y && hz==hz && vz==vz && "something is NaN");
 
     m_Planes.reserve(6);
     m_Planes.emplace_back(0, 0, -depth_dir, m_Near);

@@ -2,119 +2,119 @@
 
 namespace pdEngine
 {
-	TaskManager::TaskManager() 
-	{}
-	
-	TaskManager::~TaskManager() {}
 
-    bool TaskManager::initAll()
+TaskManager::TaskManager()
+{}
+
+TaskManager::~TaskManager() {}
+
+bool TaskManager::initAll()
+{
+    for (auto t : taskList)
     {
-        for (auto t : taskList)
+        if (t->isUninitialized())
         {
-            if (t->isUninitialized())
+            t->onInit();
+            if (t->state == TaskState::uninitialized)
             {
-                t->onInit();
-                if (t->state == TaskState::uninitialized)
-                {
-                    t->state = TaskState::ready;
-                }
-                else {
-                    return false;
-                }
+                t->state = TaskState::ready;
             }
-        }
-        return true;
-    }
-
-    void TaskManager::abortAllNow()
-    {
-        for (auto t : taskList)
-        {
-            if (t->isAlive()) 
-            {
-                t->state = TaskState::aborted;
+            else {
+                return false;
             }
         }
     }
+    return true;
+}
 
-
-    void TaskManager::updateTasks(TimeDelta timeDelta)
+void TaskManager::abortAllNow()
+{
+    for (auto t : taskList)
     {
-        auto i = taskList.begin();
-        while (i != taskList.end())
+        if (t->isAlive())
         {
-            switch ((*i)->state)
-            {
-                case TaskState::running:
-                    (*i)->onUpdate(timeDelta);
-                    ++i; break;
-                case TaskState::ready:
-                    (*i)->state = TaskState::running;
-                    ++i; break;
-                case TaskState::paused:
-                    ++i; break;
-                case TaskState::succeeded:
-                    (*i)->onSuccess();
-                    (*i)->state = TaskState::removed;
-                    taskList.remove(*i++);
-                    break;
-                case TaskState::failed:
-                    (*i)->onFail();
-                    (*i)->state = TaskState::removed;
-                    taskList.remove(*i++);
-                    break;
-                case TaskState::aborted:
-                    (*i)->onAbort();
-                    (*i)->state = TaskState::removed;
-                    taskList.remove(*i++);
-                    break;
-                case TaskState::uninitialized:
-                    (*i)->onInit();
-                    if ((*i)->state == TaskState::uninitialized)
-                        (*i)->state = TaskState::ready;
-                    ++i; break;
-                case TaskState::removed:
-                    assert(false && "TaskManager should never see removed tasks");
-                    break;
-            }
+            t->state = TaskState::aborted;
         }
     }
+}
 
-    void TaskManager::pauseTasks()
+
+void TaskManager::updateTasks(TimeDelta timeDelta)
+{
+    auto i = taskList.begin();
+    while (i != taskList.end())
     {
-        for (auto t : taskList)
+        switch ((*i)->state)
         {
-            t->pause();
+            case TaskState::running:
+                (*i)->onUpdate(timeDelta);
+                ++i; break;
+            case TaskState::ready:
+                (*i)->state = TaskState::running;
+                ++i; break;
+            case TaskState::paused:
+                ++i; break;
+            case TaskState::succeeded:
+                (*i)->onSuccess();
+                (*i)->state = TaskState::removed;
+                taskList.remove(*i++);
+                break;
+            case TaskState::failed:
+                (*i)->onFail();
+                (*i)->state = TaskState::removed;
+                taskList.remove(*i++);
+                break;
+            case TaskState::aborted:
+                (*i)->onAbort();
+                (*i)->state = TaskState::removed;
+                taskList.remove(*i++);
+                break;
+            case TaskState::uninitialized:
+                (*i)->onInit();
+                if ((*i)->state == TaskState::uninitialized)
+                    (*i)->state = TaskState::ready;
+                ++i; break;
+            case TaskState::removed:
+                assert(false && "TaskManager should never see removed tasks");
+                break;
         }
     }
+}
 
-    void TaskManager::unPauseTasks()
+void TaskManager::pauseTasks()
+{
+    for (auto t : taskList)
     {
-        for (auto t : taskList)
-        {
-            t->unPause();
+        t->pause();
+    }
+}
+
+void TaskManager::unPauseTasks()
+{
+    for (auto t : taskList)
+    {
+        t->unPause();
+    }
+}
+
+void TaskManager::addTask(Task_sptr newTask)
+{
+    taskList.push_back(newTask);
+}
+
+
+bool TaskManager::areAnyDead() {
+    for (auto t : taskList) {
+        if (t->isDead()) {
+            return true;
         }
     }
+    return false;
+}
 
-    void TaskManager::addTask(Task_sptr newTask)
-    {
-        taskList.push_back(newTask);
-    }
+unsigned int TaskManager::taskCount() const noexcept
+{
+    return taskList.size();
+}
 
-
-    bool TaskManager::areAnyDead() 
-    {
-        for (auto t : taskList)
-        {
-            if (t->isDead()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    int TaskManager::taskCount()
-    {
-        return taskList.size();
-    }
 }

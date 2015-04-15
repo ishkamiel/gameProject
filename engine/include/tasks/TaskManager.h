@@ -36,7 +36,7 @@ public:
     void pauseTasks(void);
     void unPauseTasks(void);
 
-    int taskCount(void);
+    unsigned int taskCount(void) const noexcept;
     bool areAnyDead(void);
 
 private:
