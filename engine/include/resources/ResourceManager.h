@@ -10,7 +10,7 @@ namespace pdEngine
 class ResourceManager : public Task
 {
 public:
-	ResourceManager(EventManager_sptr usigned);
+	ResourceManager();
 	virtual ~ResourceManager();
 
 	void loadResource(const std::string& resource);

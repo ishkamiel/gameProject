@@ -2,8 +2,7 @@
 
 namespace pdEngine
 {
-    ResourceManager::ResourceManager(EventManager_sptr em)
-        : eventManager(em)
+    ResourceManager::ResourceManager()
     {}
 
     ResourceManager::~ResourceManager()
