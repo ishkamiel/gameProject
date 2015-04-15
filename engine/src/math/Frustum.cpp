@@ -5,8 +5,10 @@
 #include "math/Plane.h"
 #include "Logger.h"
 
+#define GLM_FORCE_RADIANS
+
 #include <glm/gtc/constants.hpp>
-#include <glm/gtc/matrix_transform.inl>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace pdEngine
 {
@@ -30,12 +32,12 @@ Frustum::~Frustum()
 Matrix4 Frustum::getPerspective(void) const noexcept
 {
     float hFov = m_VFov/m_Aspect;
-    auto left = m_Near*tan(hFov/2.f);
-    auto right = left;
-    auto top = m_Near*tan(m_VFov/2.f);
-    auto bottom = top;
+    float left = m_Near*tan(hFov/2.f);
+    float right = left;
+    float top = m_Near*tan(m_VFov/2.f);
+    float bottom = top;
 
-    return glm::frusutm(left, right, bottom, top, m_Near, m_Far);
+    return glm::frustum(left, right, bottom, top, m_Near, m_Far);
 }
 
 void Frustum::init(void) noexcept
