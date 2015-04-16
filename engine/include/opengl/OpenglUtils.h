@@ -27,7 +27,7 @@ inline void fatalOnShaderCompileError(GLint& ok)
 {
 	if (ok != GL_TRUE)
 	{
-        getLogger()->fatal("Failed to compile shader");
+        fatal("Failed to compile shader");
 	}
 }
 
@@ -65,7 +65,7 @@ void fatalOnOpenGLError(const std::string& msg)
                 error = "UNKOWN ERROR";
                 break;
         }
-        getLogger()->fatal("{}: {}", msg, error);
+        fatal("{}: {}", msg, error);
     }
 }
 

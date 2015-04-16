@@ -36,21 +36,19 @@ void SimpleProgram::render(void) const
 
 void SimpleProgram::init(void)
 {
-	auto log = getLogger();
-
     m_ProgramID = glCreateProgram();
 
-	log->debug("Compiling vertex shader");
+	debug("Compiling vertex shader");
 	SimpleVertexShader vertexShader{};
 	vertexShader.load();
 	vertexShader.compile();
 
-	log->debug("Compiling fragment shader");
+	debug("Compiling fragment shader");
 	SimpleFragmentShader fragmentShader{};
 	fragmentShader.load();
 	fragmentShader.compile();
 
-	log->debug("Linking OpenGL program");
+	debug("Linking OpenGL program");
 	glAttachShader(m_ProgramID, vertexShader.getID());
 	glAttachShader(m_ProgramID, fragmentShader.getID());
 	glLinkProgram(m_ProgramID);
@@ -58,7 +56,7 @@ void SimpleProgram::init(void)
 	GLint programSuccess = GL_TRUE;
 	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &programSuccess);
 	if (programSuccess != GL_TRUE) {
-			log->fatal("Error linking opengGL program");
+			fatal("Error linking opengGL program");
 	}
 
 	//static const GLfloat identity[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
@@ -67,7 +65,7 @@ void SimpleProgram::init(void)
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Model"), 1, GL_FALSE, &idmat[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, &idmat[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, &idmat[0][0]);
-	log->debug("Uniforms set");
+	debug("Uniforms set");
 
 	const glm::vec4 VERTICES[8] =
 		{
@@ -116,7 +114,7 @@ void SimpleProgram::init(void)
 
     glBindVertexArray(0);
 
-	log->info("OpenGL program initialized");
+	info("OpenGL program initialized");
 }
 
 }

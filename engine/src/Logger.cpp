@@ -5,26 +5,31 @@
 namespace pdEngine
 {
 
-constexpr char* s_LoggerName = { "PDE" };
+static const std::string s_LoggerName = "pdE" ;
 
 std::string getLoggerName(void) noexcept {
 	return s_LoggerName;
 }
 
-std::ostream debug(void) noexcept {
-	return spdlog::getLogger(s_LoggerName)->debug();
+void debug(const std::string& s) noexcept {
+	spdlog::get(s_LoggerName)->debug(s);
 }
 
-std::ostream info(void) noexcept {
-	return spdlog::getLogger(s_LoggerName)->info();
+void info(const std::string& s) noexcept {
+	spdlog::get(s_LoggerName)->info(s);
 }
 
-std::ostream warn(void) noexcept {
-	return spdlog::getLogger(s_LoggerName)->warn();
+void warn(const std::string& s) noexcept {
+	spdlog::get(s_LoggerName)->warn(s);
 }
 
-std::ostream error(void) noexcept {
-	return spdlog::getLogger(s_LoggerName)->error();
+void error(const std::string& s) noexcept {
+	spdlog::get(s_LoggerName)->error(s);
 }
 
-};
+void fatal(const std::string& s) {
+	spdlog::get(s_LoggerName)->error(s);
+	exit(EXIT_FAILURE);
+}
+
+}

@@ -28,9 +28,7 @@ void OpenglRenderer::printDebugMsg(const std::string& msg) const {
 }
 
 void OpenglRenderer::init(void) {
-    auto log = getLogger();
-
-    // TODO:  log->info("Running OpenGL version: {}", glGetString(GL_VERSION));
+    info("Running OpenGL version: {}", glGetString(GL_VERSION));
 
     glClearColor(0.f, 0.f, 0.f, 1.f);
     fatalOnOpenGLError("Could not set OpenGL clear color");
@@ -47,7 +45,7 @@ void OpenglRenderer::init(void) {
     m_Thing = SimpleProgram();
     m_Thing.init();
 
-	log->info("Renderer initialization done");
+	info("Renderer initialization done");
 }
 
 }

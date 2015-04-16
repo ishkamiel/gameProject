@@ -20,7 +20,7 @@ std::string getGLLog(GLuint const logTarget)
     else if (glIsShader(logTarget))
         glGetShaderiv(logTarget, GL_INFO_LOG_LENGTH, &maxLength);
     else
-        throw std::logic_error("Unrecognized logTarget");
+        fatal("Unrecognized logTarget");
 
     char* infoLog = new char[maxLength];
 
@@ -29,7 +29,7 @@ std::string getGLLog(GLuint const logTarget)
     else if (glIsShader(logTarget))
         glGetShaderInfoLog(logTarget, maxLength, &length, infoLog);
     else
-        throw std::logic_error("Unrecognized logTarget");
+        fatal("Unrecognized logTarget");
 
     std::string retval{infoLog};
     delete infoLog;

@@ -108,7 +108,7 @@ namespace pdEngine
                 new char[rawSize]);
 
         if (rawBuffer == nullptr) {
-            getLogger()->fatal("out of memory");
+            fatal("out of memory");
             exit(-1);
         }
 
@@ -128,7 +128,7 @@ namespace pdEngine
             buffer = allocate(size);
 
             if (buffer == nullptr) {
-                getLogger()->fatal("out of memory");
+                fatal("out of memory");
             }
 
             handle = ResourceHandle_sptr(
@@ -160,7 +160,7 @@ namespace pdEngine
             mem = new char[size];
         }
         catch (const std::bad_alloc& e) {
-            getLogger()->error("out of memory: ", e.what());
+            error("out of memory: ", e.what());
             assert(false);
             return nullptr;
         }

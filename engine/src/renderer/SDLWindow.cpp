@@ -18,10 +18,10 @@ SDLWindow::~SDLWindow()
 
 void SDLWindow::init(void) {
     if (SDL_Init(0) != 0)
-        getLogger()->fatal("SDL Init failed: {}", SDL_GetError());
+        fatal("SDL Init failed: {}", SDL_GetError());
 
     if (SDL_VideoInit(0) != 0)
-        getLogger()->fatal("SDL_VideoInit failed: {}", SDL_GetError());
+        fatal("SDL_VideoInit failed: {}", SDL_GetError());
 }
 
 void SDLWindow::openWindow(void) {
@@ -32,22 +32,21 @@ void SDLWindow::openWindow(void) {
 }
 
 Renderer_sptr SDLWindow::getRenderer(void) {
-    auto log = getLogger();
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0)
-        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
+        fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) != 0)
-        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
+        fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 	if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0) != 0)
-        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
+        fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) != 0)
-        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
+        fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 
     auto context = SDL_GL_CreateContext(m_Window);
     if (context == nullptr)
-        log->fatal("SDL_GL_CreateContext failed: {}", SDL_GetError());
+        fatal("SDL_GL_CreateContext failed: {}", SDL_GetError());
 
     if (SDL_GL_SetSwapInterval(1) < 0) // Enables vSync
-        log->fatal("SDL_GL_SetSwapInterval(1) failed: {}", SDL_GetError());
+        fatal("SDL_GL_SetSwapInterval(1) failed: {}", SDL_GetError());
 
     fatalOnOpenGLError("OpenGL has failed before renderer creation");
 

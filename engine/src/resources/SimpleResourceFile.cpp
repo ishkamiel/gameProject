@@ -32,7 +32,7 @@ namespace pdEngine
             rawSize = m_File->tellg();
             return true;
         }
-        getLogger()->warn("Unable to open file {0} for reading", filename);
+        warn("Unable to open file {0} for reading", filename);
         return false;
     }
 
@@ -41,7 +41,7 @@ namespace pdEngine
         if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (r.getName() != resourceName) 
         {
-            getLogger()->warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
+            warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
             throw std::out_of_range("Unknown resource");
         }
         (void)r;
@@ -54,7 +54,7 @@ namespace pdEngine
         if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (r.getName() != resourceName) 
         {
-            getLogger()->warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
+            warn("Cannot find resource: {0}, in resource {1}", r.getName(), filename);
             throw std::out_of_range("Unknown resource");
         }
 
@@ -62,8 +62,7 @@ namespace pdEngine
         m_File->seekg(0, m_File->beg);
         m_File->read(buffer, rawSize);
         if (!m_File)
-            getLogger()->error(
-                    "Error reading file {0}, got only {1} bytes", filename, m_File->gcount());
+            error("Error reading file {0}, got only {1} bytes", filename, m_File->gcount());
 
         // getLogger()->warn("reading {0}, got only {1}, bytes", filename, file.gcount());
         // getLogger()->warn("rawSize is {0}, buffer is '{1}'", rawSize, buffer);

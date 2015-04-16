@@ -28,8 +28,7 @@ namespace pdEngine
         //DLOG("EventManager onUpdate");
 
         if (eventQueueIn.size() == 0) return;
-        auto log = getLogger();
-        log->debug("EventManager processing queued events");
+        PD_debug("EventManager processing queued events");
 
         std::swap(eventQueueIn, eventsProcessing);
 
@@ -45,11 +44,11 @@ namespace pdEngine
             auto list = findEventList(data->getTypeID());
             if (list != nullptr) 
             {
-                log->debug("Found {} listeners", list->size());
+                PD_debug("Found {} listeners", list->size());
 
                 for (auto i : *list)
                 {
-                    log->debug("Trying to call listener");
+                    PD_debug("Trying to call listener");
                     i(data);
 					++listeners_called;
                 }
@@ -80,8 +79,6 @@ namespace pdEngine
             const EventTypeID eventID,
             EventListener listener)
     {
-        auto log = getLogger();
-
         auto list = findEventList(eventID, true);
         assert(list != nullptr);
 
@@ -89,7 +86,7 @@ namespace pdEngine
         assert(list->size() != 0);
         assert(list->size() == eventMap[eventID]->size());
 
-        log->debug("Added listener for event, EventTypeID {}", eventID, "\n");
+        debug("Added listener for event, EventTypeID {}", eventID, "\n");
     }
 
 	auto EventManagerImpl::findEventList(EventTypeID id, bool create)
