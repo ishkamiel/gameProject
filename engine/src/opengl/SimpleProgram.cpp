@@ -1,103 +1,119 @@
 #include "opengl/SimpleProgram.h"
 #include "opengl/SimpleFragmentShader.h"
 #include "opengl/SimpleVertexShader.h"
+#include "opengl/OpenglUtils.h"
 
 #include "Logger.h"
+
+#include <glm/vec4.hpp>
 
 namespace pdEngine {
 
 SimpleProgram::SimpleProgram(void)
 {}
 
-void SimpleProgram::render(void)
+void SimpleProgram::render(void) const
 {
-	glUseProgram(s_ProgramID);
+	glUseProgram(m_ProgramID);
 
-	glEnableVertexAttribArray(s_VertexPosition);
-	glEnableVertexAttribArray(s_ModelPosition);
 
-	glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+	PD_debug("uniforms set");
 
-	glVertexAttribPointer(gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof (GLfloat), NULL);
+	//glEnableVertexAttribArray(s_VertexPosition);
+	//glEnableVertexAttribArray(s_ModelPosition);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
+	glBindVertexArray(m_VAO);
+	fatalOnOpenGLError("Failed to bind VAO for drawing");
 
-	glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
-	glDisableVertexAttribArray(gVertexPos2DLocation);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (GLvoid*)0);
+	fatalOnOpenGLError("Failed to draw the thing");
 
+	glBindVertexArray(0);
 	glUseProgram(0);
 }
 
 void SimpleProgram::init(void)
 {
+	auto log = getLogger();
 
+    m_ProgramID = glCreateProgram();
 
-        if (!s_InitDone)
-        {
-                s_InitOpenGLProgram();
-        }
-}
+	log->debug("Compiling vertex shader");
+	SimpleVertexShader vertexShader{};
+	vertexShader.load();
+	vertexShader.compile();
 
-void pdEngine::SimpleProgram::s_InitOpenGLProgram(void v) {
+	log->debug("Compiling fragment shader");
+	SimpleFragmentShader fragmentShader{};
+	fragmentShader.load();
+	fragmentShader.compile();
 
-}
+	log->debug("Linking OpenGL program");
+	glAttachShader(m_ProgramID, vertexShader.getID());
+	glAttachShader(m_ProgramID, fragmentShader.getID());
+	glLinkProgram(m_ProgramID);
 
-static void SimpleProgram::s_InitOpenGLProgram(void) {
-        auto log = getLogger();
+	GLint programSuccess = GL_TRUE;
+	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &programSuccess);
+	if (programSuccess != GL_TRUE) {
+			log->fatal("Error linking opengGL program {0}", m_ProgramID);
+	}
 
-        s_ProgramID = glCreateProgram();
+	static const GLfloat identity[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
-        log->debug("Compiling vertex shader");
-        SimpleVertexShader vertexShader{};
-        vertexShader.load();
-        vertexShader.compile();
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Model"), 1, GL_FALSE, identity);
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, identity);
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, identity);
+	log->debug("Uniforms set");
 
-        log->debug("Compiling fragment shader");
-        SimpleFragmentShader fragmentShader{};
-        fragmentShader.load();
-        fragmentShader.compile();
+	const glm::vec4 VERTICES[8] =
+		{
+			{ -.5f, -.5f,  .5f, 1 },
+			{ -.5f,  .5f,  .5f, 1 },
+			{  .5f,  .5f,  .5f, 1 },
+			{  .5f, -.5f,  .5f, 1 },
+			{ -.5f, -.5f, -.5f, 1 },
+			{ -.5f,  .5f, -.5f, 1 },
+			{  .5f,  .5f, -.5f, 1 },
+			{  .5f, -.5f, -.5f, 1 },
+		};
 
-        log->debug("Linking OpenGL program");
-        glAttachShader(s_ProgramID, vertexShader.getID());
-        glAttachShader(s_ProgramID, fragmentShader.getID());
-        glLinkProgram(s_ProgramID);
+	const GLuint INDICES[36] =
+		{
+			0,2,1,  0,3,2,
+			4,3,0,  4,7,3,
+			4,1,5,  4,0,1,
+			3,6,2,  3,7,6,
+			1,6,5,  1,2,6,
+			7,5,6,  7,4,5
+		};
 
-        GLint programSuccess = GL_TRUE;
-        glGetProgramiv(s_ProgramID, GL_LINK_STATUS, &programSuccess);
-        if (programSuccess != GL_TRUE) {
-                log->fatal("Error linking opengGL program {0}", m_programID);
-                throw OpenglException(m_programID);
-        }
+	glGenVertexArrays(1, &m_VAO);
+	fatalOnOpenGLError("Failed to generate VAO");
+	glBindVertexArray(m_VAO);
+	fatalOnOpenGLError("Failed to bind VAO");
 
-        log->debug("Retrieving OpenGL program attributes");
-        s_VertexPosition = glGetAttribLocation(s_ProgramID, "Vertex");
-        s_ModelPosition = glGetAttribLocation(s_ProgramID, "Model");
+	glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(1);
+	fatalOnOpenGLError("Failed to enable vertex attributes");
 
-        if (s_VertexPosition == -1 || s_ModelPosition == -1)
-        {
-                log->fatal("LVertexPos2DLocation is not a valid glsl program variable");
-        }
+    glGenBuffers(2, &m_VBO);
+	fatalOnOpenGLError("Failed to generate buffer objects");
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES), VERTICES, GL_STATIC_DRAW);
+	fatalOnOpenGLError("Failed to bind VBO to VAO");
 
-        //glClearColor(0.f, 0.f, 0.f, 1.f);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), (GLvoid*)0);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), (GLvoid*)sizeof(VERTICES[0]));
+    fatalOnOpenGLError("ERROR: Could not set VAO attributes");
 
-        GLfloat vertexData[] = {
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f, 0.5f,
-                -0.5f, 0.5f
-        };
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INDICES), INDICES, GL_STATIC_DRAW);
+    fatalOnOpenGLError("ERROR: Could not bind the IBO to the VAO");
 
-        GLuint indexData[] = {0, 1, 2, 3};
+    glBindVertexArray(0);
 
-        glGenBuffers(1, &s_VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, s_VBO);
-        glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
-
-        glGenBuffers(1, &s_IBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_IBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW);
-
-        log->info("OpenGL program initialized");
+	log->info("OpenGL program initialized");
 }
 
 }

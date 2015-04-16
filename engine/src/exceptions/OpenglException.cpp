@@ -1,6 +1,6 @@
 #include "exceptions/OpenglException.h"
 
-#include "renderer/OpenglUtils.h"
+#include "opengl/OpenglUtils.h"
 
 #include <sstream>
 

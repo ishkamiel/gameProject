@@ -37,11 +37,11 @@ void SDLWindow::openWindow(void) {
 }
 
 Renderer_sptr SDLWindow::getRenderer(void) {
-	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) != 0) 
+	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0)
 			throw SDLInitFailedException("SDL_GL_SetAttribute");
-	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1) != 0)
+	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) != 0)
 			throw SDLInitFailedException("SDL_GL_SetAttribute");
-	if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4) != 0)
+	if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0) != 0)
 			throw SDLInitFailedException("SDL_GL_SetAttribute");
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) != 0)
 			throw SDLInitFailedException("SDL_GL_SetAttribute");

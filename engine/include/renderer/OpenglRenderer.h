@@ -1,7 +1,7 @@
-#ifndef PDENGINE_RENDEREROPENGL_H_
-#define PDENGINE_RENDEREROPENGL_H_
+#pragma once
 
 #include "renderer/I_Renderer.h"
+#include "opengl/SimpleProgram.h"
 
 #include <GL/glew.h> 
 #include <GL/glu.h> 
@@ -19,13 +19,13 @@ public:
     virtual void init() override;
 
 private:
-    GLuint m_programID{0};
+    //GLuint m_programID{0};
 
-    bool gRenderQuad{true};
+    SimpleProgram m_Thing;
+    //bool gRenderQuad{true};
     //GLint gVertexPos2DLocation{-1};
-    GLuint gVBO{0};
-    GLuint gIBO{0};
+    //GLuint gVBO{0};
+    //GLuint gIBO{0};
 };
 
 }
-#endif /* PDENGINE_RENDEREROPENGL_H_ */

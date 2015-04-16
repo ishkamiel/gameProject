@@ -1,4 +1,4 @@
-#include "renderer/SimpleFragmentShader.h"
+#include "opengl/SimpleFragmentShader.h"
 
 #include <GL/glew.h> 
 #include <GL/glu.h> 
@@ -15,7 +15,7 @@ SimpleFragmentShader::~SimpleFragmentShader() {
 
 bool SimpleFragmentShader::compile(void) {
     return compileBuffer(GL_FRAGMENT_SHADER,{
-        "#version 330\n"
+        "#version 400\n"
         "out vec4 fColor;\n"
         "void main()\n"
         "{\n"

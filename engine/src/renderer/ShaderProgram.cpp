@@ -1,7 +1,7 @@
 #include "renderer/ShaderProgram.h"
 
 #include "exceptions/GLShaderCompileError.h"
-#include "renderer/OpenglUtils.h"
+#include "opengl/OpenglUtils.h"
 
 #include "Logger.h"
 

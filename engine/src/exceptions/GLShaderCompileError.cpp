@@ -1,6 +1,6 @@
 #include "exceptions/GLShaderCompileError.h"
 
-#include "renderer/OpenglUtils.h"
+#include "opengl/OpenglUtils.h"
 
 #include <string>
 #include <sstream>

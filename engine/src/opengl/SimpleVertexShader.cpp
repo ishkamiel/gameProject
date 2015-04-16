@@ -1,4 +1,4 @@
-#include "renderer/SimpleVertexShader.h"
+#include "opengl/SimpleVertexShader.h"
 
 #include <GL/glew.h> 
 #include <GL/glu.h> 
@@ -15,12 +15,13 @@ SimpleVertexShader::~SimpleVertexShader() {
 
 bool SimpleVertexShader::compile(void) {
     return compileBuffer(GL_VERTEX_SHADER,{
-        "#version 330\n"
-        "uniform mat4 View, Project;\n"
-        "in vec4 Vertex;\n"
-        "in mat4 Model;\n"
+        "#version 400\n"
+		"layout(location=0) in vec4 Vertex;\n"
+        "uniform mat4 View;\n"
+        "uniform mat4 Project;\n"
+		"uniform mat4 Model;\n"
         "void main() {\n"
-        "	gl_Position = View * Model * Project * Vertex;\n"
+        "	gl_Position = Project * View * Model * Vertex;\n"
         "}"
     });
 }
