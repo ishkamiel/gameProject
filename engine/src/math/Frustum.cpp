@@ -1,11 +1,7 @@
-#include "math/Frustum.h"
-
-#include "Utils.h"
-
-#include "math/Plane.h"
-#include "Logger.h"
-
 #define GLM_FORCE_RADIANS
+
+#include "math/Frustum.h"
+#include "Utils.h"
 
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -34,7 +30,7 @@ Matrix4 Frustum::getPerspective(void) const noexcept
     float hFov = m_VFov/m_Aspect;
     float left = m_Near*static_cast<float>(tan(hFov/2.f));
     float right = left;
-    float top = m_Near*tan(m_VFov/2.f);
+    float top = m_Near*static_cast<float>(tan(m_VFov/2.f));
     float bottom = top;
 
     return glm::frustum(left, right, bottom, top, m_Near, m_Far);
@@ -47,14 +43,17 @@ void Frustum::init(void) noexcept
 	float diff = m_Far - m_Near;
 	float depth_dir = diff/ std::abs(diff);
 
-    float x = cos((m_VFov/m_Aspect)/2.0f);
-    float hz = (-depth_dir) * sin((m_VFov/m_Aspect)/2.0f);
-    float y = cos(m_VFov/2.0f);
-    float vz = (-depth_dir) * sin(m_VFov/2.0f);
+    float x = static_cast<float>(cos(m_VFov/m_Aspect)) / 2.0f;
+    float hz = (-depth_dir) * static_cast<float>(sin(m_VFov/m_Aspect)) / 2.0f;
+    float y = static_cast<float>(cos(m_VFov/2.0f));
+    float vz = (-depth_dir) * static_cast<float>(sin(m_VFov/2.0f));
 
-    assert((m_Near != 0.0f || m_Far != 0.0f) && "zero depth frustum");
-	assert(std::abs(m_Far) > std::abs(m_Near) && "bad Far and Near clips");
-    assert(x == x && y==y && hz==hz && vz==vz && "something is NaN");
+    assert(m_Near != 0.0f || m_Far != 0.0f);
+	assert(std::abs(m_Far) > std::abs(m_Near));
+    assert(x == x);
+    assert(y==y);
+    assert(hz==hz);
+    assert(vz==vz);
 
     m_Planes.reserve(6);
     m_Planes.emplace_back(0, 0, -depth_dir, m_Near);

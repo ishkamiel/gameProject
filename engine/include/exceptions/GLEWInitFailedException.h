@@ -1,12 +1,10 @@
-/* 
+#pragma once
+/*
  * File:   SDLInitFailedException.h
  * Author: ishkamiel
  *
  * Created on April 3, 2015, 11:33 AM
  */
-
-#ifndef GLESINITFAILEDEXCEPTION_H_
-#define GLESINITFAILEDEXCEPTION_H_
 
 #include "exceptions/InitFailedException.h"
 
@@ -30,4 +28,3 @@ private:
 
 
 }
-#endif

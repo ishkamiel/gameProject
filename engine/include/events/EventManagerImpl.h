@@ -1,5 +1,4 @@
-#ifndef PDENGINE_EVENTMANAGER_H_
-#define PDENGINE_EVENTMANAGER_H_
+#pragma once
 
 #include "events/I_Event.h"
 #include "events/EventManager.h"
@@ -48,4 +47,3 @@ private:
 };
 
 }
-#endif /* PDENGINE_EVENTMANAGER_H_ */

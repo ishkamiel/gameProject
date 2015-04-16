@@ -114,7 +114,8 @@ bool TaskManager::areAnyDead() {
 
 unsigned int TaskManager::taskCount() const noexcept
 {
-    return taskList.size();
+    assert(INTMAX_MAX > taskList.size());
+    return static_cast<unsigned int>(taskList.size());
 }
 
 }

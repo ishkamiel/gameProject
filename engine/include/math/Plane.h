@@ -16,7 +16,8 @@ class Plane
     friend std::ostream& operator<<(std::ostream& os, const Plane& plane) noexcept;
 
 public:
-	Plane(const Plane&);
+	Plane();
+    Plane(const Plane&);
 	Plane(Plane&&);
     Plane(float x, float y, float z, float d);
     Plane(const Vector3& point, const Vector3& normal);
