@@ -20,4 +20,5 @@ int main()
         std::cerr << "Uncaught exception: " << e.what() << "\n";
     }
 
+    return 0;
 }

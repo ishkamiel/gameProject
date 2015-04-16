@@ -6,9 +6,7 @@
 namespace pdEngine
 {
     ResourceManager::ResourceManager()
-    {
-    	//rc = std::make_unique<ResourceCache>();
-    }
+    {}
 
     ResourceManager::~ResourceManager()
     {}
