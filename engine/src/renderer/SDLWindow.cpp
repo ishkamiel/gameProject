@@ -1,12 +1,9 @@
 #include "renderer/SDLWindow.h"
 
-#include "renderer/OpenglRenderer.h"
-#include "exceptions/SDLInitFailedException.h"
-#include "exceptions/GLEWInitFailedException.h"
 #include "Logger.h"
+#include "renderer/OpenglRenderer.h"
+#include "opengl/OpenglUtils.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
 
 namespace pdEngine {
 
@@ -20,13 +17,11 @@ SDLWindow::~SDLWindow()
 }
 
 void SDLWindow::init(void) {
-    if (SDL_Init(0) != 0) {
-		throw SDLInitFailedException("SDL_Init");
-    }
+    if (SDL_Init(0) != 0)
+        getLogger()->fatal("SDL Init failed: {}", SDL_GetError());
 
-    if (SDL_VideoInit(0) != 0) {
-        throw SDLInitFailedException("SDL_VideInit");
-    }
+    if (SDL_VideoInit(0) != 0)
+        getLogger()->fatal("SDL_VideoInit failed: {}", SDL_GetError());
 }
 
 void SDLWindow::openWindow(void) {
@@ -37,31 +32,24 @@ void SDLWindow::openWindow(void) {
 }
 
 Renderer_sptr SDLWindow::getRenderer(void) {
+    auto log = getLogger();
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0)
-			throw SDLInitFailedException("SDL_GL_SetAttribute");
+        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) != 0)
-			throw SDLInitFailedException("SDL_GL_SetAttribute");
+        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 	if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0) != 0)
-			throw SDLInitFailedException("SDL_GL_SetAttribute");
+        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) != 0)
-			throw SDLInitFailedException("SDL_GL_SetAttribute");
+        log->fatal("SDL_GL_setAttribute failed: {}", SDL_GetError());
 
     auto context = SDL_GL_CreateContext(m_Window);
-    if (context == nullptr) 
-		throw SDLInitFailedException("SDL_GL_CreateContext");
+    if (context == nullptr)
+        log->fatal("SDL_GL_CreateContext failed: {}", SDL_GetError());
 
-    // initialize GLEW
-    glewExperimental = GL_TRUE;
+    if (SDL_GL_SetSwapInterval(1) < 0) // Enables vSync
+        log->fatal("SDL_GL_SetSwapInterval(1) failed: {}", SDL_GetError());
 
-    GLenum glewError = glewInit();
-    if (glewError != 0) {
-		throw GLEWInitFailedException(glewError);
-    }
-
-    // Enable vSync
-    if (SDL_GL_SetSwapInterval(1) < 0) {
-		throw SDLInitFailedException("SDL_GL_SetSwapInterval(1)");
-    }
+    fatalOnOpenGLError("OpenGL has failed before renderer creation");
 
 	auto renderer = std::make_shared<OpenglRenderer>();
 	renderer->init();

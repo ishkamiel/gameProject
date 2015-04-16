@@ -1,11 +1,13 @@
 #include "opengl/SimpleProgram.h"
+
+#include "Logger.h"
+
 #include "opengl/SimpleFragmentShader.h"
 #include "opengl/SimpleVertexShader.h"
 #include "opengl/OpenglUtils.h"
 
-#include "Logger.h"
-
 #include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace pdEngine {
 
@@ -56,14 +58,15 @@ void SimpleProgram::init(void)
 	GLint programSuccess = GL_TRUE;
 	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &programSuccess);
 	if (programSuccess != GL_TRUE) {
-			log->fatal("Error linking opengGL program {0}", m_ProgramID);
+			log->fatal("Error linking opengGL program");
 	}
 
-	static const GLfloat identity[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+	//static const GLfloat identity[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+	static const glm::mat4 idmat;
 
-	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Model"), 1, GL_FALSE, identity);
-	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, identity);
-	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, identity);
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Model"), 1, GL_FALSE, &idmat[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, &idmat[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, &idmat[0][0]);
 	log->debug("Uniforms set");
 
 	const glm::vec4 VERTICES[8] =

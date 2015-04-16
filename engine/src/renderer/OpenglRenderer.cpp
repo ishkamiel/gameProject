@@ -1,6 +1,7 @@
 #include "renderer/OpenglRenderer.h"
 
 #include "Logger.h"
+#include "opengl/OpenglUtils.h"
 
 namespace pdEngine {
 
@@ -23,15 +24,25 @@ void OpenglRenderer::render(void) const {
 }
 
 void OpenglRenderer::printDebugMsg(const std::string& msg) const {
-    DLOG(msg);
+    PD_debug(msg);
 }
 
 void OpenglRenderer::init(void) {
     auto log = getLogger();
 
+    // TODO:  log->info("Running OpenGL version: {}", glGetString(GL_VERSION));
+
     glClearColor(0.f, 0.f, 0.f, 1.f);
+    fatalOnOpenGLError("Could not set OpenGL clear color");
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    fatalOnOpenGLError("Could not set OpenGL depth testing options");
 
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+    fatalOnOpenGLError("Could not set OpenGL culling options");
 
     m_Thing = SimpleProgram();
     m_Thing.init();

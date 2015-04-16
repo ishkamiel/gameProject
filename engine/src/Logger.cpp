@@ -1,43 +1,30 @@
 #include "Logger.h"
-#include "spdlog/spdlog.h"
+
+#include <spdlog/spdlog.h>
 
 namespace pdEngine
 {
-static std::shared_ptr<pdLogger> g_TheLogger;
 
+constexpr char* s_LoggerName = { "PDE" };
 
-pdLogger::pdLogger()
-	: m_L(spdlog::rotating_logger_mt("default_logger", "log", 1048576 * 5, 3))
-{
-#ifndef DONT_SET_DEBUG_STUFF
-	m_L->set_level(spdlog::level::debug);
-#endif
+std::string getLoggerName(void) noexcept {
+	return s_LoggerName;
 }
 
-pdLogger::pdLogger(std::shared_ptr<spdlog::logger> l)
-: m_L(l)
-{}
-
-pdLogger::~pdLogger() = default;
-
-void setLogger(std::shared_ptr<pdLogger> logger)
-{
-	g_TheLogger = logger;
+std::ostream debug(void) noexcept {
+	return spdlog::getLogger(s_LoggerName)->debug();
 }
 
-void setLogger(std::shared_ptr<spdlog::logger> l)
-{
-	g_TheLogger.reset(new pdLogger(l));
+std::ostream info(void) noexcept {
+	return spdlog::getLogger(s_LoggerName)->info();
 }
 
-std::shared_ptr<pdLogger> getLogger() noexcept
-{
-	if (!g_TheLogger)
-	{
-		g_TheLogger.reset(new pdLogger());
-	}
-
-	return g_TheLogger;
+std::ostream warn(void) noexcept {
+	return spdlog::getLogger(s_LoggerName)->warn();
 }
 
+std::ostream error(void) noexcept {
+	return spdlog::getLogger(s_LoggerName)->error();
 }
+
+};

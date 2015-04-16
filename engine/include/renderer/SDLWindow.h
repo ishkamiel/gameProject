@@ -1,15 +1,9 @@
-/* 
- * File:   SDLWindow.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 11:09 AM
- */
-
-#ifndef SDLWINDOW_H
-#define	SDLWINDOW_H
+#pragma once
 
 #include "renderer/I_Window.h"
 
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 #include <SDL2/SDL.h>
 
 namespace pdEngine
@@ -36,7 +30,3 @@ private:
 };
 
 }
-
-
-#endif	/* SDLWINDOW_H */
-

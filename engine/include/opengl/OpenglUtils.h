@@ -2,8 +2,8 @@
 
 #include "Logger.h"
 
-#include <GL/glew.h>
-#include <SDL.h>
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 #include <string>
 
@@ -11,23 +11,28 @@ namespace pdEngine
 {
 
 inline void fatalOnOpenGLError(const std::string&);
+inline void fatalOnShaderCompileError(GLint&);
+
 
 namespace OpenglUtils
 {
-
 std::string getGLLog(const GLuint);
-
 }
-
-
 
 /*
  * Definitions
  */
 
+inline void fatalOnShaderCompileError(GLint& ok)
+{
+	if (ok != GL_TRUE)
+	{
+        getLogger()->fatal("Failed to compile shader");
+	}
+}
+
 void fatalOnOpenGLError(const std::string& msg)
 {
-    //GLenum errno = glGetError();
     const GLenum errorValue = glGetError();
 
     if (errorValue != GL_NO_ERROR)
@@ -60,7 +65,7 @@ void fatalOnOpenGLError(const std::string& msg)
                 error = "UNKOWN ERROR";
                 break;
         }
-        getLogger()->fatal("{}: {}, {}", msg, errorValue, error);
+        getLogger()->fatal("{}: {}", msg, error);
     }
 }
 

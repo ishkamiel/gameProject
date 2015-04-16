@@ -1,10 +1,10 @@
-#ifndef SIMPLEFRAGMENTSHADER_H_
-#define SIMPLEFRAGMENTSHADER_H_
+#pragma once
 
-#include "renderer/ShaderProgram.h"
+#include "opengl/ShaderProgram.h"
 
 namespace pdEngine
 {
+
 class SimpleFragmentShader : public ShaderProgram
 {
 public:
@@ -13,7 +13,5 @@ public:
 
     virtual bool compile(void) override;
 };
+
 }
-
-
-#endif /* SIMPLEFRAGMENTSHADER_H_ */

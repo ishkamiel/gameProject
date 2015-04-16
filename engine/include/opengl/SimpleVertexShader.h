@@ -1,17 +1,10 @@
-/* 
- * File:   SimpleVertexShader.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 9:15 AM
- */
+#pragma once
 
-#ifndef SIMPLEVERTEXSHADER_H
-#define	SIMPLEVERTEXSHADER_H
-
-#include "renderer/ShaderProgram.h"
+#include "opengl/ShaderProgram.h"
 
 namespace pdEngine
 {
+
 class SimpleVertexShader : public ShaderProgram
 {
 public:
@@ -20,8 +13,6 @@ public:
 
     virtual bool compile(void) override;
 };
+
 }
-
-
-#endif	/* SIMPLEVERTEXSHADER_H */
 

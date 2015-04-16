@@ -97,6 +97,7 @@ void Application::shutdown(void)
 }
 
 void Application::initializeLogging(void) {
+	/*
 	if (m_LogToConsole) {
 		std::shared_ptr<spdlog::logger> log{
 			spdlog::stderr_logger_mt("pdengine")
@@ -111,6 +112,7 @@ void Application::initializeLogging(void) {
 		};
 		setLogger(log);
 	}
+	 */
 
 	auto l = getLogger();
 }
@@ -134,14 +136,14 @@ void Application::initializeResourceManager(void) {
 
 bool Application::onShutdown(Event_sptr e) {
 	(void) e;
-	DLOG("Received ev_Shutdown event, shutting down");
+	PD_debug("Received ev_Shutdown event, shutting down");
 	doShutdown = true;
 	return false;
 }
 
 bool Application::onRequestQuit(Event_sptr e) {
 	(void) e;
-	DLOG("Received ev_RequestQuit, sending ev_Shutdown");
+	PD_debug("Received ev_RequestQuit, sending ev_Shutdown");
 	EventManager::getSingleton()->queueEvent(ev_Shutdown);
 	return true;
 }

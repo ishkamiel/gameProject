@@ -1,62 +1,61 @@
-#ifndef LOGGER_H_
-#define LOGGER_H_
-
-#include "spdlog/spdlog.h"
+#pragma once
 
 #include <memory>
+#include <ostream>
 
-namespace pdEngine
-{
+namespace pdEngine {
 
-class pdLogger
-{
-public:
-	pdLogger();
-	pdLogger(std::shared_ptr<spdlog::logger>);
-	virtual ~pdLogger();
+std::ostream debug(void) noexcept;
 
-	template<typename... Args>
-	inline void debug(const std::string& s, Args&&... args) noexcept
-	{
-		m_L->debug(s.c_str(), std::forward<Args>(args)...);
-	}
+std::ostream info(void) noexcept;
 
-	template<typename... Args>
-	inline void info(const std::string& s, Args&&... args) noexcept
-	{
-		m_L->info(s.c_str(), std::forward<Args>(args)...);
-	}
+std::ostream warn(void) noexcept;
 
-	template<typename... Args>
-	inline void warn(const std::string& s, Args&&... args) noexcept
-	{
-		m_L->warn(s.c_str(), std::forward<Args>(args)...);
-	}
+std::ostream error(void) noexcept;
 
-	template<typename... Args>
-	void error(const std::string& s, Args&&... args) noexcept
-	{
-		m_L->error(s.c_str(), std::forward<Args>(args)...);
-	}
+std::string getLoggerName(void) noexcept;
 
-	template<typename... Args>
-	void fatal(const std::string& s, Args&&... args) noexcept
-	{
-		m_L->error(s.c_str(), std::forward<Args>(args)...);
-		exit(EXIT_FAILURE);
-	}
+template<typename T>
+static inline void logToStream(std::ostream &o, T& t) noexcept {
+	o << t << std::endl;
+}
 
-private:
-	std::shared_ptr<spdlog::logger> m_L;
-};
+template<typename T, typename... Args>
+static inline void logToStream(std::ostream &o, T& t, Args&&... args) noexcept {
+	logToStream(o, t);
+	logToStream(o, args...);
+}
 
-void setLogger(std::shared_ptr<pdLogger>);
-void setLogger(std::shared_ptr<spdlog::logger>);
-std::shared_ptr<pdLogger> getLogger() noexcept;
+template<typename... Args>
+inline void debug(const std::string &s, Args &&... args) noexcept {
+	logToStream(debug(), s, std::forward<Args>(args)...);
+}
+
+template<typename... Args>
+inline void info(const std::string &s, Args &&... args) noexcept {
+	//TODO: m_L->info(s.c_str(), std::forward<Args>(args)...);
+}
+
+template<typename... Args>
+inline void warn(const std::string &s, Args &&... args) noexcept {
+	//TODO: m_L->warn(s.c_str(), std::forward<Args>(args)...);
+}
+
+template<typename... Args>
+void error(const std::string &s, Args &&... args) noexcept {
+	//TODO: m_L->error(s.c_str(), std::forward<Args>(args)...);
+}
+
+template<typename... Args>
+void fatal(const std::string &s, Args &&... args) noexcept {
+	//TODO: m_L->error(s.c_str(), std::forward<Args>(args)...);
+	exit(EXIT_FAILURE);
+}
+
 
 }
-#define DLOG( ... ) getLogger()->debug(__VA_ARGS__)
-#define PD_debug( ... ) getLogger()->debug(__VA_ARGS__)
+
+#define PD_debug( ... ) debug(__VA_ARGS__)
 
 #ifdef NDEBUG
 
@@ -68,6 +67,3 @@ std::shared_ptr<pdLogger> getLogger() noexcept;
 #undef PD_debug
 #define PD_debug( ... )
 #endif /* NDEBUG */
-
-
-#endif /* LOGGER_H_ */
