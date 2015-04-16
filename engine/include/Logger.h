@@ -39,6 +39,13 @@ public:
 		m_L->error(s.c_str(), std::forward<Args>(args)...);
 	}
 
+	template<typename... Args>
+	void fatal(const std::string& s, Args&&... args) noexcept
+	{
+		m_L->error(s.c_str(), std::forward<Args>(args)...);
+		exit(EXIT_FAILURE);
+	}
+
 private:
 	std::shared_ptr<spdlog::logger> m_L;
 };

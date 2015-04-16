@@ -97,7 +97,7 @@ void Application::shutdown(void)
 }
 
 void Application::initializeLogging(void) {
-	if (true) {
+	if (m_LogToConsole) {
 		std::shared_ptr<spdlog::logger> log{
 			spdlog::stderr_logger_mt("pdengine")
 		};

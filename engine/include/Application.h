@@ -1,5 +1,4 @@
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#pragma once
 
 #include "tasks/TaskManager.h"
 #include "tasks/Task.h"
@@ -12,15 +11,6 @@
 namespace pdEngine {
 
 class Application {
-    TimerFrequency updateFrequency{240};
-
-    Renderer_sptr renderer;
-    Window_sptr window;
-    TaskManager_sptr taskManager;
-
-    bool initOk{false};
-    bool doShutdown{false};
-
 public:
     Application();
     virtual ~Application();
@@ -37,7 +27,16 @@ private:
     void shutdown(void);
     bool onShutdown(Event_sptr e);
     bool onRequestQuit(Event_sptr e);
+
+    TimerFrequency updateFrequency{240};
+
+    Renderer_sptr renderer;
+    Window_sptr window;
+    TaskManager_sptr taskManager;
+
+    bool initOk{false};
+    bool doShutdown{false};
+    bool m_LogToConsole { true };
 };
 }
 
-#endif

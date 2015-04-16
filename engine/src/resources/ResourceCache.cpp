@@ -1,6 +1,6 @@
 #include "resources/ResourceCache.h"
-
 #include "resources/DefaultResourceLoader.h"
+#include "Logger.h"
 #include "Utils.h"
 
 #include <cassert>
@@ -107,7 +107,10 @@ namespace pdEngine
                 allocate(rawSize) : 
                 new char[rawSize]);
 
-        if (rawBuffer == nullptr) return nullptr;
+        if (rawBuffer == nullptr) {
+            getLogger()->fatal("out of memory");
+            exit(-1);
+        }
 
         file->vGetRawResource(*r, rawBuffer);
         char* buffer = nullptr;
@@ -121,12 +124,11 @@ namespace pdEngine
         else 
         {
             size = loader->vGetLoadedResourceSize(rawBuffer, rawSize);
+
             buffer = allocate(size);
 
-            if (rawBuffer == nullptr || buffer == nullptr)
-            {
-                throw std::runtime_error("out of memory");
-                return nullptr;
+            if (buffer == nullptr) {
+                getLogger()->fatal("out of memory");
             }
 
             handle = ResourceHandle_sptr(
@@ -152,10 +154,20 @@ namespace pdEngine
         if (!makeRoom(size))
             return nullptr;
 
-        char *mem = new char[size];
+        char* mem;
+
+        try {
+            mem = new char[size];
+        }
+        catch (const std::bad_alloc& e) {
+            getLogger()->error("out of memory: ", e.what());
+            assert(false);
+            return nullptr;
+        }
 
         if (mem)
             allocated += size;
+        return nullptr;
 
         return mem;
     }
