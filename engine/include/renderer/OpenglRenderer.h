@@ -22,7 +22,7 @@ private:
     GLuint m_programID{0};
 
     bool gRenderQuad{true};
-    GLint gVertexPos2DLocation{-1};
+    //GLint gVertexPos2DLocation{-1};
     GLuint gVBO{0};
     GLuint gIBO{0};
 };

@@ -19,16 +19,7 @@ void OpenglRenderer::render(void) const {
     //Clear color buffer 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(m_programID);
-    glEnableVertexAttribArray(gVertexPos2DLocation);
-    glBindBuffer(GL_ARRAY_BUFFER, gVBO);
-    glVertexAttribPointer(gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof (GLfloat), NULL);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
 
-    glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
-    glDisableVertexAttribArray(gVertexPos2DLocation);
-
-    glUseProgram(0);
 }
 
 void OpenglRenderer::printDebugMsg(const std::string& msg) const {

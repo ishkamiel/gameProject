@@ -15,11 +15,11 @@ SimpleFragmentShader::~SimpleFragmentShader() {
 
 bool SimpleFragmentShader::compile(void) {
     return compileBuffer(GL_FRAGMENT_SHADER,{
-        "#version 140\n"
-        "out vec4 LFragment;\n"
+        "#version 330\n"
+        "out vec4 fColor;\n"
         "void main()\n"
         "{\n"
-        "	LFragment = vec4( 1.0, 1.0, 1.0, 1.0 );\n"
+        "	fColor = vec4( 1.0, 1.0, 1.0, 1.0 );\n"
         "}"
     });
 }

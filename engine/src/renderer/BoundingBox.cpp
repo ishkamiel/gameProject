@@ -12,7 +12,10 @@ namespace pdEngine
 
 BoundingBox::BoundingBox(ActorID id, const std::string& name, RenderPass rp, const Color& c, Matrix4* t)
 : SceneNode (id, name, rp, c, t)
-{}
+{
+
+
+}
 
 BoundingBox::~BoundingBox()
 {}
