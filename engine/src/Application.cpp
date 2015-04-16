@@ -94,6 +94,7 @@ void Application::shutdown(void)
 
 void Application::initializeLogging(void) {
     std::cerr << "Initializing logging facilities\n";
+    initLogging();
     info("Logging initialized");
 	// TODO?
 }

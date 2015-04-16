@@ -3,6 +3,7 @@
 #include <memory>
 #include <ostream>
 #include <sstream>
+#include <iostream>
 
 namespace pdEngine {
 
@@ -13,6 +14,8 @@ void info(const std::string&) noexcept;
 void warn(const std::string&) noexcept;
 void error(const std::string&) noexcept;
 void fatal(const std::string&);
+
+void initLogging();
 
 template<typename T>
 static inline void logToStream(std::stringstream& o, T&& t) noexcept {
@@ -27,9 +30,11 @@ static inline void logToStream(std::stringstream& o, T&& t, Args&&... args) noex
 
 template<typename... Args>
 static inline std::string stringify(const std::string &s, Args&&... args) noexcept {
+	std::cerr << "Gonna stringify me some strings";
 	std::stringstream ss;
 	ss << s;
 	logToStream(ss, std::forward<Args>(args)...);
+	std::cerr << "Done whith that: " << ss.str() << "\n";
 	return ss.str();
 }
 
@@ -40,6 +45,7 @@ inline void debug(const std::string &s, Args &&... args) noexcept {
 
 template<typename... Args>
 inline void info(const std::string &s, Args &&... args) noexcept {
+	std::cerr << "here wer are\n";
 	info(stringify(s, std::forward<Args>(args)...));
 }
 
