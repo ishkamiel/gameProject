@@ -8,11 +8,11 @@
 #ifndef OPENGLEXCEPTION_H
 #define	OPENGLEXCEPTION_H
 
-#include <GL/glew.h>
 
 #include <stdexcept>
 #include <string>
-
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 namespace pdEngine
 {
 

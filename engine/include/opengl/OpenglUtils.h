@@ -2,8 +2,8 @@
 
 #include "Logger.h"
 
-#include <GL/glew.h>
-#include <SDL.h>
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 #include <string>
 

@@ -10,8 +10,8 @@
 
 #include "exceptions/InitFailedException.h"
 
-#include <GL/glew.h>
-
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 namespace pdEngine
 {
 

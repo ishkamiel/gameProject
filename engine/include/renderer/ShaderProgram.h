@@ -1,9 +1,8 @@
 #ifndef PDENGINE_SHADERPROGRAM_H_
 #define PDENGINE_SHADERPROGRAM_H_ 
 
-#include <GL/glew.h>
-
-#include <string>
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 namespace pdEngine
 {

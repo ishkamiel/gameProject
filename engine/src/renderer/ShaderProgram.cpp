@@ -4,10 +4,9 @@
 #include "opengl/OpenglUtils.h"
 
 #include "Logger.h"
-
-#include <GL/glew.h> 
-#include <GL/glu.h> 
-#include <SDL_opengl.h> 
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
+#include <SDL_opengl.h>
 
 namespace pdEngine
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GL/glu.h>
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 namespace pdEngine
 {

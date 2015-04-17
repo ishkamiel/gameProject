@@ -2,7 +2,6 @@
 
 #include "renderer/OpenglRenderer.h"
 #include "exceptions/SDLInitFailedException.h"
-#include "exceptions/GLEWInitFailedException.h"
 #include "Logger.h"
 
 #include <SDL2/SDL.h>
