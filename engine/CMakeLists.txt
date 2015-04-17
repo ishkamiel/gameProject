@@ -1,33 +1,32 @@
 project(pdEngine)
 
 
-find_package(GLEW)
+find_package(Epoxy)
 find_package(SDL2)
 find_package(SDL2_ttf)
 # find_package(Spdlog)
-include(GetSpdlog)
+# include(GetSpdlog)
 
 file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 include_directories( 
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    ${SDL2_INCLUDE_DIR} 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../lib/include"
+    ${SDL2_INCLUDE_DIR}
     ${SDL2TTF_INCLUDE_DIR} 
-    ${Spdlog_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIR} 
+    ${epoxy_INCLUDE_DIR}
     #${CEGUI_INCLUDES}
     )
 
 add_library(pdEngine SHARED
-    ${sources} 
-    src/opengl/SimpleProgram.cpp include/opengl/SimpleProgram.h include/opengl/Epoxy.h)
+    ${sources})
 
-add_dependencies(pdEngine libspdlog)
+# add_dependencies(pdEngine libspdlog)
 
 target_link_libraries(pdEngine
     ${SDL2_LIBRARY}
     ${SDL2TTF_LIBRARY}
-    ${GLEW_LIBRARY} 
+    ${epoxy_LIBRARY}
     #${CEGUI_LIBRARIES}
     )
 

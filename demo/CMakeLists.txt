@@ -10,7 +10,8 @@ find_package(SDL2)
 include_directories( 
 	"include" 
     "../engine/include"
-    ${SDL2_INCLUDE_DIR} 
+    "../lib/include"
+    ${SDL2_INCLUDE_DIR}
     )
 
 foreach(BIN_SOURCE ${MY_BIN_SOURCES})
