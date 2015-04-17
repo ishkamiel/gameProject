@@ -1,5 +1,4 @@
-#ifndef PDENGINE_INPUTMANAGERSDL_H_
-#define PDENGINE_INPUTMANAGERSDL_H_
+#pragma once
 
 #include "InputManager.h"
 #include "events/EventManagerImpl.h"
@@ -24,4 +23,3 @@ private:
 };
 
 }
-#endif /* PDENGINE_INPUTMANAGERSDL_H_ */

@@ -1,5 +1,4 @@
-#ifndef PDENGINE_INPUTMANAGER_H_
-#define PDENGINE_INPUTMANAGER_H_
+#pragma once
 
 #include "tasks/Task.h"
 
@@ -20,11 +19,3 @@ namespace pdEngine
     };
 }
 
-
-
-
-
-
-
-
-#endif /* PDENGINE_INPUTMANAGER_H_ */

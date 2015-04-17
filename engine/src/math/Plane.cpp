@@ -54,7 +54,7 @@ Plane& Plane::operator=(Plane&& o) noexcept
 
 bool Plane::isValid(void) const noexcept
 {
-    if (std::pow(n.length() - 1.0f, 2) > 0.00001f) return false;
+    if (0.00001f < std::pow(n.length() - 1.0f, 2)) return false;
 
     return true;
 }
