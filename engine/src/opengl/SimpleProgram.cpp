@@ -8,6 +8,7 @@
 
 
 #include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace pdEngine {
 
@@ -18,11 +19,30 @@ void SimpleProgram::render(void) const
 {
 	glUseProgram(m_ProgramID);
 
+	static glm::mat4 model;
+	static float a = 0.01;
+	static glm::mat4 rotation1 = {
+		(float)cos(a), (float)-sin(a), 0, 0,
+		(float)sin(a), (float)cos(a), 0, 0,
+		0, 0, 1.f, 0,
+		0, 0, 0, 1.f
+	};
 
-	PD_debug("uniforms set");
+	static glm::mat4 rotation2 = {
+		1, 0, 0, 0,
+		0, (float)cos(a*2), (float)-sin(a*2), 0,
+		0, (float)sin(a*2), (float)cos(a*2), 0,
+		0, 0, 0, 1.f
+	};
 
-	//glEnableVertexAttribArray(s_VertexPosition);
-	//glEnableVertexAttribArray(s_ModelPosition);
+	model = model*rotation1 * rotation2;
+
+	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Model"), 1, GL_FALSE, &model[0][0]);
+	//glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, identity);
+	//glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, identity);
+
+	glEnableVertexAttribArray(0);
+	fatalOnOpenGLError("Failed to enable vertex attributes");
 
 	glBindVertexArray(m_VAO);
 	fatalOnOpenGLError("Failed to bind VAO for drawing");
@@ -103,19 +123,21 @@ void SimpleProgram::init(void)
 	//glEnableVertexAttribArray(1);
 	fatalOnOpenGLError("Failed to enable vertex attributes");
 
-    glGenBuffers(2, &m_VBO);
-	fatalOnOpenGLError("Failed to generate buffer objects");
+    glGenBuffers(1, &m_VBO);
+	fatalOnOpenGLError("Failed to generate VBO buffer objects");
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES), VERTICES, GL_STATIC_DRAW);
 	fatalOnOpenGLError("Failed to bind VBO to VAO");
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), (GLvoid*)0);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), (GLvoid*)sizeof(VERTICES[0]));
-    fatalOnOpenGLError("ERROR: Could not set VAO attributes");
 
+	glGenBuffers(1, &m_IBO);
+	fatalOnOpenGLError("Failed to generate IBO buffer object");
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INDICES), INDICES, GL_STATIC_DRAW);
     fatalOnOpenGLError("ERROR: Could not bind the IBO to the VAO");
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), (GLvoid*)0);
+	fatalOnOpenGLError("ERROR: Could not set VAO attributes");
 
     glBindVertexArray(0);
 	glUseProgram(0);

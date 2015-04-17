@@ -23,7 +23,7 @@ private:
     GLuint m_VBO;
     GLuint m_VAO;
     GLuint m_IBO;
-    GLint m_ProgramID;
+    GLuint m_ProgramID;
 
 };
 

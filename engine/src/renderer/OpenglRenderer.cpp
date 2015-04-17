@@ -13,14 +13,11 @@ OpenglRenderer::~OpenglRenderer() {
 }
 
 void OpenglRenderer::render(void) const {
-    PD_debug("starting render");
-
     glClear(GL_COLOR_BUFFER_BIT);
 
     //glEnable(GL_DEPTH_TEST);
     //glDepthFunc(GL_EQUAL);
 
-    PD_debug("trying to render the thing");
     m_Thing.render();
 }
 

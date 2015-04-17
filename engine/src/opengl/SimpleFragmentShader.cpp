@@ -17,7 +17,7 @@ bool SimpleFragmentShader::compile(void) {
         "out vec4 fColor;\n"
         "void main()\n"
         "{\n"
-        "	fColor = vec4( 1.0, 1.0, 1.0, 1.0 );\n"
+        "	fColor = vec4( 1.0, 1.0, 0.3, 0.5 );\n"
         "}"
     });
 }
