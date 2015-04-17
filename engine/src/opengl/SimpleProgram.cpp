@@ -61,12 +61,16 @@ void SimpleProgram::init(void)
 			log->fatal("Error linking opengGL program {0}", m_ProgramID);
 	}
 
+	fatalOnOpenGLError("Failed after OpenGL program linking");
+
+	glUseProgram(m_ProgramID);
+
 	static const GLfloat identity[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Model"), 1, GL_FALSE, identity);
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, identity);
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, identity);
-	log->debug("Uniforms set");
+	fatalOnOpenGLError("Failed to set uniforms");
 
 	const glm::vec4 VERTICES[8] =
 		{
@@ -114,7 +118,7 @@ void SimpleProgram::init(void)
     fatalOnOpenGLError("ERROR: Could not bind the IBO to the VAO");
 
     glBindVertexArray(0);
-
+	glUseProgram(0);
 	log->info("OpenGL program initialized");
 }
 
