@@ -1,12 +1,4 @@
-/* 
- * File:   SDLInitFailedException.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 11:33 AM
- */
-
-#ifndef SDLINITFAILEDEXCEPTION_H
-#define	SDLINITFAILEDEXCEPTION_H
+#pragma once
 
 #include "exceptions/InitFailedException.h"
 
@@ -28,5 +20,3 @@ private:
 };
 
 }
-#endif	/* SDLINITFAILEDEXCEPTION_H */
-

@@ -15,7 +15,7 @@ namespace pdEngine
         DefaultEvent(const EventTypeID&);
         virtual ~DefaultEvent();
 
-        virtual inline const EventTypeID& getTypeID(void) const override final;
+        virtual inline const EventTypeID& getTypeID(void) const override;
         virtual float getTimestamp(void) const override;
     };
 }

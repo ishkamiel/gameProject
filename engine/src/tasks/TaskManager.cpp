@@ -75,7 +75,7 @@ void TaskManager::updateTasks(TimeDelta timeDelta)
                     (*i)->state = TaskState::ready;
                 ++i; break;
             case TaskState::removed:
-                assert(false && "TaskManager should never see removed tasks");
+                assert(false);// "TaskManager should never see removed tasks");
                 break;
         }
     }

@@ -1,5 +1,4 @@
-#ifndef I_DEFAULTRESOURCELOADER_H_
-#define I_DEFAULTRESOURCELOADER_H_
+#pragma once
 
 #include "resources/I_ResourceLoader.h"
 
@@ -16,4 +15,3 @@ namespace pdEngine
     };
 }
 
-#endif /* I_DEFAULTRESOURCELOADER_H_ */

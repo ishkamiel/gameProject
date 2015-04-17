@@ -46,8 +46,7 @@ bool Scene::onRestore(void)
 {
     if (!m_Root) return true;
 
-    if (m_Root->v_OnRestore(this)) return true;
-    return false;
+    return m_Root->v_OnRestore(this);
 }
 
 bool Scene::onLostDevice(void)
@@ -59,8 +58,7 @@ bool Scene::onUpdate(TimeDelta delta)
 {
     if (!m_Root) return true;
 
-    if (m_Root->v_OnUpdate(this, delta)) return true;
-    return false;
+    return m_Root->v_OnUpdate(this, delta);
 }
 
 std::shared_ptr<I_SceneNode> Scene::findActor(ActorID id)

@@ -165,9 +165,8 @@ namespace pdEngine
             return nullptr;
         }
 
-        if (mem)
+        if (mem != nullptr)
             allocated += size;
-        return nullptr;
 
         return mem;
     }
