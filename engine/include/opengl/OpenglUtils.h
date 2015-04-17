@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Logger.h"
-
-#include <epoxy/gl.h>
-#include <epoxy/glx.h>
+#include "Epoxy.h"
 
 #include <string>
 

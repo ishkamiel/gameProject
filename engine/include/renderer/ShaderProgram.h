@@ -1,5 +1,5 @@
-#ifndef PDENGINE_SHADERPROGRAM_H_
-#define PDENGINE_SHADERPROGRAM_H_ 
+#pragma once
+#include "Logger.h"
 
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
@@ -32,4 +32,3 @@ void ShaderProgram::setID(GLuint id)
 }
 
 }
-#endif

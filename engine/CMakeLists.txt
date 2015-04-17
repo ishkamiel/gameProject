@@ -20,7 +20,7 @@ include_directories(
 
 add_library(pdEngine SHARED
     ${sources} 
-    src/opengl/SimpleProgram.cpp include/opengl/SimpleProgram.h)
+    src/opengl/SimpleProgram.cpp include/opengl/SimpleProgram.h include/opengl/Epoxy.h)
 
 add_dependencies(pdEngine libspdlog)
 

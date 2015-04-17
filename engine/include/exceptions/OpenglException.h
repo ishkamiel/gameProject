@@ -1,18 +1,9 @@
-/* 
- * File:   OpenglException.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 4:55 PM
- */
+#pragma once
 
-#ifndef OPENGLEXCEPTION_H
-#define	OPENGLEXCEPTION_H
-
+#include "opengl/Epoxy.h"
 
 #include <stdexcept>
-#include <string>
-#include <epoxy/gl.h>
-#include <epoxy/glx.h>
+
 namespace pdEngine
 {
 
@@ -30,6 +21,4 @@ private:
 };
 
 }
-
-#endif	/* OPENGLEXCEPTION_H */
 

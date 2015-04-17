@@ -1,9 +1,11 @@
 #include "opengl/SimpleProgram.h"
+
+#include "Logger.h"
+
 #include "opengl/SimpleFragmentShader.h"
 #include "opengl/SimpleVertexShader.h"
 #include "opengl/OpenglUtils.h"
 
-#include "Logger.h"
 
 #include <glm/vec4.hpp>
 

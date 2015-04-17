@@ -1,13 +1,6 @@
-/* 
- * File:   SDLWindow.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 11:09 AM
- */
+#pragma once
 
-#ifndef SDLWINDOW_H
-#define	SDLWINDOW_H
-
+#include "Logger.h"
 #include "renderer/I_Window.h"
 
 #include <SDL2/SDL.h>
@@ -36,7 +29,3 @@ private:
 };
 
 }
-
-
-#endif	/* SDLWINDOW_H */
-

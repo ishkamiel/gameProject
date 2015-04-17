@@ -1,13 +1,5 @@
-/* 
- * File:   GLShaderCompileError.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 1:01 PM
- */
-
-#ifndef GLSHADERCOMPILEERROR_H
-#define	GLSHADERCOMPILEERROR_H
-
+#pragma once
+#include "Logger.h"
 #include "exceptions/InitFailedException.h"
 
 #include <epoxy/gl.h>
@@ -30,5 +22,4 @@ private:
 };
 
 }
-#endif	/* GLSHADERCOMPILEERROR_H */
 

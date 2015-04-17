@@ -49,14 +49,6 @@ Renderer_sptr SDLWindow::getRenderer(void) {
     if (context == nullptr) 
 		throw SDLInitFailedException("SDL_GL_CreateContext");
 
-    // initialize GLEW
-    glewExperimental = GL_TRUE;
-
-    GLenum glewError = glewInit();
-    if (glewError != 0) {
-		throw GLEWInitFailedException(glewError);
-    }
-
     // Enable vSync
     if (SDL_GL_SetSwapInterval(1) < 0) {
 		throw SDLInitFailedException("SDL_GL_SetSwapInterval(1)");

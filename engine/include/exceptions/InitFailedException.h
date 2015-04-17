@@ -1,12 +1,4 @@
-/* 
- * File:   InitFailedException.h
- * Author: ishkamiel
- *
- * Created on April 3, 2015, 11:26 AM
- */
-
-#ifndef INITFAILEDEXCEPTION_H
-#define	INITFAILEDEXCEPTION_H
+#pragma once
 
 #include <stdexcept>
 
@@ -28,4 +20,3 @@ public:
 };
 
 }
-#endif	/* INITFAILEDEXCEPTION_H */
