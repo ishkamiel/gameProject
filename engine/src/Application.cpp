@@ -7,17 +7,19 @@
 
 #include "Application.h"
 
+#include "Logger.h"
+
 #include "events/EventManager.h"
 #include "renderer/OpenglRenderer.h"
 #include "renderer/SDLWindow.h"
 #include "resources/ResourceManager.h"
-#include "Logger.h"
 #include "Utils.h"
 #include "Timer.h"
 #include "InputManagerSDL.h"
 
 #include <functional>
 #include <memory>
+
 
 namespace pdEngine {
 
