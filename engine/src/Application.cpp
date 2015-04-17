@@ -10,7 +10,7 @@
 #include "Logger.h"
 
 #include "events/EventManager.h"
-#include "renderer/OpenglRenderer.h"
+#include "opengl/OpenglRenderer.h"
 #include "renderer/SDLWindow.h"
 #include "resources/ResourceManager.h"
 #include "Utils.h"

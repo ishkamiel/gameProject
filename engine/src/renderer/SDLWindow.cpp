@@ -1,6 +1,6 @@
 #include "renderer/SDLWindow.h"
 
-#include "renderer/OpenglRenderer.h"
+#include "opengl/OpenglRenderer.h"
 #include "exceptions/SDLInitFailedException.h"
 #include "Logger.h"
 

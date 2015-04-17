@@ -1,5 +1,5 @@
 #include "DemoOpengl.h"
-#include "renderer/OpenglRenderer.h"
+#include "opengl/OpenglRenderer.h"
 
 namespace pdEngineDemo
 {

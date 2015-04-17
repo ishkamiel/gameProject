@@ -41,6 +41,9 @@ void SimpleProgram::render(void) const
 	//glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "View"), 1,  GL_FALSE, identity);
 	//glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, "Project"), 1, GL_FALSE, identity);
 
+
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
 	glEnableVertexAttribArray(0);
 	fatalOnOpenGLError("Failed to enable vertex attributes");
 
