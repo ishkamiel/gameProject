@@ -21,8 +21,8 @@ public:
 	void getResource(const std::string& resource);
 
 protected:
-	void onUpdate(TimeDelta) override;
-	void onInit(void) override;
+	void onUpdate(TimeDelta) noexcept override;
+	void onInit(void) noexcept override;
 private:
 
 	std::unique_ptr<ResourceCache> rc;

@@ -1,5 +1,4 @@
-#ifndef TASK_H_
-#define TASK_H_
+#pragma once
 
 #include "Timer.h"
 
@@ -8,104 +7,105 @@
 
 namespace pdEngine
 {
-    class Task;
-	using Task_sptr = std::shared_ptr<Task>;
-    using Task_wptr = std::weak_ptr<Task>;
+class Task;
+using Task_sptr = std::shared_ptr<Task>;
+using Task_wptr = std::weak_ptr<Task>;
 
-    enum class TaskState
-    {
-        uninitialized,
-        ready,
-        running,
-        paused,
-        succeeded,
-        removed,
-        failed,
-        aborted
-    };
-
-    class Task
-    {
-        friend class TaskManager;
-
-        TaskState   state       { TaskState::uninitialized };
-        Task_sptr   childTask   { nullptr };
-
-    public:
-        virtual ~Task(void) =0;
-
-        inline void succeed(void) { state = TaskState::succeeded; }
-        inline void fail(void) { state = TaskState::failed; }
-
-        inline void pause(void);
-        inline void unPause(void);
-
-        inline TaskState getState(void) const;
-        inline bool isAlive(void) const;
-        inline bool isDead(void) const;
-        inline bool isRemoved(void) const;
-        inline bool isPaused(void) const;
-        inline bool isUninitialized(void) const;
-
-        void addChild(Task_sptr child);
-        Task_sptr removeChild(void);
-        Task_sptr peekChild(void);
-
-    protected:
-        virtual void onInit(void);
-        virtual void onUpdate(TimeDelta) =0;
-        virtual void onSuccess(void);
-        virtual void onFail(void);
-        virtual void onAbort(void);
-
-    private:
-    };
-}
-
-namespace pdEngine
+enum class TaskState
 {
-    void Task::pause(void) 
-    {
-        assert(isAlive());
-        state = TaskState::paused;
-    }
+    uninitialized,
+    ready,
+    running,
+    paused,
+    succeeded,
+    removed,
+    failed,
+    aborted
+};
 
-    void Task::unPause(void)
-    {
-        assert(isAlive());
-        state = TaskState::running;
-    }
+class Task
+{
+    friend class TaskManager;
 
-    TaskState Task::getState(void) const 
-    { 
-        return (state); 
-    }
+    TaskState   state       { TaskState::uninitialized };
+    Task_sptr   childTask   { nullptr };
 
-    bool Task::isAlive(void) const 
-    { 
-        return (state == TaskState::running || 
-                state == TaskState::ready ||
-                state == TaskState::paused); 
-    }
+public:
+    virtual ~Task(void) =0;
 
-    bool Task::isDead(void) const 
-    { 
-        return (state == TaskState::failed || state == TaskState::aborted); 
-    }
+    inline void succeed(void) noexcept { state = TaskState::succeeded; }
+    inline void fail(void) noexcept { state = TaskState::failed; }
 
-    bool Task::isRemoved(void) const { 
-        return (state == TaskState::removed); 
-    }
+    inline void pause(void) noexcept;
+    inline void unPause(void) noexcept;
 
-    bool Task::isPaused(void) const 
-    { 
-        return (state == TaskState::paused); 
-    }
+    inline TaskState getState(void) const noexcept;
+    inline bool isAlive(void) const noexcept;
+    inline bool isDead(void) const noexcept;
+    inline bool isRemoved(void) const noexcept;
+    inline bool isPaused(void) const noexcept;
+    inline bool isUninitialized(void) const noexcept;
 
-    bool Task::isUninitialized(void) const
-    {
-        return (state == TaskState::uninitialized);
-    }
+    void addChild(Task_sptr child) noexcept;
+    Task_sptr removeChild(void) noexcept;
+    Task_sptr peekChild(void) const noexcept;
+
+protected:
+    virtual void onInit(void) noexcept;
+    virtual void onUpdate(TimeDelta) noexcept =0;
+    virtual void onSuccess(void) noexcept;
+    virtual void onFail(void) noexcept;
+    virtual void onAbort(void) noexcept;
+
+private:
+};
+
+/*
+ * Implementations
+ */
+
+void Task::pause(void) noexcept
+{
+    assert(isAlive());
+    state = TaskState::paused;
 }
 
-#endif
+void Task::unPause(void) noexcept
+{
+    assert(isAlive());
+    state = TaskState::running;
+}
+
+TaskState Task::getState(void) const noexcept
+{
+    return (state);
+}
+
+bool Task::isAlive(void) const noexcept
+{
+    return (state == TaskState::running ||
+            state == TaskState::ready ||
+            state == TaskState::paused);
+}
+
+bool Task::isDead(void) const noexcept
+{
+    return (state == TaskState::failed || state == TaskState::aborted);
+}
+
+bool Task::isRemoved(void) const  noexcept
+{
+    return (state == TaskState::removed);
+}
+
+bool Task::isPaused(void) const noexcept
+{
+    return (state == TaskState::paused);
+}
+
+bool Task::isUninitialized(void) const noexcept
+{
+    return (state == TaskState::uninitialized);
+}
+
+}

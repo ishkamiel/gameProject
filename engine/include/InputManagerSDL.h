@@ -14,8 +14,8 @@ public:
 	InputManagerSDL(EventManager_sptr);
 	virtual ~InputManagerSDL();
 protected:
-	void onUpdate(TimeDelta) override;
-	void onInit(void) override;
+	void onUpdate(TimeDelta) noexcept override;
+	void onInit(void) noexcept override;
 private:
 
 	EventManager_sptr m_EventManager;

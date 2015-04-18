@@ -11,11 +11,11 @@ namespace pdEngine
     ResourceManager::~ResourceManager()
     {}
 
-    void ResourceManager::onInit()
+    void ResourceManager::onInit() noexcept
     {
     }
 
-    void ResourceManager::onUpdate(TimeDelta delta)
+    void ResourceManager::onUpdate(TimeDelta delta) noexcept
     {
         (void) delta;
     }

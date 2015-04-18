@@ -2,35 +2,37 @@
 
 namespace pdEngine
 {
-    Task::~Task() {}
 
-    void Task::onInit(void)
-    {}
+Task::~Task()
+{ }
 
-    void Task::onSuccess(void)
-    {}
+void Task::onInit(void) noexcept
+{ }
 
-    void Task::onFail(void)
-    {}
+void Task::onSuccess(void) noexcept
+{ }
 
-    void Task::onAbort(void)
-    {}
+void Task::onFail(void) noexcept
+{ }
 
-    void Task::addChild(Task_sptr child)
-    {
-        childTask = child;
-    }
+void Task::onAbort(void) noexcept
+{ }
 
-    Task_sptr Task::removeChild(void)
-    {
-        auto retval = childTask;
-        childTask = nullptr;
+void Task::addChild(Task_sptr child) noexcept
+{
+    childTask = child;
+}
 
-        return retval;
-    }
+Task_sptr Task::removeChild(void) noexcept
+{
+    auto retval = childTask;
+    childTask = nullptr;
 
-    Task_sptr Task::peekChild(void)
-    {
-        return childTask;
-    }
+    return retval;
+}
+
+Task_sptr Task::peekChild(void) const noexcept
+{
+    return childTask;
+}
 }

@@ -22,7 +22,7 @@ namespace pdEngine
         ////TODO Do we need to so something?
     //}
 
-    void EventManagerImpl::onUpdate(TimeDelta timeDelta)
+    void EventManagerImpl::onUpdate(TimeDelta timeDelta) noexcept
     {
         (void)timeDelta;
         //PD_debug("EventManager onUpdate");

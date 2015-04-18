@@ -5,6 +5,7 @@
 
 #include "gmock/gmock.h"
 
+/*
 namespace pdEngine
 {
     class SimpleTask : public Task
@@ -12,12 +13,12 @@ namespace pdEngine
     public:
         SimpleTask() {};
         virtual ~SimpleTask() {};
-        virtual void onUpdate(TimeDelta t) override 
-        { 
+        virtual void onUpdate(TimeDelta t) noexcept override
+        {
             (void)t; 
             if (m_FailU) fail(); 
         }
-        virtual void onInit() override 
+        virtual void onInit() noexcept override
         { 
             if (m_FailI) fail();
         }
@@ -31,12 +32,13 @@ namespace pdEngine
     class MockTask : public Task
     {
     public:
-        MOCK_METHOD0(onInit, void(void));
-        MOCK_METHOD0(onAbort, void(void));
-        MOCK_METHOD0(onFail, void(void));
-        MOCK_METHOD0(onSuccess, void(void));
-        MOCK_METHOD1(onUpdate, void(TimeDelta));
+        //MOCK_METHOD0(onInit, void(void));
+        //MOCK_METHOD0(onAbort, void(void));
+        //MOCK_METHOD0(onFail, void(void));
+        //MOCK_METHOD0(onSuccess, void(void));
+        //MOCK_METHOD1(onUpdate, void(TimeDelta));
     };
 }
+ */
 
 #endif /* MOCKTASK_H_ */

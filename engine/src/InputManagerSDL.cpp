@@ -14,7 +14,7 @@ namespace pdEngine
         delete m_Event;
     }
 
-    void InputManagerSDL::onUpdate(TimeDelta delta)
+    void InputManagerSDL::onUpdate(TimeDelta delta) noexcept
     {
         (void) delta;
 		
@@ -29,7 +29,7 @@ namespace pdEngine
         }
     }
 
-    void InputManagerSDL::onInit(void) 
+    void InputManagerSDL::onInit(void) noexcept
     {
         // TODO setup sdl event stuff here?
     }
