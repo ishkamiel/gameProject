@@ -17,7 +17,7 @@ namespace pdEngine
         timeSlice = std::chrono::duration_cast<TimerDefaultDelta>(oneSec);
 
         timeSlice = (timeSlice/freq);
-        DLOG("Frequency set to {0}, resulting in a {1} timeSlice", freq, timeSlice.count());
+        PD_debug("Frequency set to {0}, resulting in a {1} timeSlice", freq, timeSlice.count());
     }
 
     /*
@@ -27,7 +27,7 @@ namespace pdEngine
         timeSlice = std::chrono::duration_cast<TimerDefaultDelta>(oneSec);
 
         timeSlice = (timeSlice/freq);
-        DLOG("Frequency set to {0}, resulting in a {1} timeSlice", freq, timeSlice.count());
+        PD_debug("Frequency set to {0}, resulting in a {1} timeSlice", freq, timeSlice.count());
         return timeSlice;
     }
     */

@@ -136,14 +136,14 @@ void Application::initializeResourceManager(void) {
 
 bool Application::onShutdown(Event_sptr e) {
 	(void) e;
-	DLOG("Received ev_Shutdown event, shutting down");
+	PD_debug("Received ev_Shutdown event, shutting down");
 	doShutdown = true;
 	return false;
 }
 
 bool Application::onRequestQuit(Event_sptr e) {
 	(void) e;
-	DLOG("Received ev_RequestQuit, sending ev_Shutdown");
+	PD_debug("Received ev_RequestQuit, sending ev_Shutdown");
 	EventManager::getSingleton()->queueEvent(ev_Shutdown);
 	return true;
 }

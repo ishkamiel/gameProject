@@ -25,7 +25,7 @@ namespace pdEngine
     void EventManagerImpl::onUpdate(TimeDelta timeDelta)
     {
         (void)timeDelta;
-        //DLOG("EventManager onUpdate");
+        //PD_debug("EventManager onUpdate");
 
         if (eventQueueIn.size() == 0) return;
         auto log = getLogger();
@@ -39,7 +39,7 @@ namespace pdEngine
             eventsProcessing.pop();
 
             assert(data != nullptr);
-            DLOG("Processing event of type {}", data->getTypeID());
+            PD_debug("Processing event of type {}", data->getTypeID());
 			auto listeners_called = 0;
 
             auto list = findEventList(data->getTypeID());
@@ -54,7 +54,7 @@ namespace pdEngine
 					++listeners_called;
                 }
             }
-            DLOG("Event processed by {0} listeners", listeners_called);
+            PD_debug("Event processed by {0} listeners", listeners_called);
         }
     }
 
@@ -65,7 +65,7 @@ namespace pdEngine
 
     void EventManagerImpl::queueEvent(const Event_sptr eventPtr)
     {
-        DLOG("Queing new event EventTypeID: {0}", eventPtr->getTypeID());
+        PD_debug("Queing new event EventTypeID: {0}", eventPtr->getTypeID());
         eventQueueIn.push(eventPtr);
     }
 

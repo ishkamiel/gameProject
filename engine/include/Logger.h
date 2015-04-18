@@ -1,5 +1,4 @@
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#pragma once
 
 #include "spdlog/spdlog.h"
 
@@ -50,16 +49,14 @@ private:
 	std::shared_ptr<spdlog::logger> m_L;
 };
 
-void setLogger(std::shared_ptr<pdLogger>);
 void setLogger(std::shared_ptr<spdlog::logger>);
 std::shared_ptr<pdLogger> getLogger() noexcept;
 
 }
-#define DLOG( ... ) getLogger()->debug(__VA_ARGS__)
+
 #define PD_debug( ... ) getLogger()->debug(__VA_ARGS__)
 
 #ifdef NDEBUG
-
 #define DONT_SET_DEBUG_STUFF
 #undef SET_LEVEL_TO_DEBUG
 #undef DLOG
@@ -68,6 +65,3 @@ std::shared_ptr<pdLogger> getLogger() noexcept;
 #undef PD_debug
 #define PD_debug( ... )
 #endif /* NDEBUG */
-
-
-#endif /* LOGGER_H_ */

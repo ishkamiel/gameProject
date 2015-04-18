@@ -22,7 +22,7 @@ void OpenglRenderer::render(void) const {
 }
 
 void OpenglRenderer::printDebugMsg(const std::string& msg) const {
-    DLOG(msg);
+    PD_debug(msg);
 }
 
 void OpenglRenderer::init(void) {
