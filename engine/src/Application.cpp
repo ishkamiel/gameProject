@@ -38,20 +38,14 @@ bool Application::init(void) {
     taskManager = std::make_shared<TaskManager>();
     initializeEventManager();
     initializeResourceManager();
+	initializeWindow();
+	initializeRenderer();
 
     log->debug("Initializing task manager tasks.");
     if (!taskManager->initAll()) {
         log->error("Some tasks failed initialization.");
         return (false);
     }
-
-    log->info("Creating and opening main window.");
-	window = std::make_shared<SDLWindow>();
-	window->init();
-	window->openWindow();
-
-	log->info("Initializing rendering.");
-    renderer = window->getRenderer();
 
     initOk = true;
 	log->info("Application successfully initialized!");
@@ -65,13 +59,14 @@ bool Application::start(void)
     if (!initOk) throw std::runtime_error("Application not successfully initialized before start!");
 
     auto timer = new Timer(updateFrequency);
+
     log->info("Entering main loop");
     while (!doShutdown) {
         auto deltaTime = timer->stepAndSleep();
 
         taskManager->updateTasks(deltaTime);
 
-        renderer->render();
+        m_Renderer->v_Render();
 
 		window->swapFrame();
     }
@@ -92,7 +87,7 @@ void Application::shutdown(void)
 
     taskManager->abortAllNow();
 
-	renderer.reset();
+	m_Renderer.reset();
 	window.reset();
 	
 	taskManager.reset();
@@ -132,6 +127,27 @@ void Application::initializeResourceManager(void) {
 	auto rm = std::make_shared<ResourceManager>();
 
 	taskManager->addTask(std::shared_ptr<Task>(rm));
+}
+
+void Application::initializeWindow(void)
+{
+	auto log = getLogger();
+
+	log->info("Creating and opening main window.");
+	window = std::make_shared<SDLWindow>();
+	window->init();
+	window->openWindow();
+
+}
+
+void Application::initializeRenderer(void)
+{
+	auto log = getLogger();
+
+	log->info("Initializing rendering.");
+	m_Renderer = window->getRenderer();
+
+	taskManager->addTask(m_Renderer);
 }
 
 bool Application::onShutdown(Event_sptr e) {

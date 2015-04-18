@@ -29,12 +29,12 @@ class EventManagerImpl : public Task, public EventManager {
 
 public:
     EventManagerImpl();
-    ~EventManagerImpl();
+    virtual ~EventManagerImpl();
 
     EventManagerImpl(const EventManagerImpl&) = delete;
     EventManagerImpl& operator=(const EventManagerImpl&) = delete;
 
-    void onUpdate(TimeDelta) noexcept override;
+    void onUpdate(const TimeDelta&) noexcept override;
 
     void queueEvent(const Event_sptr) override;
     void queueEvent(const EventTypeID) override;

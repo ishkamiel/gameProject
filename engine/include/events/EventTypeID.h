@@ -1,5 +1,4 @@
-#ifndef EVENTTYPEID_H
-#define	EVENTTYPEID_H
+#pragma once
 
 #include <memory>
 #include <string>
@@ -98,4 +97,3 @@ constexpr uint32_t crc32<size_t(-1)>(const char *) {
 }
 
 }
-#endif	/* EVENTTYPEID_H */

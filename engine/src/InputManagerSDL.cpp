@@ -14,7 +14,7 @@ namespace pdEngine
         delete m_Event;
     }
 
-    void InputManagerSDL::onUpdate(TimeDelta delta) noexcept
+    void InputManagerSDL::onUpdate(const TimeDelta& delta) noexcept
     {
         (void) delta;
 		

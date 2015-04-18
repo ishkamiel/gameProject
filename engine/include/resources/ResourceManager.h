@@ -21,7 +21,7 @@ public:
 	void getResource(const std::string& resource);
 
 protected:
-	void onUpdate(TimeDelta) noexcept override;
+	void onUpdate(const TimeDelta&) noexcept override;
 	void onInit(void) noexcept override;
 private:
 

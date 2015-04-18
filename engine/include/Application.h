@@ -24,13 +24,16 @@ private:
     void initializeLogging(void);
     void initializeEventManager(void);
     void initializeResourceManager(void);
+    void initializeWindow(void);
+    void initializeRenderer(void);
+
     void shutdown(void);
     bool onShutdown(Event_sptr e);
     bool onRequestQuit(Event_sptr e);
 
     TimerFrequency updateFrequency{240};
 
-    Renderer_sptr renderer;
+    Renderer_sptr m_Renderer;
     Window_sptr window;
     TaskManager_sptr taskManager;
 

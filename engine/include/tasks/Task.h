@@ -52,7 +52,7 @@ public:
 
 protected:
     virtual void onInit(void) noexcept;
-    virtual void onUpdate(TimeDelta) noexcept =0;
+    virtual void onUpdate(const TimeDelta&) noexcept =0;
     virtual void onSuccess(void) noexcept;
     virtual void onFail(void) noexcept;
     virtual void onAbort(void) noexcept;

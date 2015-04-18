@@ -12,7 +12,7 @@ OpenglRenderer::OpenglRenderer() {
 OpenglRenderer::~OpenglRenderer() {
 }
 
-void OpenglRenderer::render(void) const {
+void OpenglRenderer::v_Render(void) noexcept {
     glClear(GL_COLOR_BUFFER_BIT);
 
     //glEnable(GL_DEPTH_TEST);
@@ -21,11 +21,16 @@ void OpenglRenderer::render(void) const {
     m_Thing.render();
 }
 
+void OpenglRenderer::onUpdate(const TimeDelta& delta) noexcept
+{
+    (void)delta;
+}
+
 void OpenglRenderer::printDebugMsg(const std::string& msg) const {
     PD_debug(msg);
 }
 
-void OpenglRenderer::init(void) {
+void OpenglRenderer::onInit(void) noexcept {
     auto log = getLogger();
 
     log->info("We are running opengl {}", epoxy_gl_version());

@@ -55,7 +55,7 @@ Renderer_sptr SDLWindow::getRenderer(void) {
     }
 
 	auto renderer = std::make_shared<OpenglRenderer>();
-	renderer->init();
+	renderer->onInit();
 	return renderer;
 }
 

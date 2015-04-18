@@ -1,5 +1,4 @@
-#ifndef PDENGINE_IEVENT_H_
-#define PDENGINE_IEVENT_H_
+#pragma once
 
 #include "events/EventTypeID.h"
 
@@ -21,4 +20,3 @@ public:
 };
 
 }
-#endif
