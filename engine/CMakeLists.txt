@@ -1,6 +1,5 @@
 project(pdEngine)
 
-
 find_package(Epoxy)
 find_package(SDL2)
 find_package(SDL2_ttf)
