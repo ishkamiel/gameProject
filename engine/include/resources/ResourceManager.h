@@ -1,5 +1,4 @@
-#ifndef PDENGINE_RESOURCEMANAGER_H_
-#define PDENGINE_RESOURCEMANAGER_H_
+#pragma once
 
 #include "tasks/Task.h"
 
@@ -33,4 +32,3 @@ using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
 using ResourceManager_wptr = std::weak_ptr<ResourceManager>;
 
 }
-#endif

@@ -19,7 +19,7 @@ include_directories(
     )
 
 add_library(pdEngine SHARED
-    ${sources})
+    ${sources} src/Root.h src/Root.cpp)
 
 # add_dependencies(pdEngine libspdlog)
 

@@ -1,12 +1,4 @@
-/* 
- * File:   I_EventManager.h
- * Author: ishkamiel
- *
- * Created on April 2, 2015, 10:47 PM
- */
-
-#ifndef I_EVENTMANAGER_H
-#define	I_EVENTMANAGER_H
+#pragma once
 
 #include "events/EventListener.h"
 
@@ -28,6 +20,4 @@ public:
 
 
 }
-
-#endif	/* I_EVENTMANAGER_H */
 

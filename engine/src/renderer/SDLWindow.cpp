@@ -59,6 +59,11 @@ Renderer_sptr SDLWindow::getRenderer(void) {
 	return renderer;
 }
 
+void SDLWindow::setTitle(const std::string& title) noexcept
+{
+	SDL_SetWindowTitle(m_Window, title.c_str());
+}
+
 void SDLWindow::swapFrame(void) 
 {
     SDL_GL_SwapWindow(m_Window);

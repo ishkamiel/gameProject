@@ -19,6 +19,8 @@ public:
     virtual void openWindow(void) =0;
 	virtual Renderer_sptr getRenderer() =0;
 	virtual void swapFrame(void) =0;
+
+	virtual void setTitle(const std::string&) noexcept =0;
 };
 
 using Window_sptr = std::shared_ptr<I_Window>;

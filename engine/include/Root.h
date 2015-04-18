@@ -1,12 +1,4 @@
-/*
- *  Root.h
- *
- *  Created on: Apr 12, 2015
- *      Author: ishkamiel
- */
-
-#ifndef ROOT_H_
-#define ROOT_H_
+#pragma once
 
 #include "events/EventManager.h"
 #include "resources/ResourceManager.h"
@@ -18,14 +10,21 @@ namespace pdEngine
 
 class Root
 {
+
+public:
 	Root();
 	virtual ~Root();
 
-	std::shared_ptr<EventManager> getEventManager() const noexcept;
-	std::shared_ptr<ResourceManager> getResourceManager() const noexcept;
+	inline EventManager_sptr getEventManager() const noexcept { return m_EM; };
+	inline ResourceManager_sptr getResourceManager() const noexcept { return m_RM; };
+
+	void setEventManager(EventManager_sptr) noexcept;
+	void setResourceManager(ResourceManager_sptr) noexcept;
+private:
+	EventManager_sptr m_EM;
+	ResourceManager_sptr m_RM;
 };
 
 std::shared_ptr<Root> getRoot(void) noexcept;
 
 }
-#endif /* ROOT_H_ */

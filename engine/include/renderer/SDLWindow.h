@@ -20,6 +20,8 @@ public:
 	virtual Renderer_sptr getRenderer(void) override;
 	virtual void swapFrame(void) override;
 
+	virtual void setTitle(const std::string&) noexcept override;
+
 private:
 	int m_WindowWidth                { 640 };
 	int m_WindowHeight               { 480 };
