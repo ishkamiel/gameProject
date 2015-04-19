@@ -6,7 +6,7 @@
 #include "renderer/Material.h"
 #include "math/Matrix4.h"
 #include "math/Vector3.h"
-#include "Actor.h"
+#include "actors/Actor.h"
 #include "Color.h"
 
 #include <string>

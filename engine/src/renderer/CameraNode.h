@@ -2,7 +2,7 @@
 #define CAMERA_H_
 
 #include "renderer/SceneNode.h"
-#include "Actor.h"
+#include "actors/Actor.h"
 #include "math/Frustum.h"
 #include "math/Matrix4.h"
 #include "math/Vector4.h"

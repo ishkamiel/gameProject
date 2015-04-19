@@ -15,11 +15,10 @@
 #include "resources/ResourceManager.h"
 #include "Utils.h"
 #include "Timer.h"
-#include "InputManagerSDL.h"
+#include "input/InputManagerSDL.h"
 
 #include <functional>
 #include <memory>
-
 
 namespace pdEngine {
 

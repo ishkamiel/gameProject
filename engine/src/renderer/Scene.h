@@ -1,7 +1,6 @@
-#ifndef SCENE_H_
-#define SCENE_H_
+#pragma once
 
-#include "Actor.h"
+#include "actors/Actor.h"
 #include "Timer.h"
 #include "renderer/I_Renderer.h"
 #include "math/Matrix4.h"
@@ -72,4 +71,3 @@ using Scene_sptr = std::shared_ptr<Scene>;
 
 }
 
-#endif /* SCENE_H_ */
