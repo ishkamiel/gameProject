@@ -7,6 +7,7 @@ find_package(SDL2_ttf)
 # include(GetSpdlog)
 
 file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 include_directories( 
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
@@ -17,8 +18,18 @@ include_directories(
     #${CEGUI_INCLUDES}
     )
 
+#file(COPY {headers} DESTINATION ${include_output_path})
+file(
+COPY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+DESTINATION  ${include_output_path}
+FILES_MATCHING PATTERN "*.h")
+
+file(COPY ../lib/include/spdlog DESTINATION ${include_output_path})
+
 add_library(pdEngine SHARED
-    ${sources})
+    ${sources}
+    ${headers}
+    )
 
 # add_dependencies(pdEngine libspdlog)
 
