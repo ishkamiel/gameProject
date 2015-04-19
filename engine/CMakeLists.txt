@@ -10,7 +10,7 @@ file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 include_directories( 
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/../lib/include"
     ${SDL2_INCLUDE_DIR}
     ${SDL2TTF_INCLUDE_DIR} 
@@ -19,12 +19,6 @@ include_directories(
     )
 
 #file(COPY {headers} DESTINATION ${include_output_path})
-file(
-COPY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-DESTINATION  ${include_output_path}
-FILES_MATCHING PATTERN "*.h")
-
-file(COPY ../lib/include/spdlog DESTINATION ${include_output_path})
 
 add_library(pdEngine SHARED
     ${sources}
@@ -42,6 +36,13 @@ target_link_libraries(pdEngine
 
 set_property(TARGET pdEngine PROPERTY CXX_STANDARD 14)
 set_property(TARGET pdEngine PROPERTY CXX_STANDARD_REQUIRED ON)
+
+file(
+COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/
+DESTINATION  ${include_output_path}
+FILES_MATCHING PATTERN "*.h")
+
+file(COPY ../lib/include/spdlog DESTINATION ${include_output_path})
 
 if(${BUILD_TESTS})
     include(GetGmock)
