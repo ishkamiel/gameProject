@@ -7,8 +7,6 @@ file(GLOB MY_BIN_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/bins/*.cpp")
 
 find_package(SDL2)
 
-message("pdEngine includes: ${pdEngine_INCLUDE_DIR}")
-
 include_directories( 
 	"include"
 	${include_output_path}
