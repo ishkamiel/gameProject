@@ -17,7 +17,7 @@ public:
 
 	virtual void init(void) override;
 	virtual void openWindow(void) override;
-	virtual Renderer_sptr getRenderer(void) override;
+	virtual Renderer_sptr createRenderer(void) override;
 	virtual void swapFrame(void) override;
 
 	virtual void setTitle(const std::string&) noexcept override;

@@ -27,7 +27,7 @@ class Scene
 
 
 public:
-    Scene ();
+    Scene (I_Renderer*);
     virtual ~Scene ();
 
     bool onRender(void);
@@ -43,7 +43,7 @@ public:
     void setCamera(CameraNode_sptr) ;
     const CameraNode_sptr getCamera(void) const;
 
-    void pushAndSetMatrix(const Matrix4* toWorld);
+    void pushMatrix(const Matrix4* toWorld);
     void popMatrix(void);
     const Matrix4* getTopMatrix(void);
 
@@ -55,8 +55,9 @@ private:
 
 protected:
 	std::shared_ptr<CameraNode> m_Camera;
-    std::shared_ptr<I_Renderer> m_Renderer;
     std::shared_ptr<SceneNode> m_Root;
+
+    I_Renderer* m_Renderer; // I_Renderer destroys Scene.
 
     std::stack<Matrix4> m_TranlsationMatrices;
     /* Alpha? */

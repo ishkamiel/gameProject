@@ -6,7 +6,7 @@
 namespace pdEngine
 {
 
-CameraNode::CameraNode(const Matrix4* t, const Frustum& frustum)
+CameraNode::CameraNode(const Matrix4& t, const Frustum& frustum)
    : SceneNode(NullActorID, "Camera", RenderPass::First, Color(), t),
    m_Frustum(frustum),
    m_IsActive(true),
@@ -42,7 +42,7 @@ bool CameraNode::v_IsVisible(Scene*) const
     return m_IsActive;
 }
 
-bool CameraNode::v_SetView(Scene* scene)
+bool CameraNode::v_setView(Scene* scene) noexcept
 {
     (void)scene;
     /*
@@ -81,17 +81,19 @@ auto CameraNode::getTarget(void) -> SceneNode_sptr
 
 auto CameraNode::getWorldViewProjection(Scene*) -> Matrix4
 {
+    return getProjection() * getView();
+    //return getProjection() * getView();
+    //return m_Projection;
+}
+
+auto CameraNode::getProjection() noexcept -> Matrix4&
+{ 
     return m_Projection;
 }
 
-auto CameraNode::getProjection() -> Matrix4
+auto CameraNode::getView() noexcept -> Matrix4&
 { 
-    return m_Projection; 
-}
-
-auto CameraNode::getView() -> Matrix4
-{ 
-    return m_View; 
+    return m_View;
 }
 void CameraNode::setCameraOffset(const Vector4& v)
 {

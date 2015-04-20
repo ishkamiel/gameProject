@@ -8,25 +8,25 @@ namespace pdEngine
 static const Matrix4 identity = Matrix4();
 
 RootNode::RootNode()
-    : SceneNode(0, "Root", RenderPass::First, Color(), &identity)
+    : SceneNode(0, "Root", RenderPass::First, Color(), Matrix4())
 {
     m_Children.reserve(static_cast<long>(RenderPass::Last));
 
     rootStatic.reset(new SceneNode(
                 NullActorID, "StaticGroup", RenderPass::Static,
-                Color(), &identity));
+                Color(), Matrix4()));
 
     rootActor.reset(new SceneNode(
                 NullActorID, "ActorGroup", RenderPass::Actor,
-                Color(), &identity));
+                Color(), Matrix4()));
 
     rootSky.reset(new SceneNode(
                 NullActorID, "SkyGroup", RenderPass::Sky,
-                Color(), &identity));
+                Color(), Matrix4()));
 
     rootInvisible.reset(new SceneNode(
                 NullActorID, "InvisibleGroup", RenderPass::NotRendered,
-                Color(), &identity));
+                Color(), Matrix4()));
 }
 
 RootNode::~RootNode()

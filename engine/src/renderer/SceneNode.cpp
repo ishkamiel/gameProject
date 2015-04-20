@@ -10,29 +10,39 @@ SceneNode::SceneNode (ActorID actorID,
             std::string name,
             RenderPass renderPass,
             const Color &diffuseColor,
-            const Matrix4* to,
-            const Matrix4* from)
+            const Matrix4& to,
+            const Matrix4& from)
+:
+    m_ActorID(actorID),
+    m_Name(name),
+    m_Radius(0),
+    m_RenderPass(renderPass),
+    m_AlphaType(AlphaType::Opaque),
+    m_ToWorld(to),
+    m_FromWorld(from)
 {
-    m_ActorID = actorID;
-    m_Name = name;
-    m_RenderPass = renderPass;
-    m_Radius = 0;
-    m_AlphaType = AlphaType::Opaque;
-
-    v_SetTransform(to, from);
-    m_Material.setDiffuse(diffuseColor);
+    (void)diffuseColor;
 }
+SceneNode::SceneNode (ActorID id,
+                      std::string name,
+                      RenderPass rp,
+                      const Color &c,
+                      const Matrix4& to)
+    : SceneNode(id, name, rp, c, to, to.getInverse())
+{}
 
 SceneNode::~SceneNode()
 {}
 
-void SceneNode::v_SetTransform(const Matrix4* toWorld, const Matrix4* fromWorld)
+void SceneNode::v_setTransform(const Matrix4& toWorld, const Matrix4& fromWorld) noexcept
 {
-    m_ToWorld = *toWorld;
-    if (!fromWorld)
-        m_FromWorld = toWorld->getInverse();
-    else
-        m_FromWorld = *fromWorld;
+    m_ToWorld = toWorld;
+    m_FromWorld = fromWorld;
+}
+
+void SceneNode::v_setTransform(const Matrix4& toWorld) noexcept
+{
+    v_setTransform(toWorld, toWorld.getInverse());
 }
 
 bool SceneNode::v_OnRestore(Scene* scene)
@@ -64,7 +74,7 @@ bool SceneNode::v_OnUpdate(Scene* scene, const TimeDelta delta)
 
 bool SceneNode::v_PreRender(Scene* scene)
 {
-    scene->pushAndSetMatrix(&m_ToWorld);
+    scene->pushMatrix(&m_ToWorld);
     return true;
 }
 

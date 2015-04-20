@@ -21,15 +21,12 @@ class SceneNode : public I_SceneNode
     using SceneNodeList = std::vector<SceneNode_sptr>;
 
 public:
-    SceneNode (ActorID actorID,
-            std::string name,
-            RenderPass renderPass,
-            const Color &diffuseColor,
-            const Matrix4* to,
-            const Matrix4* from = nullptr);
+    SceneNode (ActorID, std::string , RenderPass , const Color&, const Matrix4&);
+    SceneNode (ActorID, std::string , RenderPass , const Color&, const Matrix4&, const Matrix4&);
     virtual ~SceneNode();
 
-    virtual void v_SetTransform(const Matrix4* toWorld, const Matrix4* fromWorld = nullptr) override;
+    virtual void v_setTransform(const Matrix4& toWrold, const Matrix4& fromWorld) noexcept override;
+    virtual void v_setTransform(const Matrix4& toWorld) noexcept override;
 
     virtual bool v_OnRestore(Scene* scene) override;
     virtual bool v_OnUpdate(Scene* scene, const TimeDelta) override;
@@ -68,12 +65,12 @@ protected:
 protected:
     ActorID m_ActorID;
     std::string m_Name;
-    Matrix4 m_ToWorld;
-    Matrix4 m_FromWorld;
     float m_Radius;
     RenderPass m_RenderPass;
-    Material m_Material;
     AlphaType m_AlphaType;
+    Matrix4 m_ToWorld;
+    Matrix4 m_FromWorld;
+    Material m_Material;
 
     SceneNodeList m_Children;
     SceneNode *m_Parent;

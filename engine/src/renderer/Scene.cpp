@@ -1,6 +1,7 @@
 #include "renderer/Scene.h"
 
 #include "renderer/RootNode.h"
+#include "renderer/CameraNode.h"
 #include "Timer.h"
 
 #include <cassert>
@@ -8,7 +9,8 @@
 namespace pdEngine
 {
 
-Scene::Scene()
+Scene::Scene(I_Renderer* renderer)
+: m_Renderer(renderer)
 {
     m_Root.reset(new RootNode());
     //m_LightManager.reset(new LightManager);
@@ -26,7 +28,9 @@ bool Scene::onRender(void)
 {
     if (m_Root && m_Camera)
     {
-        // m_Camera->SetViewTransform(this);
+        //m_Camera->getViewTransform(this);
+        m_Renderer->setProjection(m_Camera->getProjection());
+        m_Renderer->setView(m_Camera->getView());
         // m_LightManager->CalcLighting(this);
 
         if (m_Root->v_PreRender(this))
@@ -112,7 +116,7 @@ const CameraNode_sptr Scene::getCamera(void) const
     return m_Camera;
 }
 
-void Scene::pushAndSetMatrix(const Matrix4* toWorld)
+void Scene::pushMatrix(const Matrix4* toWorld)
 {
     m_TranlsationMatrices.push(*toWorld);
 

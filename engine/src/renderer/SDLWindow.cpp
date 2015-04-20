@@ -35,7 +35,7 @@ void SDLWindow::openWindow(void) {
             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 }
 
-Renderer_sptr SDLWindow::getRenderer(void) {
+Renderer_sptr SDLWindow::createRenderer(void) {
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4) != 0)
 			throw SDLInitFailedException("SDL_GL_SetAttribute");
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) != 0)

@@ -19,7 +19,8 @@ class I_SceneNode
 public:
     virtual ~I_SceneNode() {};
 
-    virtual void v_SetTransform(const Matrix4* toWorld, const Matrix4* fromWorld = nullptr) = 0;
+    virtual void v_setTransform(const Matrix4& toWorld, const Matrix4& fromWorld) noexcept = 0;
+    virtual void v_setTransform(const Matrix4& toWorld) noexcept = 0;
 
     virtual bool v_OnRestore(Scene*) = 0;
     virtual bool v_OnUpdate(Scene*, const TimeDelta) = 0;

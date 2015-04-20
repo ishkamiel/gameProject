@@ -22,9 +22,18 @@ public:
 
     virtual void printDebugMsg(const std::string&) const override;
 
+    virtual void setView(const Matrix4&) noexcept override;
+    virtual void setProjection(const Matrix4&) noexcept override;
 private:
+    void loadShaderProgram(void) noexcept;
+
     Scene* m_Scene;
     //GLuint m_programID{0};
+
+    GLuint m_programID;
+    GLint m_projectUniformLocation;
+    GLint m_viewUniformLocation;
+    GLint m_modelUniformLocation;
 
     SimpleProgram m_Thing;
     //bool gRenderQuad{true};

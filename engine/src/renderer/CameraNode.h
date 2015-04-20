@@ -14,14 +14,14 @@ class CameraNode : public SceneNode
 {
 
 public:
-    CameraNode(const Matrix4*, const Frustum&);
+    CameraNode(const Matrix4&, const Frustum&);
     virtual ~CameraNode();
 
     virtual bool v_Render(Scene*) override;
     virtual bool v_OnRestore(Scene*) override;
     virtual bool v_IsVisible(Scene*) const override;
 
-    virtual bool v_SetView(Scene*);
+    virtual bool v_setView(Scene*) noexcept;
 
     const Frustum& getFrustum(void);
 
@@ -31,8 +31,8 @@ public:
 
     Matrix4 getWorldViewProjection(Scene*);
 
-    Matrix4 getProjection();
-    Matrix4 getView();
+    Matrix4& getProjection(void) noexcept;
+    Matrix4& getView(void) noexcept;
 
     void setCameraOffset(const Vector4&);
 

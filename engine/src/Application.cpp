@@ -144,7 +144,9 @@ void Application::initializeRenderer(void)
 	auto log = getLogger();
 
 	log->info("Initializing rendering.");
-	m_Renderer = window->getRenderer();
+	m_Renderer = window->createRenderer();
+
+	m_Renderer->onInit();
 
 	taskManager->addTask(m_Renderer);
 }
