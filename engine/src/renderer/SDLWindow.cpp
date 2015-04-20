@@ -1,11 +1,14 @@
 #include "renderer/SDLWindow.h"
 
+
 #include "opengl/OpenglRenderer.h"
 #include "exceptions/SDLInitFailedException.h"
 #include "Logger.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+
+#include <sstream>
 
 namespace pdEngine {
 
@@ -18,14 +21,40 @@ SDLWindow::~SDLWindow()
 	//if (m_Window != nullptr) delete m_Window;
 }
 
-void SDLWindow::init(void) {
-    if (SDL_Init(0) != 0) {
-		throw SDLInitFailedException("SDL_Init");
-    }
+void SDLWindow::onInit(void) noexcept
+{
+	initializeSDL();
+	readyToRun();
+}
 
-    if (SDL_VideoInit(0) != 0) {
-        throw SDLInitFailedException("SDL_VideInit");
-    }
+void SDLWindow::onUpdate(int delta) noexcept
+{
+	static int counter = 0;
+	const int limit = 1000;
+
+	counter += delta;
+	++m_updateCount;
+
+	if (counter > limit)
+	{
+		static std::stringstream ss;
+		ss << "pdEngine - " << m_frameCount << "fps, " << m_updateCount << "ups";
+		setTitle(ss.str());
+		ss.str("");
+		counter = 0;
+		m_updateCount = 0;
+		m_frameCount = 0;
+	}
+}
+
+void SDLWindow::initializeSDL(void) {
+	if (SDL_Init(0) != 0) {
+		throw SDLInitFailedException("SDL_Init");
+	}
+
+	if (SDL_VideoInit(0) != 0) {
+		throw SDLInitFailedException("SDL_VideInit");
+	}
 }
 
 void SDLWindow::openWindow(void) {
@@ -67,6 +96,7 @@ void SDLWindow::setTitle(const std::string& title) noexcept
 void SDLWindow::swapFrame(void) 
 {
     SDL_GL_SwapWindow(m_Window);
+	++m_frameCount;
 }
 
 }

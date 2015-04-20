@@ -59,7 +59,7 @@ bool SceneNode::v_OnRestore(Scene* scene)
     return true;
 }
 
-bool SceneNode::v_OnUpdate(Scene* scene, const TimeDelta delta)
+bool SceneNode::v_OnUpdate(Scene* scene, const int delta)
 {
     auto i = m_Children.begin();
     auto end = m_Children.end();

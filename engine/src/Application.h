@@ -31,7 +31,7 @@ private:
     bool onShutdown(Event_sptr e);
     bool onRequestQuit(Event_sptr e);
 
-    TimerFrequency updateFrequency{240};
+    int updateFrequency{250};
 
     Renderer_sptr m_Renderer;
     Window_sptr window;

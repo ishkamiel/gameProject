@@ -13,7 +13,7 @@ namespace  pdEngine
 	public:
 
 		void onInit(Task_sptr t) { t->onInit(); }
-		void onUpdate(Task_sptr t, TimeDelta td) { t->onUpdate(td); }
+		void onUpdate(Task_sptr t, int td) { t->onUpdate(td); }
 		void onSuccess(Task_sptr t) { t->onSuccess(); }
 		void onFail(Task_sptr t) { t->onFail(); }
 		void onAbort(Task_sptr t) { t->onAbort(); }

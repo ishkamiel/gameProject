@@ -11,7 +11,6 @@ namespace pdEngine {
 
 class TaskManager {
     std::list<Task_sptr> taskList;
-    TimeDelta previous = 0;
     bool paused = false;
 
 public:

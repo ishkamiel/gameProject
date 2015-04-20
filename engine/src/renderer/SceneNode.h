@@ -29,7 +29,7 @@ public:
     virtual void v_setTransform(const Matrix4& toWorld) noexcept override;
 
     virtual bool v_OnRestore(Scene* scene) override;
-    virtual bool v_OnUpdate(Scene* scene, const TimeDelta) override;
+    virtual bool v_OnUpdate(Scene* scene, const int) override;
 
     virtual bool v_IsVisible(Scene*) const override;
 

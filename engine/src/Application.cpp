@@ -57,20 +57,22 @@ bool Application::start(void)
 
     if (!initOk) throw std::runtime_error("Application not successfully initialized before start!");
 
-    auto timer = new Timer(updateFrequency);
+    auto timer = Timer(updateFrequency);
+	const int deltaTime = timer.getStepDeltaMs();
 
     log->info("Entering main loop");
     while (!doShutdown) {
-        auto deltaTime = timer->stepAndSleep();
 
-        taskManager->updateTasks(deltaTime);
+	    while (timer.step()) {
+		    //auto deltaTime = timer.stepAndSleep();
+
+		    taskManager->updateTasks(deltaTime);
+	    }
 
         m_Renderer->v_Render();
-
 		window->swapFrame();
     }
-    log->info("Leaving main loop after {0} milliseconds", timer->totalMilli());
-    delete timer;
+    log->info("Leaving main loop after {0} seconds", timer.totalSeconds());
 
     shutdown();
     return true;
@@ -133,10 +135,12 @@ void Application::initializeWindow(void)
 	auto log = getLogger();
 
 	log->info("Creating and opening main window.");
-	window = std::make_shared<SDLWindow>();
-	window->init();
-	window->openWindow();
+	auto w = std::make_shared<SDLWindow>();
+	w->onInit();
 
+	taskManager->addTask(w);
+	window = w;
+	window->openWindow();
 }
 
 void Application::initializeRenderer(void)

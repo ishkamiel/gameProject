@@ -8,70 +8,53 @@
 
 namespace pdEngine
 {
-    Timer::Timer(TimerFrequency freq)
-        : prev(std::chrono::high_resolution_clock::now()) 
-    {
-        start = prev;
+Timer::Timer(int freq)
+    : start(std::chrono::high_resolution_clock::now()), prev(start)
+{
+    std::chrono::seconds oneSec {1};
+    timeSlice = std::chrono::duration_cast<Duration>(oneSec);
 
-        std::chrono::seconds oneSec {1};
-        timeSlice = std::chrono::duration_cast<TimerDefaultDelta>(oneSec);
-
-        timeSlice = (timeSlice/freq);
-        PD_debug("Frequency set to {0}, resulting in a {1} timeSlice", freq, timeSlice.count());
-    }
-
+    timeSlice = (timeSlice/freq);
     /*
-    TimerDefaultDelta Timer::setFrequencey(TimerFrequency freq)
-    {
-        std::chrono::seconds oneSec {1};
-        timeSlice = std::chrono::duration_cast<TimerDefaultDelta>(oneSec);
+    rest = timeSlice - std::chrono::duration_cast<Duration>(
+        std::chrono::milliseconds(getStepDeltaMs()));
+	*/
+    PD_debug("Updates per second set to {0} ({1} per update)", freq, timeSlice.count());
+}
 
-        timeSlice = (timeSlice/freq);
-        PD_debug("Frequency set to {0}, resulting in a {1} timeSlice", freq, timeSlice.count());
-        return timeSlice;
-    }
-    */
+int Timer::getStepDeltaMs(void) const noexcept
+{
+	 return std::chrono::duration_cast<std::chrono::milliseconds>(timeSlice).count();
+}
 
-    TimeDelta Timer::stepAndSleep(void)
-    {
-        auto sleepTime = timeSlice - (now() - prev);
-        if (sleepTime.count() > 0)
-            std::this_thread::sleep_for(sleepTime);
 
-        delta = now()-prev;
-        prev += delta;
+bool Timer::stepAndSleep(void)
+{
+    //auto sleepTime = timeSlice - (now() - prev);
+    //if (sleepTime.count() > 0)
+        //std::this_thread::sleep_for(sleepTime);
+//
+    //delta = now()-prev;
+    //prev += delta;
 
-        return delta.count();
-        //return std::chrono::duration_cast<std::chrono::microseconds>(delta).count();
-    }
+    //return delta.count();
+    //return std::chrono::duration_cast<std::chrono::microseconds>(delta).count();
+    return false;
+}
 
-    TimeMicro Timer::totalMicro(void) const
-    {
-        return std::chrono::duration_cast<std::chrono::microseconds>(prev-start).count();
-    }
+unsigned long Timer::totalMicro(void) const
+{
+    return std::chrono::duration_cast<std::chrono::microseconds>(prev-start).count();
+}
 
-    TimeMilli Timer::totalMilli(void) const
-    {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(prev-start).count();
-    }
+unsigned long Timer::totalMilli(void) const
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(prev-start).count();
+}
 
-    TimeSeconds Timer::totalSeconds(void) const
-    {
-        return (std::chrono::duration_cast<std::chrono::seconds>(prev-start)).count();
-    }
+unsigned long Timer::totalSeconds(void) const
+{
+    return (std::chrono::duration_cast<std::chrono::seconds>(prev-start)).count();
+}
 
-    TimeMicro Timer::deltaMicro(void) const
-    {
-        return std::chrono::duration_cast<std::chrono::microseconds>(delta).count();
-    }
-
-    TimeMilli Timer::deltaMilli(void) const
-    {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-    }
-
-    TimeSeconds Timer::deltaSeconds(void) const
-    {
-        return std::chrono::duration_cast<std::chrono::seconds>(delta).count();
-    }
 }

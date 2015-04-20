@@ -1,57 +1,53 @@
-#ifndef PDENGINE_TIMER_H_
-#define PDENGINE_TIMER_H_
+#pragma once
 
 #include <chrono>
 
 namespace pdEngine
 {
-using TimeMicro = unsigned long int;
-using TimeMilli = unsigned long int;
-using TimeSeconds = unsigned int;
-
-using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
-using TimerDefaultDelta = std::chrono::high_resolution_clock::duration;
-using TimerFrequency = unsigned int;
-
-using TimeDelta = unsigned int;
-
-static inline TimePoint now();
 
 class Timer
 {
-    TimePoint start;
-    TimePoint prev;
-    TimerDefaultDelta delta;
-    TimerDefaultDelta timeSlice;
+    using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
+    using Duration = std::chrono::high_resolution_clock::duration;
 
 public:
-    Timer(const TimerFrequency stepsPerSecond);
-    TimeDelta stepAndSleep(void);
+    static inline TimePoint now() noexcept;
 
-    // TimeNanoseconds deltaNanoseconds(void) const;
-    // TimeMilliseconds deltaMilliseconds(void) const;
-    // TimeSeconds deltaSeconds(void) const;
+public:
+    Timer(const int stepsPerSecond);
+    virtual ~Timer() = default;
 
-    TimeMicro totalMicro(void) const;
-    TimeMilli totalMilli(void) const;
-    TimeSeconds totalSeconds(void) const;
+    bool stepAndSleep(void);
 
-    TimeMicro deltaMicro(void) const;
-    TimeMilli deltaMilli(void) const;
-    TimeSeconds deltaSeconds(void) const;
+    inline bool step(void) noexcept;
+    int getStepDeltaMs(void) const noexcept;
+
+    unsigned long totalMicro(void) const;
+    unsigned long totalMilli(void) const;
+    unsigned long totalSeconds(void) const;
 
 private:
+    TimePoint start;
+    TimePoint prev;
+    Duration timeSlice;
 };
-}
 
-namespace pdEngine
-{
+/*
+ * Implementations
+ */
 
-TimePoint now()
+auto Timer::now() noexcept -> TimePoint
 {
     return std::chrono::high_resolution_clock::now();
 }
+
+bool Timer::step(void) noexcept
+{
+    if (prev > now()) return false;
+
+    prev+=timeSlice;
+    return true;
 }
 
+}
 
-#endif /* PDENGINE_TIMER_H_ */

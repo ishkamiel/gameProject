@@ -58,7 +58,7 @@ bool Scene::onLostDevice(void)
     throw std::runtime_error("FIXME: Not implemented");
 }
 
-bool Scene::onUpdate(TimeDelta delta)
+bool Scene::onUpdate(int delta)
 {
     if (!m_Root) return true;
 

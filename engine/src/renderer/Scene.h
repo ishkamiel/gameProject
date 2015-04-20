@@ -33,7 +33,7 @@ public:
     bool onRender(void);
     bool onRestore(void);
     bool onLostDevice(void);
-    bool onUpdate(TimeDelta);
+    bool onUpdate(int);
 
     std::shared_ptr<I_SceneNode> findActor(ActorID);
 

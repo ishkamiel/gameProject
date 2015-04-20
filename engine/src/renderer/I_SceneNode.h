@@ -23,7 +23,7 @@ public:
     virtual void v_setTransform(const Matrix4& toWorld) noexcept = 0;
 
     virtual bool v_OnRestore(Scene*) = 0;
-    virtual bool v_OnUpdate(Scene*, const TimeDelta) = 0;
+    virtual bool v_OnUpdate(Scene*, const int) = 0;
 
     virtual bool v_IsVisible(Scene*) const = 0;
 

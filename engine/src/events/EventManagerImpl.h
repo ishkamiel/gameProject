@@ -24,8 +24,6 @@ class EventManagerImpl : public Task, public EventManager {
     EventMap eventMap{};
     EventQueue eventQueueIn{};
     EventQueue eventsProcessing{};
-    TimeDelta updateInterval{10};
-    TimeDelta lastUpdate{0};
 
 public:
     EventManagerImpl();
