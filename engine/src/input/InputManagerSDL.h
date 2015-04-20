@@ -13,6 +13,9 @@ class InputManagerSDL : public InputManager
 public:
 	InputManagerSDL(EventManager_sptr);
 	virtual ~InputManagerSDL();
+
+	std::string v_getTaskName(void) const noexcept override { return "SDL Input Manager"; }
+
 protected:
 	void onUpdate(int deltaMs) noexcept override;
 	void onInit(void) noexcept override;

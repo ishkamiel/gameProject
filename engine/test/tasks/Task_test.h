@@ -11,6 +11,7 @@ namespace  pdEngine
 	class TaskManager
 	{
 	public:
+
 		void onInit(Task_sptr t) { t->onInit(); }
 		void onUpdate(Task_sptr t, TimeDelta td) { t->onUpdate(td); }
 		void onSuccess(Task_sptr t) { t->onSuccess(); }
@@ -24,6 +25,7 @@ namespace  pdEngine
 	public:
 		SimpleTask() {};
 		virtual ~SimpleTask() {};
+		std::string v_getTaskName(void) const noexcept override { return "Test Task"; }
 		virtual void onUpdate(int t) noexcept override { (void)t; }
 	};
 }

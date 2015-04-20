@@ -31,6 +31,8 @@ public:
     EventManagerImpl();
     virtual ~EventManagerImpl();
 
+    std::string v_getTaskName(void) const noexcept override { return "Event Manager"; }
+
     EventManagerImpl(const EventManagerImpl&) = delete;
     EventManagerImpl& operator=(const EventManagerImpl&) = delete;
 

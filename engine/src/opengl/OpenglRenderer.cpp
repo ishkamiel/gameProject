@@ -24,8 +24,8 @@ void OpenglRenderer::v_Render(void) noexcept {
     //glEnable(GL_DEPTH_TEST);
     //glDepthFunc(GL_EQUAL);
 
+    PD_debug("calling scene onRender");
     m_Scene->onRender();
-    m_Thing.render();
 }
 
 void OpenglRenderer::onUpdate(int delta) noexcept

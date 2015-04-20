@@ -32,5 +32,6 @@ namespace pdEngine
     void InputManagerSDL::onInit(void) noexcept
     {
         // TODO setup sdl event stuff here?
+        readyToRun();
     }
 }

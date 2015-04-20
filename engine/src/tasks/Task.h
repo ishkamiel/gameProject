@@ -36,6 +36,8 @@ public:
     inline void pause(void) noexcept;
     inline void unPause(void) noexcept;
 
+    virtual std::string v_getTaskName() const noexcept =0;
+
     inline TaskState getState(void) const noexcept;
     inline bool isAlive(void) const noexcept;
     inline bool isDead(void) const noexcept;

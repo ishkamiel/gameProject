@@ -15,6 +15,8 @@ public:
 	ResourceManager();
 	virtual ~ResourceManager();
 
+	std::string v_getTaskName(void) const noexcept override { return "Resource Manager"; }
+
 	void addResourceFile(const std::string& filename);
 
 	void loadResource(const std::string& resource);

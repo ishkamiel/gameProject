@@ -15,6 +15,8 @@ public:
     OpenglRenderer();
     ~OpenglRenderer();
 
+    std::string v_getTaskName(void) const noexcept override { return "OpenGL Renderer"; }
+
     virtual void onInit(void) noexcept override;
     virtual void onUpdate(int) noexcept override;
 

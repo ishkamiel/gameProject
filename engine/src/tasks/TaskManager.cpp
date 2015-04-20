@@ -1,4 +1,5 @@
 #include "tasks/TaskManager.h"
+#include "Logger.h"
 
 namespace pdEngine
 {
@@ -10,16 +11,16 @@ TaskManager::~TaskManager() {}
 
 bool TaskManager::initAll()
 {
+    auto log = getLogger();
+
     for (auto t : taskList)
     {
         if (t->isUninitialized())
         {
             t->onInit();
-            if (t->state == TaskState::uninitialized)
+            if (t->state != TaskState::ready)
             {
-                t->state = TaskState::ready;
-            }
-            else {
+                log->error("Failed to intiialize {}", t->v_getTaskName());
                 return false;
             }
         }

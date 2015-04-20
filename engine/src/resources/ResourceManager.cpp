@@ -13,6 +13,7 @@ namespace pdEngine
 
     void ResourceManager::onInit() noexcept
     {
+        readyToRun();
     }
 
     void ResourceManager::onUpdate(int delta) noexcept
