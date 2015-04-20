@@ -16,7 +16,7 @@ public:
     ~OpenglRenderer();
 
     virtual void onInit(void) noexcept override;
-    virtual void onUpdate(const TimeDelta&) noexcept override;
+    virtual void onUpdate(int) noexcept override;
 
     virtual void v_Render(void) noexcept override;
 

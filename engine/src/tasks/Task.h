@@ -27,9 +27,6 @@ class Task
 {
     friend class TaskManager;
 
-    TaskState   state       { TaskState::uninitialized };
-    Task_sptr   childTask   { nullptr };
-
 public:
     virtual ~Task(void) =0;
 
@@ -52,12 +49,16 @@ public:
 
 protected:
     virtual void onInit(void) noexcept;
-    virtual void onUpdate(const TimeDelta&) noexcept =0;
+    virtual void onUpdate(int deltaMs) noexcept =0;
     virtual void onSuccess(void) noexcept;
     virtual void onFail(void) noexcept;
     virtual void onAbort(void) noexcept;
 
+    inline void readyToRun(void) noexcept { state = TaskState::ready; }
+
 private:
+    TaskState   state       { TaskState::uninitialized };
+    Task_sptr   childTask   { nullptr };
 };
 
 /*

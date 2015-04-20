@@ -1,12 +1,4 @@
-/*
- * TaskManager.h
- *
- *  Created on: Feb 26, 2015
- *      Author: ishkamiel
- */
-
-#ifndef PDENGINE_TASKMANAGER_H_
-#define PDENGINE_TASKMANAGER_H_
+#pragma once
 
 #include "events/EventManagerImpl.h"
 #include "tasks/Task.h"
@@ -32,7 +24,7 @@ public:
 
     void addTask(Task_sptr);
 
-    void updateTasks(TimeDelta);
+    void updateTasks(int deltaMs);
     void pauseTasks(void);
     void unPauseTasks(void);
 
@@ -44,4 +36,3 @@ private:
 
 using TaskManager_sptr = std::shared_ptr<TaskManager>;
 }
-#endif /* PDENGINE_TASKMANAGER_H_ */

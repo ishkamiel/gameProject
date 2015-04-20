@@ -24,7 +24,7 @@ namespace  pdEngine
 	public:
 		SimpleTask() {};
 		virtual ~SimpleTask() {};
-		virtual void onUpdate(const TimeDelta& t) noexcept override { (void)t; }
+		virtual void onUpdate(int t) noexcept override { (void)t; }
 	};
 }
 

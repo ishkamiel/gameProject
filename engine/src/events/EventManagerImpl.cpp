@@ -17,15 +17,10 @@ namespace pdEngine
         //TODO Do we need to clean something up?
     }
 
-    //void EventManagerImpl::onInit()
-    //{
-        ////TODO Do we need to so something?
-    //}
 
-    void EventManagerImpl::onUpdate(const TimeDelta& timeDelta) noexcept
+    void EventManagerImpl::onUpdate(int deltaMs) noexcept
     {
-        (void)timeDelta;
-        //PD_debug("EventManager onUpdate");
+        (void)deltaMs;
 
         if (eventQueueIn.size() == 0) return;
         auto log = getLogger();

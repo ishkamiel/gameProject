@@ -15,7 +15,7 @@ namespace pdEngine
     {
     }
 
-    void ResourceManager::onUpdate(const TimeDelta& delta) noexcept
+    void ResourceManager::onUpdate(int delta) noexcept
     {
         (void) delta;
     }

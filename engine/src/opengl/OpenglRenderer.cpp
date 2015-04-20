@@ -28,7 +28,7 @@ void OpenglRenderer::v_Render(void) noexcept {
     m_Thing.render();
 }
 
-void OpenglRenderer::onUpdate(const TimeDelta& delta) noexcept
+void OpenglRenderer::onUpdate(int delta) noexcept
 {
     m_Scene->onUpdate(delta);
 }
@@ -54,10 +54,13 @@ void OpenglRenderer::onInit(void) noexcept {
         Matrix4(),
         Frustum(90, 4.f/3.f, 0.f, 100.f));
 
+    m_Scene->setCamera(camera);
+
     //m_Thing = SimpleProgram();
     //m_Thing.init();
 
 	log->info("Renderer initialization done");
+    readyToRun();
 }
 
 void OpenglRenderer::loadShaderProgram(void) noexcept

@@ -34,7 +34,7 @@ public:
     EventManagerImpl(const EventManagerImpl&) = delete;
     EventManagerImpl& operator=(const EventManagerImpl&) = delete;
 
-    void onUpdate(const TimeDelta&) noexcept override;
+    void onUpdate(int deltaMs) noexcept override;
 
     void queueEvent(const Event_sptr) override;
     void queueEvent(const EventTypeID) override;

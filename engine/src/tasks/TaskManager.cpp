@@ -39,7 +39,7 @@ void TaskManager::abortAllNow()
 }
 
 
-void TaskManager::updateTasks(TimeDelta timeDelta)
+void TaskManager::updateTasks(int deltaMs)
 {
     auto i = taskList.begin();
     while (i != taskList.end())
@@ -47,7 +47,7 @@ void TaskManager::updateTasks(TimeDelta timeDelta)
         switch ((*i)->state)
         {
             case TaskState::running:
-                (*i)->onUpdate(timeDelta);
+                (*i)->onUpdate(deltaMs);
                 ++i; break;
             case TaskState::ready:
                 (*i)->state = TaskState::running;
@@ -71,8 +71,7 @@ void TaskManager::updateTasks(TimeDelta timeDelta)
                 break;
             case TaskState::uninitialized:
                 (*i)->onInit();
-                if ((*i)->state == TaskState::uninitialized)
-                    (*i)->state = TaskState::ready;
+                assert((*i)->state != TaskState::uninitialized);
                 ++i; break;
             case TaskState::removed:
                 assert(false);// "TaskManager should never see removed tasks");

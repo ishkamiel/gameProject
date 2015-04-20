@@ -7,16 +7,21 @@ Task::~Task()
 { }
 
 void Task::onInit(void) noexcept
-{ }
+{
+    if (state == TaskState::uninitialized) {
+        // don't ready failed, aborted, etc...
+        readyToRun();
+    }
+}
 
 void Task::onSuccess(void) noexcept
-{ }
+{}
 
 void Task::onFail(void) noexcept
-{ }
+{}
 
 void Task::onAbort(void) noexcept
-{ }
+{}
 
 void Task::addChild(Task_sptr child) noexcept
 {

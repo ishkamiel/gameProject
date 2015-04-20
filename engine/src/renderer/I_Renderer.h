@@ -14,7 +14,7 @@ public:
 	virtual ~I_Renderer(void) {};
 
     virtual void onInit(void) noexcept override = 0;
-    virtual void onUpdate(const TimeDelta&) noexcept override = 0;
+    virtual void onUpdate(int deltaMs) noexcept override = 0;
 
     virtual void v_Render(void) noexcept = 0;
 
