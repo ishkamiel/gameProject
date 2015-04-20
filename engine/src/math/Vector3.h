@@ -1,12 +1,4 @@
-/* 
- * File:   Vector3.h
- * Author: ishkamiel
- *
- * Created on April 8, 2015, 3:12 PM
- */
-
-#ifndef VECTOR3_H
-#define	VECTOR3_H
+#pragma once
 
 #include<glm/vec3.hpp>
 #include<glm/geometric.hpp>
@@ -48,12 +40,7 @@ public:
 
 	inline Vector3& operator=(const Vector3&) noexcept;
 	inline Vector3& operator=(Vector3&&) noexcept;
-
-private:
-    //std::unique_ptr<glm::vec3> m_Vec;
 };
-
-
 
 float Vector3::getX(void) const noexcept
 {
@@ -143,4 +130,3 @@ inline Vector3& operator*=(Vector3& l, const int s) noexcept
 }
 
 }
-#endif	/* VECTOR3_H */

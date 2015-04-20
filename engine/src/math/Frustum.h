@@ -1,6 +1,6 @@
-#ifndef FRUSTUM_H_
-#define FRUSTUM_H_
+#pragma once
 
+#include "math/Math_fwd.h"
 #include "math/Vector3.h"
 #include "math/Matrix4.h"
 #include "math/Plane.h"
@@ -64,5 +64,3 @@ bool Frustum::isInside(const Vector3 &p, const float r) const noexcept
 }
 
 }
-
-#endif /* FRUSTUM_H_ */

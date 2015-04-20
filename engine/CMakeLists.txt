@@ -23,7 +23,7 @@ include_directories(
 add_library(pdEngine SHARED
     ${sources}
     ${headers}
-    )
+    src/math/Math_fwd.h)
 
 # add_dependencies(pdEngine libspdlog)
 

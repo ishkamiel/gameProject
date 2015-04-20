@@ -1,17 +1,12 @@
-/*
- * Matrix4.h
- *
- *  Created on: Apr 10, 2015
- *      Author: ishkamiel
- */
+#pragma once
 
-#ifndef SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_MATRIX4_H_
-#define SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_MATRIX4_H_
+#include "math/Math_fwd.h"
+#include "math/Vector3.h"
 
-#include "math/Vector4.h"
-
+#define GLM_FORCE_RADIANS
 #include <glm/mat4x4.hpp>
 #include <glm/matrix.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace pdEngine
 {
@@ -30,7 +25,7 @@ public:
 	Matrix4& operator=(Matrix4&&);
 
 	inline Matrix4 getInverse(void) const noexcept;
-	inline Matrix4 getTranslated(const Vector4&) const noexcept;
+	inline Matrix4 getTranslated(const Vector3&) const noexcept;
 };
 
 Matrix4 Matrix4::getInverse(void) const noexcept
@@ -38,7 +33,11 @@ Matrix4 Matrix4::getInverse(void) const noexcept
 	return Matrix4(glm::inverse(static_cast<glm::mat4>(*this)));
 }
 
-
+Matrix4 Matrix4::getTranslated(const Vector3& vec) const noexcept
+{
+	return Matrix4(glm::translate(
+		static_cast<glm::mat4>(*this),
+		static_cast<glm::vec3>(vec)));
 }
 
-#endif /* SOURCE_DIRECTORY__ENGINE_INCLUDE_MATH_MATRIX4_H_ */
+}
