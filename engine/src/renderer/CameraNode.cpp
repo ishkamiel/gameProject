@@ -7,7 +7,7 @@ namespace pdEngine
 {
 
 CameraNode::CameraNode(const Matrix4& t, const Frustum& frustum)
-   : SceneNode(NullActorID, "Camera", RenderPass::First, Color(), t),
+   : SceneNode(NullActorId, "Camera", RenderPass::First, Color(), t),
    m_Frustum(frustum),
    m_IsActive(true),
    m_DebugCamera(false)

@@ -13,19 +13,19 @@ RootNode::RootNode()
     m_Children.reserve(static_cast<long>(RenderPass::Last));
 
     rootStatic.reset(new SceneNode(
-                NullActorID, "StaticGroup", RenderPass::Static,
+                NullActorId, "StaticGroup", RenderPass::Static,
                 Color(), Matrix4()));
 
     rootActor.reset(new SceneNode(
-                NullActorID, "ActorGroup", RenderPass::Actor,
+                NullActorId, "ActorGroup", RenderPass::Actor,
                 Color(), Matrix4()));
 
     rootSky.reset(new SceneNode(
-                NullActorID, "SkyGroup", RenderPass::Sky,
+                NullActorId, "SkyGroup", RenderPass::Sky,
                 Color(), Matrix4()));
 
     rootInvisible.reset(new SceneNode(
-                NullActorID, "InvisibleGroup", RenderPass::NotRendered,
+                NullActorId, "InvisibleGroup", RenderPass::NotRendered,
                 Color(), Matrix4()));
 }
 

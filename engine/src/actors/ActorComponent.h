@@ -1,11 +1,13 @@
 #pragma once
 
-#include "actors/Actor.h"
+//#include "actors/Actor.h"
 #include "resources/ResourceManager.h"
 #include <memory>
 
 namespace pdEngine
 {
+class Actor;
+using Actor_sptr = std::shared_ptr<Actor>;
 
 using ActorComponentId = unsigned int;
 
@@ -28,8 +30,8 @@ public:
     { };
 
 protected:
-    virtual ComponentId v_getComponentId(void) const noexcept = 0;
-    inline void setOwner(Actor_sptr owner) const noexcept { m_owner = owner; }
+    virtual ActorComponentId v_getComponentId(void) const noexcept = 0;
+    inline void setOwner(Actor_sptr owner) noexcept { m_owner = owner; }
     inline Actor_sptr getOwner(void) const noexcept { return m_owner; }
 
 private:
@@ -38,7 +40,5 @@ private:
 };
 
 using ActorComponent_sptr = std::shared_ptr<ActorComponent>;
-
-};
 
 }

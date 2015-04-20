@@ -1,16 +1,16 @@
 #include "actors/Actor.h"
 
-
+namespace pdEngine
+{
 
 Actor::Actor(ActorId id)
+: m_id(id)
 {
 
 }
 
-Actor::~Actor(void v)
-{
-
-}
+Actor::~Actor(void)
+{ }
 
 bool Actor::init() noexcept
 {
@@ -32,7 +32,9 @@ void Actor::update(int deltaMs) noexcept
 
 }
 
-void Actor::addComponent(ActorComponent_sptr pComponent)
+void Actor::addComponent(ActorComponent_sptr pComponent) noexcept
 {
+
+}
 
 }

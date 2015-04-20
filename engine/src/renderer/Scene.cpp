@@ -65,7 +65,7 @@ bool Scene::onUpdate(int delta)
     return m_Root->v_OnUpdate(this, delta);
 }
 
-std::shared_ptr<I_SceneNode> Scene::findActor(ActorID id)
+std::shared_ptr<I_SceneNode> Scene::findActor(ActorId id)
 {
     auto i = m_ActorMap.find(id);
 
@@ -74,7 +74,7 @@ std::shared_ptr<I_SceneNode> Scene::findActor(ActorID id)
     return i->second;
 }
 
-bool Scene::addChild(ActorID id, std::shared_ptr<I_SceneNode> child)
+bool Scene::addChild(ActorId id, std::shared_ptr<I_SceneNode> child)
 {
     m_ActorMap[id] = child;
     return m_Root->v_AddChild(child);
@@ -88,7 +88,7 @@ bool Scene::addChild(ActorID id, std::shared_ptr<I_SceneNode> child)
     // }
 }
 
-bool Scene::removeAChild(ActorID id)
+bool Scene::removeAChild(ActorId id)
 {
     auto child = findActor(id);
 

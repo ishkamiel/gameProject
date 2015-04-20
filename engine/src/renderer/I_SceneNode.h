@@ -34,11 +34,11 @@ public:
     virtual bool v_RenderChildren(Scene*) = 0;
 
     virtual bool v_AddChild(std::shared_ptr<I_SceneNode>) = 0;
-    virtual bool v_RemoveChild(ActorID id) = 0;
+    virtual bool v_RemoveChild(ActorId id) = 0;
 
     // Accessors
     virtual const Vector3 getPosition() const = 0;
-    virtual const ActorID& getActorID() const = 0;
+    virtual const ActorId& getActorID() const = 0;
     virtual const Matrix4& getToWorld() const = 0;
     virtual const Matrix4& getFromWorld() const = 0;
     virtual const char* getName() const = 0;
