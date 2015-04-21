@@ -7,14 +7,14 @@ namespace pdEngine
 
 class RenderComponent : public ActorComponent
 {
-const static ActorComponentId s_componentId; // unique ID for this component type
+const static ActorComponentId s_componentId = 1; // unique ID for this component type
 
 public:
-    virtual ActorComponentId v_getComponentId(void) const noexcept override;
+    inline virtual ActorComponentId v_getComponentId(void) const noexcept override;
 
-    virtual void v_postInit() noexcept override;
+    virtual void v_postInit(void) noexcept override;
 
-    virtual void v_render() noexcept = 0;
+    virtual void v_render(void) noexcept = 0;
 
 };
 
@@ -22,7 +22,7 @@ public:
 
 ActorComponentId RenderComponent::v_getComponentId(void) const noexcept
 {
-	return s_componentId;
+	return RenderComponent::s_componentId;
 }
 
 }
