@@ -1,44 +1,43 @@
-#ifndef MOCKTASK_H_
-#define MOCKTASK_H_
+#pragma once
 
 #include "tasks/Task.h"
 
-#include "gmock/gmock.h"
-
 /*
-namespace pdEngine
-{
-    class SimpleTask : public Task
-    {
-    public:
-        SimpleTask() {};
-        virtual ~SimpleTask() {};
-        virtual void onUpdate(TimeDelta t) noexcept override
-        {
-            (void)t; 
-            if (m_FailU) fail(); 
-        }
-        virtual void onInit() noexcept override
-        { 
-            if (m_FailI) fail();
-        }
-        
-        void t_failNextUpdate() { m_FailU = true; };
-        void t_failInit() { m_FailI = true; };
-        bool m_FailU { false };
-        bool m_FailI { false };
-    };
-
-    class MockTask : public Task
-    {
-    public:
-        //MOCK_METHOD0(onInit, void(void));
-        //MOCK_METHOD0(onAbort, void(void));
-        //MOCK_METHOD0(onFail, void(void));
-        //MOCK_METHOD0(onSuccess, void(void));
-        //MOCK_METHOD1(onUpdate, void(TimeDelta));
-    };
-}
+ * #include "gmock/gmock.h"
+ * Google Mock didn't lick noexcept functions, so here we are...
  */
 
-#endif /* MOCKTASK_H_ */
+namespace pdEngine
+{
+
+class MockTask : public Task
+{
+public:
+    bool m_failOnUpdate = false;
+    bool m_failOnInit = false;
+
+    int m_callsToInit = 0;
+    int m_callsToUpdate = 0;
+
+public:
+    MockTask() {}
+    virtual ~MockTask() {}
+
+    std::string v_getTaskName(void) const noexcept override { return "MockTask"; }
+
+    virtual inline void onUpdate(int t) noexcept override
+    {
+        (void)t;
+        ++m_callsToUpdate;
+        if (m_failOnUpdate) fail();
+    }
+    virtual inline void onInit() noexcept override
+    {
+        ++m_callsToInit;
+        if (m_failOnInit) fail();
+        Task::onInit();
+    }
+};
+
+}
+

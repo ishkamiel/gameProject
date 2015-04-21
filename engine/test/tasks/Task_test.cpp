@@ -1,143 +1,190 @@
-#include "tasks/Task_test.h"
+#include "tasks/MockTask.h"
 
-namespace pdEngineTest 
+#include <gtest/gtest.h>
+#include <memory>
+
+namespace  pdEngine
 {
-  void Task_test::SetUp()
-  {
-    t.reset(new pdEngine::SimpleTask());
-    t2.reset(new pdEngine::SimpleTask());
-    t3.reset(new pdEngine::SimpleTask());
-    t4.reset(new pdEngine::SimpleTask());
-    
-    tm = new pdEngine::TaskManager();
+
+class TaskManager
+{
+public:
+
+  void onInit(Task_sptr t) { t->onInit(); }
+  void onUpdate(Task_sptr t, int td) { t->onUpdate(td); }
+  void onSuccess(Task_sptr t) { t->onSuccess(); }
+  void onFail(Task_sptr t) { t->onFail(); }
+  void onAbort(Task_sptr t) { t->onAbort(); }
+  void setState(Task_sptr t, pdEngine::TaskState state) { t->state = state; }
+};
+
+class Task_test : public ::testing::Test
+{
+protected:
+  std::unique_ptr<pdEngine::TaskManager> fake_tm;
+
+  std::shared_ptr<Task> task;
+  MockTask* mock;
+
+  Task_test() {};
+
+  virtual ~Task_test() {};
+
+  virtual void SetUp() {
+    fake_tm.reset(new pdEngine::TaskManager);
+    mock = new MockTask();
+    task = std::shared_ptr<Task>(mock);
   }
-  
-  void Task_test::TearDown()
-  {
-    delete tm;
+
+  virtual void TearDown() {
+    fake_tm.reset();
+    task.reset(); // destructs mt too...
   }
-  
-  TEST_F(Task_test, testConstructors) 
-  {
-    ASSERT_TRUE(t->isUninitialized());
-    ASSERT_EQ(t->getState(), pdEngine::TaskState::uninitialized);
-  }
-  
-  TEST_F(Task_test, testInit) 
-  {
-    tm->onInit(t);
-    ASSERT_TRUE(t->isDead() || t->isUninitialized());
-  }
-  
-  TEST_F(Task_test, testUpdate) 
-  {
-    tm->onInit(t);
-    ASSERT_TRUE(t->isDead() || t->isUninitialized());
-    if (t->isUninitialized())
-    {
-      tm->setState(t, pdEngine::TaskState::running);
-      tm->onUpdate(t, 1);
-    }
-  }
-  
-  TEST_F(Task_test, testStatesAndPause) 
-  {
-    ASSERT_EQ(t->getState(), pdEngine::TaskState::uninitialized);
-    ASSERT_FALSE(t->isAlive());
-    ASSERT_FALSE(t->isDead());
-    ASSERT_FALSE(t->isRemoved());
-    ASSERT_FALSE(t->isPaused());
-    ASSERT_TRUE(t->isUninitialized());
-    
-    tm->onInit(t);
-    ASSERT_TRUE(t->isDead() || t->isUninitialized());
-    if (t->isUninitialized())
-    {
-      tm->setState(t, pdEngine::TaskState::running);
-      ASSERT_TRUE(t->isAlive());
-      ASSERT_FALSE(t->isDead());
-      ASSERT_FALSE(t->isRemoved());
-      ASSERT_FALSE(t->isPaused());
-      ASSERT_FALSE(t->isUninitialized());
-      
-      t->pause();
-      ASSERT_TRUE(t->isAlive());
-      ASSERT_FALSE(t->isDead());
-      ASSERT_FALSE(t->isRemoved());
-      ASSERT_TRUE(t->isPaused());
-      ASSERT_FALSE(t->isUninitialized());
-      
-      t->unPause();
-      ASSERT_TRUE(t->isAlive());
-      ASSERT_FALSE(t->isDead());
-      ASSERT_FALSE(t->isRemoved());
-      ASSERT_FALSE(t->isPaused());
-      ASSERT_FALSE(t->isUninitialized());
-      
-      t->unPause();
-      t->unPause();
-      ASSERT_FALSE(t->isPaused());
-      
-      t->pause();
-      t->pause();
-      t->pause();
-      t->pause();
-      t->pause();
-      ASSERT_TRUE(t->isPaused());
-      ASSERT_EQ(t->getState(), pdEngine::TaskState::paused);
-      t->unPause();
-      ASSERT_FALSE(t->isPaused());
-      ASSERT_EQ(t->getState(), pdEngine::TaskState::running);
-    }
-  }
-  
-  TEST_F(Task_test, testFail) 
-  {
-    t->fail();
-    ASSERT_EQ(t->getState(), pdEngine::TaskState::failed);
-    ASSERT_FALSE(t->isAlive());
-    ASSERT_TRUE(t->isDead());
-    ASSERT_FALSE(t->isRemoved());
-    ASSERT_FALSE(t->isPaused());
-    ASSERT_FALSE(t->isUninitialized());
-  }
-  
-  TEST_F(Task_test, testSucceed) 
-  {
-    tm->onInit(t);
-    ASSERT_TRUE(t->isDead() || t->isUninitialized());
-    if (t->isUninitialized())
-    {
-      t->succeed();
-      ASSERT_EQ(t->getState(), pdEngine::TaskState::succeeded);
-      ASSERT_FALSE(t->isAlive());
-      ASSERT_FALSE(t->isDead());
-      ASSERT_FALSE(t->isRemoved());
-      ASSERT_FALSE(t->isPaused());
-      ASSERT_FALSE(t->isUninitialized());
-    }
-  }
-  
-  TEST_F(Task_test, TestChildren) 
-  {
-    pdEngine::Task_sptr sptr_2 { t2 };
-    pdEngine::Task_sptr sptr_3 { t3 };
-    pdEngine::Task_sptr sptr_4 { t4 };
-    
-    t3->addChild(sptr_4);
-    t2->addChild(sptr_3);
-    t->addChild(sptr_2);
-    
-    ASSERT_TRUE(t->peekChild() == sptr_2);
-    ASSERT_TRUE(t2->peekChild() == sptr_3);
-    ASSERT_TRUE(t3->peekChild() == sptr_4);
-    ASSERT_EQ(t3->peekChild(), sptr_4);
-    ASSERT_TRUE(t3->removeChild() == sptr_4);
-    ASSERT_FALSE(t3->removeChild());
-    ASSERT_EQ(t2->removeChild(), sptr_3);
-    ASSERT_EQ(t->removeChild(), sptr_2);
-    ASSERT_FALSE(t->removeChild());
-    ASSERT_FALSE(t->removeChild());
-  }
+};
+
+TEST_F(Task_test, FreshTasksAreUninitialized)
+{
+  ASSERT_TRUE(task->isUninitialized());
+  ASSERT_EQ(task->getState(), pdEngine::TaskState::uninitialized);
+}
+
+TEST_F(Task_test, onInitSetsStateToReady)
+{
+  fake_tm->onInit(task);
+  ASSERT_EQ(task->getState(), pdEngine::TaskState::ready);
+}
+
+TEST_F(Task_test, onInitFailingStays)
+{
+  mock->m_failOnInit = true;
+  fake_tm->onInit(task);
+  ASSERT_EQ(task->getState(), pdEngine::TaskState::failed);
+}
+
+TEST_F(Task_test, isDead)
+{
+  ASSERT_FALSE(task->isDead());
+  fake_tm->onInit(task);
+  ASSERT_FALSE(task->isDead());
+  task->fail();
+  ASSERT_TRUE(task->isDead());
+}
+
+TEST_F(Task_test, isAlive)
+{
+  ASSERT_FALSE(task->isAlive());
+  fake_tm->onInit(task);
+  ASSERT_TRUE(task->isAlive());
+  task->fail();
+  ASSERT_FALSE(task->isAlive());
+}
+
+TEST_F(Task_test, isUninitialized)
+{
+  ASSERT_TRUE(task->isUninitialized());
+  fake_tm->onInit(task);
+  ASSERT_FALSE(task->isUninitialized());
+  task->fail();
+  ASSERT_FALSE(task->isUninitialized());
+}
+
+TEST_F(Task_test, testStatesAndPause)
+{
+  ASSERT_EQ(task->getState(), pdEngine::TaskState::uninitialized);
+  ASSERT_FALSE(task->isAlive());
+  ASSERT_FALSE(task->isDead());
+  ASSERT_FALSE(task->isRemoved());
+  ASSERT_FALSE(task->isPaused());
+  ASSERT_TRUE(task->isUninitialized());
+
+  fake_tm->onInit(task);
+  ASSERT_EQ(task->getState(), TaskState::ready);
+
+    fake_tm->setState(task, pdEngine::TaskState::running);
+    ASSERT_TRUE(task->isAlive());
+    ASSERT_FALSE(task->isDead());
+    ASSERT_FALSE(task->isRemoved());
+    ASSERT_FALSE(task->isPaused());
+    ASSERT_FALSE(task->isUninitialized());
+
+    task->pause();
+    ASSERT_TRUE(task->isAlive());
+    ASSERT_FALSE(task->isDead());
+    ASSERT_FALSE(task->isRemoved());
+    ASSERT_TRUE(task->isPaused());
+    ASSERT_FALSE(task->isUninitialized());
+
+    task->unPause();
+    ASSERT_TRUE(task->isAlive());
+    ASSERT_FALSE(task->isDead());
+    ASSERT_FALSE(task->isRemoved());
+    ASSERT_FALSE(task->isPaused());
+    ASSERT_FALSE(task->isUninitialized());
+
+    task->unPause();
+    task->unPause();
+    ASSERT_FALSE(task->isPaused());
+
+    task->pause();
+    task->pause();
+    task->pause();
+    task->pause();
+    task->pause();
+    ASSERT_TRUE(task->isPaused());
+    ASSERT_EQ(task->getState(), pdEngine::TaskState::paused);
+    task->unPause();
+    ASSERT_FALSE(task->isPaused());
+    ASSERT_EQ(task->getState(), pdEngine::TaskState::running);
+    task->unPause();
+    task->unPause();
+    ASSERT_FALSE(task->isPaused());
+    ASSERT_EQ(task->getState(), pdEngine::TaskState::running);
+}
+
+TEST_F(Task_test, testFail)
+{
+  task->fail();
+  ASSERT_EQ(task->getState(), pdEngine::TaskState::failed);
+  ASSERT_FALSE(task->isAlive());
+  ASSERT_TRUE(task->isDead());
+  ASSERT_FALSE(task->isRemoved());
+  ASSERT_FALSE(task->isPaused());
+  ASSERT_FALSE(task->isUninitialized());
+}
+
+TEST_F(Task_test, testSucceed)
+{
+  fake_tm->onInit(task);
+  task->succeed();
+  ASSERT_EQ(task->getState(), pdEngine::TaskState::succeeded);
+  ASSERT_FALSE(task->isAlive());
+  ASSERT_FALSE(task->isDead());
+  ASSERT_FALSE(task->isRemoved());
+  ASSERT_FALSE(task->isPaused());
+  ASSERT_FALSE(task->isUninitialized());
+}
+
+TEST_F(Task_test, TestChildren)
+{
+  std::shared_ptr<Task> t2 = std::make_shared<MockTask>();
+  std::shared_ptr<Task> t3 = std::make_shared<MockTask>();
+  std::shared_ptr<Task> t4 = std::make_shared<MockTask>();
+
+  t3->addChild(t4);
+  t2->addChild(t3);
+  task->addChild(t2);
+
+  ASSERT_TRUE(task->peekChild() == t2);
+  ASSERT_TRUE(t2->peekChild() == t3);
+  ASSERT_TRUE(t3->peekChild() == t4);
+  ASSERT_EQ(t3->peekChild(), t4);
+  ASSERT_TRUE(t3->removeChild() == t4);
+  ASSERT_TRUE(!t3->removeChild());
+  ASSERT_EQ(t2->removeChild(), t3);
+  ASSERT_EQ(task->removeChild(), t2);
+  //ASSERT_FALSE(t->removeChild());
+  //ASSERT_FALSE(t->removeChild());
+}
+
 }
   
