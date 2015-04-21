@@ -5,19 +5,27 @@
 
 namespace pdEngine
 {
-    ResourceManager::ResourceManager()
-    {}
+ResourceManager::ResourceManager()
+{}
 
-    ResourceManager::~ResourceManager()
-    {}
+ResourceManager::~ResourceManager()
+{}
 
-    void ResourceManager::onInit() noexcept
-    {
-        readyToRun();
-    }
+void ResourceManager::onInit() noexcept
+{
+    readyToRun();
+}
 
-    void ResourceManager::onUpdate(int delta) noexcept
-    {
-        (void) delta;
-    }
+pugi::xml_document* ResourceManager::loadResourceXML(const std::string& res)
+{
+    // TODO
+    return nullptr;
+}
+
+
+
+void ResourceManager::onUpdate(int delta) noexcept
+{
+    (void) delta;
+}
 }

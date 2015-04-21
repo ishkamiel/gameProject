@@ -4,14 +4,17 @@ find_package(Epoxy)
 find_package(SDL2)
 find_package(SDL2_ttf)
 # find_package(Spdlog)
-# include(GetSpdlog)
+include(GetSpdlog)
 include(GetPugixml)
 
+
 file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-file(GLOB_RECURSE headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB_RECURSE headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+# file(GLOB_RECURSE lib_sources "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.cpp")
+# file(GLOB_RECURSE lib_headers "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.h")
 
 include_directories( 
-    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     "${CMAKE_CURRENT_SOURCE_DIR}/../lib/include"
     ${SDL2_INCLUDE_DIR}
     ${SDL2TTF_INCLUDE_DIR} 
@@ -23,13 +26,13 @@ include_directories(
 
 add_library(pdEngine SHARED
     ${sources}
-    ${headers}
-    src/math/Math_fwd.h)
+    ${headers})
 
-# add_dependencies(pdEngine libspdlog)
+add_dependencies(pdEngine 
+    #libspdlog
+    libpugixml)
 
 target_link_libraries(pdEngine
-    libpugixml
     ${SDL2_LIBRARY}
     ${SDL2TTF_LIBRARY}
     ${epoxy_LIBRARY}
