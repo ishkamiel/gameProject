@@ -1,30 +1,34 @@
 #pragma once
 
-#include "events/EventManager.h"
-#include "resources/ResourceManager.h"
-
 #include <memory>
 
 namespace pdEngine
 {
 
+class EventManager;
+class ResourceManager;
+
 class Root
 {
+	std::shared_ptr<EventManager> m_eventManager;
+	std::shared_ptr<ResourceManager>  m_resourceManager;
 
 public:
+	static std::shared_ptr<Root> get() noexcept;
+
+	std::shared_ptr<EventManager> getEventManager() const noexcept;
+	std::shared_ptr<ResourceManager> getResourceManager() const noexcept;
+
+	void setEventManager(std::shared_ptr<EventManager>) noexcept;
+	void setResourceManager(std::shared_ptr<ResourceManager>) noexcept;
+private:
 	Root();
 	virtual ~Root();
-
-	inline EventManager_sptr getEventManager() const noexcept { return m_EM; };
-	inline ResourceManager_sptr getResourceManager() const noexcept { return m_RM; };
-
-	void setEventManager(EventManager_sptr) noexcept;
-	void setResourceManager(ResourceManager_sptr) noexcept;
-private:
-	EventManager_sptr m_EM;
-	ResourceManager_sptr m_RM;
 };
 
-std::shared_ptr<Root> getRoot(void) noexcept;
+inline std::shared_ptr<Root> getRoot() noexcept
+{
+	return Root::get();
+}
 
 }

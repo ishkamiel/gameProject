@@ -8,6 +8,7 @@
 #include "Application.h"
 
 #include "Logger.h"
+#include "Root.h"
 
 #include "events/EventManager.h"
 #include "opengl/OpenglRenderer.h"
@@ -115,6 +116,8 @@ void Application::initializeLogging(void) {
 
 void Application::initializeEventManager(void) {
 	auto em = EventManager::getSingleton();
+	getRoot()->setEventManager(em);
+
 	taskManager->addTask(std::dynamic_pointer_cast<Task>(em));
 	taskManager->addTask(std::make_shared<InputManagerSDL>(em));
 
@@ -126,6 +129,7 @@ void Application::initializeEventManager(void) {
 
 void Application::initializeResourceManager(void) {
 	auto rm = std::make_shared<ResourceManager>();
+	getRoot()->setResourceManager(rm);
 
 	taskManager->addTask(std::shared_ptr<Task>(rm));
 }

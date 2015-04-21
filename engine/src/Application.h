@@ -10,6 +10,9 @@
 
 namespace pdEngine {
 
+class ResourceManager;
+using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
+
 class Application {
 public:
     Application();
