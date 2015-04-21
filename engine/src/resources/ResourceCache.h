@@ -1,7 +1,7 @@
-#ifndef RESOURCECACHE_H_
-#define RESOURCECACHE_H_ vlue
+#pragma once
 
 #include "resources/I_ResourceContainer.h"
+#include "resources/I_ResourceLoader.h"
 #include "resources/Resource.h"
 #include "resources/ResourceHandle.h"
 
@@ -9,66 +9,56 @@
 #include <map>
 #include <memory>
 
-#include "I_ResourceLoader.h"
 
 
 namespace pdEngine
 {
-    class ResourceCache;
-    using ResourceCache_sptr = std::shared_ptr<ResourceCache>;
-    using ResourceCache_wptr = std::weak_ptr<ResourceCache>;
 
-    using ResourceHandleList = std::list<ResourceHandle_sptr>;
-    using ResourceHandleMap = std::map<std::string, ResourceHandle_sptr>;
-    using ResourceLoaderList = std::list<ResourceLoader_sptr>;
+class ResourceCache
+{
 
-    class ResourceCache
-    {
-    protected:
-        friend class ResourceHandle;
 
-        ResourceHandleList lruResources;
-        ResourceHandleMap resources;
-        ResourceLoaderList loaders;
+protected:
+    friend class ResourceHandle;
 
-        I_ResourceContainer* file;
+    std::list<ResourceHandle_sptr>              m_lruResources;
+    std::map<std::string, ResourceHandle_sptr>  m_resources;
+    std::list<ResourceLoader_sptr>              m_loaders;
+    std::list<ResourceContainer_uptr>              m_containers;
 
-        unsigned int cacheSize;
-        unsigned int allocated;
-    
-    public:
-        /**
-         * @brief 
-         *
-         * @param int size in Mb
-         * @param iResourceFile resource file
-         */
-        ResourceCache (const unsigned int, I_ResourceContainer*);
-        virtual ~ResourceCache ();
+    unsigned int m_cacheSize;
+    unsigned int m_allocated;
 
-        bool init();
-        void registerLoader(ResourceLoader_sptr);
+public:
+    ResourceCache (const unsigned int);
+    virtual ~ResourceCache ();
 
-        ResourceHandle_sptr getHandle(Resource*);
-        int preLoad(const std::string pattern, void (*callback)(int, bool&));
-        void flush(void);
-    
-    protected:
-        ResourceHandle_sptr find(Resource*);
-        ResourceHandle_sptr load(Resource*);
+    void addContainer(ResourceContainer_uptr);
+    bool init();
+    void registerLoader(ResourceLoader_sptr);
 
-        void update(ResourceHandle_sptr);
-        void free(ResourceHandle_sptr);
+    ResourceHandle_sptr getHandle(Resource*);
+    int preLoad(const std::string pattern, void (*callback)(int, bool&));
+    void flush(void);
 
-        bool makeRoom(unsigned int);
-        char* allocate(unsigned int);
-        void freeOneResource();
-        void memoryHasBeenFreed(unsigned int);
-    
-    private:
-        ResourceHandle_sptr loadRawFile(ResourceLoader_sptr, Resource*);
-        ResourceHandle_sptr loadNonRawFile(ResourceLoader_sptr, Resource*);
-    };
+protected:
+    ResourceHandle_sptr find(Resource*);
+    ResourceHandle_sptr load(Resource*);
+
+    void update(ResourceHandle_sptr);
+    void free(ResourceHandle_sptr);
+
+    bool makeRoom(unsigned int);
+    char* allocate(unsigned int);
+    void freeOneResource();
+    void memoryHasBeenFreed(unsigned int);
+
+private:
+    ResourceHandle_sptr loadRawFile(ResourceLoader_sptr, Resource*);
+    ResourceHandle_sptr loadNonRawFile(ResourceLoader_sptr, Resource*);
+};
+
+using ResourceCache_sptr = std::shared_ptr<ResourceCache>;
+using ResourceCache_wptr = std::weak_ptr<ResourceCache>;
 }
 
-#endif /* RESOURCECACHE_H_ */

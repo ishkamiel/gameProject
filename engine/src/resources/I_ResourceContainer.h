@@ -1,7 +1,8 @@
-#ifndef I_RESOURCECONTAINER_H_
-#define I_RESOURCECONTAINER_H_ value
+#pragma once
 
 #include "resources/Resource.h"
+
+#include <memory>
 
 namespace pdEngine
 {
@@ -54,5 +55,7 @@ public:
 	virtual std::string vGetResourceName(int num) const =0;
 };
 
+using ResourceContainer_sptr = std::shared_ptr<I_ResourceContainer>;
+using ResourceContainer_uptr = std::unique_ptr<I_ResourceContainer>;
+
 }
-#endif /* I_RESOURCECONTAINER_H_ */   
