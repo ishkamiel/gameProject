@@ -10,7 +10,7 @@ ExternalProject_Add(pugixml
     GIT_REPOSITORY https://github.com/zeux/pugixml.git
     GIT_TAG v1.6
     PREFIX ${dir}
-    PATCH_COMMAND patch -p0 -d ${dir}/src/pugixml < ${patch} && cp ${cp_src} ${cp_dst}
+    PATCH_COMMAND patch -p0 -N -d ${dir}/src/pugixml < ${patch} || cp ${cp_src} ${cp_dst}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     UPDATE_COMMAND ""
