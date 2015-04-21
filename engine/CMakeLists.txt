@@ -5,6 +5,7 @@ find_package(SDL2)
 find_package(SDL2_ttf)
 # find_package(Spdlog)
 # include(GetSpdlog)
+include(GetPugixml)
 
 file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE headers "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -28,6 +29,7 @@ add_library(pdEngine SHARED
 # add_dependencies(pdEngine libspdlog)
 
 target_link_libraries(pdEngine
+    libpugixml
     ${SDL2_LIBRARY}
     ${SDL2TTF_LIBRARY}
     ${epoxy_LIBRARY}

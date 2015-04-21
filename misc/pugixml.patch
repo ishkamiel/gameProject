@@ -1,0 +1,13 @@
+--- scripts/CMakeLists.txt	2015-03-25 05:19:09.000000000 +0200
++++ CMakeLists.txt	2015-04-21 09:25:00.360252079 +0300
+@@ -9,8 +9,8 @@
+ include(GNUInstallDirs)
+ mark_as_advanced(CLEAR CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_INCLUDEDIR)
+ 
+-set(HEADERS ../src/pugixml.hpp ../src/pugiconfig.hpp)
+-set(SOURCES ${HEADERS} ../src/pugixml.cpp)
++set(HEADERS src/pugixml.hpp src/pugiconfig.hpp)
++set(SOURCES ${HEADERS} src/pugixml.cpp)
+ 
+ if(DEFINED BUILD_DEFINES)
+ 	add_definitions(${BUILD_DEFINES})

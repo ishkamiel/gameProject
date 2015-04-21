@@ -14,4 +14,4 @@ spdlog - https://github.com/gabime/spdlog
 
 Epoxy - https://github.com/anholt/libepoxy
 
-
+pugigml - http://pugixml.org
