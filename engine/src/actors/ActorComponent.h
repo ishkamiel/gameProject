@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "actors/Actor.h"
-//#include "resources/ResourceManager.h"
 #include <memory>
 
 namespace pdEngine

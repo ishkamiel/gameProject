@@ -60,7 +60,9 @@ std::weak_ptr<T> Actor::getComponent(ActorComponentId id) const noexcept
 
     if (f != m_components.end()) {
         ActorComponent_sptr ptr{f->second};
-        return std::weak_ptr<T>(std::static_pointer_cast<T>(ptr));
+        return std::weak_ptr<T>(
+            std::static_pointer_cast<T>(ptr)
+            );
     };
     return std::weak_ptr<T>();
 }
