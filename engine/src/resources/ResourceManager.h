@@ -4,6 +4,8 @@
 
 #include <memory>
 
+namespace pugi { class xml_document; }
+
 namespace pdEngine
 {
 
@@ -18,6 +20,8 @@ public:
 	std::string v_getTaskName(void) const noexcept override { return "Resource Manager"; }
 
 	void addResourceFile(const std::string& filename);
+
+	pugi::xml_document* loadResourceXML(const std::string& resource);
 
 	void loadResource(const std::string& resource);
 	void getResource(const std::string& resource);

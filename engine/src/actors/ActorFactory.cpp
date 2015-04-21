@@ -1,61 +1,66 @@
-#include "ActorFactory.h"
+#include "actors/ActorFactory.h"
+
+#include "Logger.h"
+#include "resources/ResourceManager.h"
+
+#include <pugixml.hpp>
 
 namespace pdEngine
 {
 
-ActorFactory::ActorFactory(void)
+ActorFactory::ActorFactory(ResourceManager_sptr rm, EventManager_sptr em)
+: m_resourceManager(rm), m_eventManager(em)
 {}
 
 ActorFactory::~ActorFactory(void)
 {}
 
-Actor_sptr ActorFactory::createActor(const char* actorResource) noexcept
+Actor_sptr ActorFactory::createActor(const char* res) noexcept
 {
-    /*
-    // Grab the root XML node
-    TiXmlElement* pRoot =
-        XmlResourceLoader::LoadAndReturnRootXmlElement(actorResource);
-    if (!pRoot)
+    pugi::xml_document* xmlRoot = m_resourceManager->loadResourceXML(res);
+
+    if (!xmlRoot)
     {
-        GCC_ERROR(“Failed to create actor from resource: ” + std::string(actorResource));
-        return StrongActorPtr();
+        getLogger()->error("Failed to load actor resources {}", res);
+        return Actor_sptr();
     }
 
-    // create the actor instance
-    StrongActorPtr pActor(GCC_NEW Actor(GetNextActorId()));
-    if (!pActor->Init(pRoot))
+    Actor_sptr actor = std::make_shared<Actor>(getNextActorId());
+
+    if (!actor->init())
     {
-        GCC_ERROR(“Failed to initialize actor: ” + std::string(actorResource));
-        return StrongActorPtr();
+        getLogger()->error("Failed to initialize actor {}", res);
+        return Actor_sptr();
     }
 
-    // Loop through each child element and load the component
-    for (TiXmlElement* pNode = pRoot->FirstChildElement(); pNode;
-        pNode = pNode->NextSiblingElement())
+    for (auto it : *xmlRoot)
     {
-        StrongActorComponentPtr pComponent(CreateComponent(pNode));
-        if (pComponent)
+        ActorComponent_sptr comp = v_createComponent(&it);
+        if (!comp)
         {
-            pActor->AddComponent(pComponent);
-            pComponent->SetOwner(pActor);
+            getLogger()->error("Failed to create actor subcomponent for {]", res);
+            return Actor_sptr();
         }
-        else
-        {
-            return StrongActorPtr();
-        }
+
+        actor->addComponent(comp);
+        comp->setOwner(actor);
     }
 
-    // Now that the actor has been fully created, run the post init phase
-    pActor->PostInit();
-
-    return pActor;
-   */
-    return std::shared_ptr<Actor>();
+    actor->postInit();
+    return actor;
 }
 
-ActorComponent_sptr ActorFactory::v_createComponent(/* TODO DATA */) noexcept
+ActorComponent_sptr ActorFactory::v_createComponent(const pugi::xml_node* data) noexcept
 {
-    return std::shared_ptr<ActorComponent>();
+    std::string name(data->name());
+
+    auto f = m_actorComponentCreators.find(name);
+    if (f == m_actorComponentCreators.end()) {
+        getLogger()->error("Cannot find actor component creator for {}", name);
+        return ActorComponent_sptr();
+    }
+
+    return ActorComponent_sptr(f->second());
 }
 
 ActorId ActorFactory::getNextActorId(void) noexcept

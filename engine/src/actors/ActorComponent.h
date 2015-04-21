@@ -1,7 +1,7 @@
 #pragma once
 
 //#include "actors/Actor.h"
-#include "resources/ResourceManager.h"
+//#include "resources/ResourceManager.h"
 #include <memory>
 
 namespace pdEngine
@@ -36,7 +36,7 @@ protected:
 
 private:
     Actor_sptr m_owner;
-    ResourceManager_sptr m_resourceManager;
+    //ResourceManager_sptr m_resourceManager;
 };
 
 using ActorComponent_sptr = std::shared_ptr<ActorComponent>;
