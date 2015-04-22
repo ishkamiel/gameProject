@@ -1,5 +1,4 @@
-#ifndef PDENGINE_RESOURCE_H_
-#define PDENGINE_RESOURCE_H_ value
+#pragma once
 
 #include <string>
 
@@ -8,12 +7,12 @@ namespace pdEngine
     class Resource
     {
     public:
-        std::string name;
+        std::string m_name;
 
     public:
         Resource(const std::string& name);
         ~Resource();
-        const std::string getName(void) const;
+        inline const std::string getName(void) const noexcept
+        { return m_name; }
     };
 }
-#endif

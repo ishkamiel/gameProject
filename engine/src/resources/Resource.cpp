@@ -5,16 +5,11 @@
 namespace pdEngine
 {
     Resource::Resource(const std::string& n)
-        : name(n)
+        : m_name(n)
     {
-        std::transform(name.begin(), name.end(), name.begin(), ::tolower); 
+        std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
     }
 
     Resource::~Resource()
     {}
-
-    const std::string Resource::getName(void) const
-    {
-        return name;
-    }
 }
