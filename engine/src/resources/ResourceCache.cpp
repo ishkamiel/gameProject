@@ -114,7 +114,7 @@ ResourceHandle_sptr ResourceCache::load(Resource* r)
 
     ResourceHandle *rawPointer;
 
-    if (loader->vUseRawFile()) {
+    if (loader->v_usesRawFile()) {
         rawPointer = loadRaw(container, loader, r);
     }
     else {
@@ -197,7 +197,7 @@ ResourceContainer_sptr ResourceCache::getContainer(Resource* r) noexcept
 ResourceLoader_sptr ResourceCache::getLoader(Resource* r) noexcept
 {
     for (auto l : m_loaders) {
-        if (std::regex_search(r->getName(), l->vGetRegex())) {
+        if (std::regex_search(r->getName(), l->v_getRegex())) {
             return l;
         }
     }
@@ -232,7 +232,7 @@ ResourceHandle* ResourceCache::loadNonRaw(
 
     file->vGetRawResource(*r, rawBuffer);
 
-    auto size = loader->vGetLoadedResourceSize(rawBuffer, rawSize);
+    auto size = loader->v_getLoadedResourceSize(rawBuffer, rawSize);
     char* buffer = allocate(size);
 
     if (buffer == nullptr) {
@@ -241,7 +241,7 @@ ResourceHandle* ResourceCache::loadNonRaw(
 
     auto handle = new ResourceHandle(*r, buffer, size);
 
-    bool success = loader->vLoadResource(rawBuffer, rawSize, handle);
+    bool success = loader->v_loadResource(rawBuffer, rawSize, handle);
     safeDeleteArray(rawBuffer);
 
     if (!success) return nullptr;

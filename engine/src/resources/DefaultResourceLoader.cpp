@@ -1,26 +1,33 @@
 #include "resources/DefaultResourceLoader.h"
 
+#include <cassert>
+
 namespace pdEngine
 {
-    std::regex DefaultResourceLoader::vGetRegex()
+    std::regex DefaultResourceLoader::v_getRegex() const noexcept
     {
-        std::regex re { ".*" };
-        return re;
+        return std::regex { ".*" };
     }
 
-    bool DefaultResourceLoader::vUseRawFile()
+    bool DefaultResourceLoader::v_usesRawFile() const noexcept
     {
         return true;
     }
 
-    unsigned int DefaultResourceLoader::vGetLoadedResourceSize(char* b, unsigned int s)
+    unsigned int DefaultResourceLoader::v_getLoadedResourceSize(
+        char* buffer, unsigned int size) noexcept
     {
-        (void)b;
-        return s;
+        (void)buffer;
+        return size;
     }
 
-    bool DefaultResourceLoader::vLoadResource(char*, unsigned int, ResourceHandle*)
+    bool DefaultResourceLoader::v_loadResource(
+        char* buffer, unsigned int size, ResourceHandle* handle) noexcept
     {
+        (void)buffer;
+        (void)size;
+        (void)handle;
+        assert(false); // TODO implement this!
         return true;
     }
 }

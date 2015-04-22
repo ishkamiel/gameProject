@@ -6,12 +6,13 @@ namespace pdEngine
 {
     class DefaultResourceLoader : public I_ResourceLoader
     {
+
     public:
     	virtual ~DefaultResourceLoader() {}
-        virtual std::regex vGetRegex() override;
-        virtual bool vUseRawFile() override;
-        virtual unsigned int vGetLoadedResourceSize(char*, unsigned int) override;
-        virtual bool vLoadResource(char*, unsigned int, ResourceHandle*) override;
+        virtual std::regex v_getRegex() const noexcept override;
+        virtual bool v_usesRawFile() const noexcept override;
+        virtual unsigned int v_getLoadedResourceSize(char *, unsigned int) noexcept override;
+        virtual bool v_loadResource(char *, unsigned int, ResourceHandle*) noexcept override;
     };
 }
 

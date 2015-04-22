@@ -1,27 +1,22 @@
-#ifndef I_RESOURCELOADER_H_
-#define I_RESOURCELOADER_H_
-
-#include "resources/ResourceHandle.h"
+#pragma once
 
 #include <memory>
 #include <regex>
-#include <string>
 
 namespace pdEngine
 {
+class ResourceHandle;
+
 class I_ResourceLoader
 {
 public:
-	virtual ~I_ResourceLoader()
-	{
-	}
-	virtual std::regex vGetRegex() =0;
-	virtual bool vUseRawFile() =0;
-	virtual unsigned int vGetLoadedResourceSize(char*, unsigned int) =0;
-	virtual bool vLoadResource(char*, unsigned int, ResourceHandle*) =0;
+	virtual ~I_ResourceLoader() {}
+
+	virtual std::regex v_getRegex() const noexcept =0 ;
+	virtual bool v_usesRawFile() const noexcept = 0;
+	virtual unsigned int v_getLoadedResourceSize(char *, unsigned int) noexcept = 0;
+	virtual bool v_loadResource(char *, unsigned int, ResourceHandle*) noexcept = 0;
 };
 
 using ResourceLoader_sptr = std::shared_ptr<I_ResourceLoader>;
 }
-
-#endif /* I_RESOURCELOADER_H_ */
