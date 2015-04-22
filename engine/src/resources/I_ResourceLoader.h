@@ -18,7 +18,7 @@ public:
 	virtual std::regex vGetRegex() =0;
 	virtual bool vUseRawFile() =0;
 	virtual unsigned int vGetLoadedResourceSize(char*, unsigned int) =0;
-	virtual bool vLoadResource(char*, unsigned int, ResourceHandle_sptr) =0;
+	virtual bool vLoadResource(char*, unsigned int, ResourceHandle*) =0;
 };
 
 using ResourceLoader_sptr = std::shared_ptr<I_ResourceLoader>;

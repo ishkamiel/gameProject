@@ -84,4 +84,10 @@ namespace pdEngine
 
         return resourceName;
     }
+
+std::string SimpleResourceFile::v_getName() const noexcept
+{
+    return filename;
+}
+
 }

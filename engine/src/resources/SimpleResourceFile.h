@@ -25,6 +25,8 @@ public:
 	SimpleResourceFile(const std::string&);
 	virtual ~SimpleResourceFile();
 
+	virtual std::string v_getName() const noexcept override;
+
 	virtual bool vOpen(void) override;
 	virtual int vGetNumResources(void) const override;
 	virtual std::string vGetResourceName(int) const override;

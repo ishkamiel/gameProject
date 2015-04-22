@@ -19,7 +19,7 @@ namespace pdEngine
         return s;
     }
 
-    bool DefaultResourceLoader::vLoadResource(char*, unsigned int, ResourceHandle_sptr)
+    bool DefaultResourceLoader::vLoadResource(char*, unsigned int, ResourceHandle*)
     {
         return true;
     }

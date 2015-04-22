@@ -19,8 +19,6 @@ class ResourceCache
 
 
 protected:
-    friend class ResourceHandle;
-
     std::list<ResourceHandle_sptr>              m_lruResources;
     std::map<std::string, ResourceHandle_sptr>  m_resources;
     std::list<ResourceLoader_sptr>              m_loaders;
@@ -63,9 +61,9 @@ protected:
     void memoryHasBeenFreed(unsigned int);
 
 private:
-    /**
-     * Private function to separate different load scenarios.
-     */
+    // helper functions for cleaner code
+    ResourceContainer_sptr getContainer(Resource* r) noexcept;
+    ResourceLoader_sptr getLoader(Resource* r) noexcept;
     ResourceHandle* loadRaw(ResourceContainer_sptr, ResourceLoader_sptr, Resource*);
     ResourceHandle* loadNonRaw(ResourceContainer_sptr, ResourceLoader_sptr, Resource*);
 };

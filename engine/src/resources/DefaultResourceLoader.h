@@ -11,7 +11,7 @@ namespace pdEngine
         virtual std::regex vGetRegex() override;
         virtual bool vUseRawFile() override;
         virtual unsigned int vGetLoadedResourceSize(char*, unsigned int) override;
-        virtual bool vLoadResource(char*, unsigned int, ResourceHandle_sptr) override;
+        virtual bool vLoadResource(char*, unsigned int, ResourceHandle*) override;
     };
 }
 

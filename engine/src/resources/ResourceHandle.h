@@ -1,40 +1,35 @@
-#ifndef RESOURCEHANDLE_H_
-#define RESOURCEHANDLE_H_
+#pragma once
 
-// #include "resources/ResourceCache.h"
 #include "resources/Resource.h"
 
 #include <memory>
 
 namespace pdEngine
 {
-    class ResourceCache;
-    class ResourceHandle;
-    using ResourceHandle_sptr = std::shared_ptr<ResourceHandle>;
 
-    class ResourceHandle
-    {
-        Resource resource;
-        char *buffer;
-        unsigned int size;
-        // iResourceExtraData_sptr extra;
-        ResourceCache* resourceCache;
+class ResourceHandle
+{
+    Resource resource;
+    char *buffer;
+    unsigned int size;
+    // iResourceExtraData_sptr extra;
 
-    public:
-        ResourceHandle(Resource&, char*, unsigned int, ResourceCache*);
-        virtual ~ResourceHandle();
+public:
+    ResourceHandle(Resource&, char*, unsigned int);
+    virtual ~ResourceHandle();
 
-        unsigned int getSize(void) const;
-        char* getBuffer(void) const;
-        char* getWritableBuffer(void);
-        const std::string getResourceName();
-       
-        // iResourceExtraData_sptr getExtra();
-        // void setExtra(iResourceExtraData_sptr);
+    unsigned int getSize(void) const;
+    char* getBuffer(void) const;
+    char* getWritableBuffer(void);
+    const std::string getResourceName();
 
-    protected:
-    private:
-    };
+    // iResourceExtraData_sptr getExtra();
+    // void setExtra(iResourceExtraData_sptr);
+
+protected:
+private:
+
+};
+
+using ResourceHandle_sptr = std::shared_ptr<ResourceHandle>;
 }
-
-#endif /* RESOURCEHANDLE_H_ */

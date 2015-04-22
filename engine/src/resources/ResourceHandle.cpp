@@ -6,18 +6,13 @@
 namespace pdEngine
 {
         //ResourceHandle(Resource&, char*, unsigned int, ResourceCache_sptr);
-    ResourceHandle::ResourceHandle(Resource& r, char* b, unsigned int s, ResourceCache* rm)
-        : resource(r), buffer(b), size(s), resourceCache(rm)
+    ResourceHandle::ResourceHandle(Resource& r, char* b, unsigned int s)
+        : resource(r), buffer(b), size(s)
     {}
 
     ResourceHandle::~ResourceHandle()
     {
         safeDeleteArray(buffer);
-        /*
-         * The shared pointer does this now, no ndeed for friends... :)
-        if (resourceCache != nullptr)
-            resourceCache->memoryHasBeenFreed(size);
-            */
     }
 
     unsigned int ResourceHandle::getSize(void) const {
