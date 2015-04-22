@@ -6,6 +6,7 @@
       <w>retval</w>
       <w>spdlog</w>
       <w>sptr</w>
+      <w>uptr</w>
       <w>wptr</w>
     </words>
   </dictionary>
