@@ -24,7 +24,7 @@ namespace pdEngine
         }
     }
 
-    bool SimpleResourceFile::vOpen(void)
+    bool SimpleResourceFile::v_open(void)
     {
         m_File.reset(new std::ifstream(filename, std::ios::in|std::ios::binary|std::ios::ate));
         if (m_File->is_open())
@@ -36,7 +36,7 @@ namespace pdEngine
         return false;
     }
 
-    int SimpleResourceFile::vGetRawResourceSize(const Resource &r)
+    int SimpleResourceFile::v_getRawResourceSize(const Resource &r)
     {
         if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (r.getName() != resourceName) 
@@ -49,7 +49,7 @@ namespace pdEngine
         return rawSize;
     }
 
-    int SimpleResourceFile::vGetRawResource(const Resource &r, char *buffer)
+    int SimpleResourceFile::v_loadRawResource(const Resource &r, char *buffer)
     {
         if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (r.getName() != resourceName) 
@@ -70,13 +70,13 @@ namespace pdEngine
         return rawSize;
     }
 
-    int SimpleResourceFile::vGetNumResources() const
+    int SimpleResourceFile::v_getResourceCount(void) const
     {
         if (!m_File || !m_File->is_open()) throw std::logic_error("Resource not opened");
         return 1;
     }
 
-    std::string SimpleResourceFile::vGetResourceName(int num) const
+    std::string SimpleResourceFile::v_getResourceName(int num) const
     {
         if (!m_File || !m_File->is_open()) throw std::logic_error("Resource not opened");
         if (num != 0)
@@ -85,7 +85,7 @@ namespace pdEngine
         return resourceName;
     }
 
-std::string SimpleResourceFile::v_getName() const noexcept
+std::string SimpleResourceFile::v_getName(void) const noexcept
 {
     return filename;
 }

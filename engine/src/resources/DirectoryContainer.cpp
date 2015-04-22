@@ -23,25 +23,25 @@ DirectoryContainer::~DirectoryContainer()
 }
 
 
-int DirectoryContainer::vGetNumResources(void) const {
+int DirectoryContainer::v_getResourceCount(void) const {
     return 0;
 }
 
-bool DirectoryContainer::vOpen(void) {
+bool DirectoryContainer::v_open(void) {
     return false;
 }
 
-std::string DirectoryContainer::vGetResourceName(int i) const {
+std::string DirectoryContainer::v_getResourceName(int i) const {
     (void) i;
     throw std::out_of_range("Unknown resource");
 }
 
-int DirectoryContainer::vGetRawResourceSize(Resource const &r) {
+int DirectoryContainer::v_getRawResourceSize(Resource const &r) {
     (void) r;
     throw std::out_of_range("Unknown resource");
 }
 
-int DirectoryContainer::vGetRawResource(Resource const &r, char *buffer) {
+int DirectoryContainer::v_loadRawResource(Resource const &r, char *buffer) {
     (void) r;
     (void) buffer;
     throw std::out_of_range("Unknown resource");

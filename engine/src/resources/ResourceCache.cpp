@@ -32,7 +32,7 @@ bool ResourceCache::init()
 
     for (auto container : m_containers)
     {
-        if (container->vOpen()) {
+        if (container->v_open()) {
             registerLoader(ResourceLoader_sptr(new DefaultResourceLoader()));
         }
         else
@@ -207,21 +207,21 @@ ResourceLoader_sptr ResourceCache::getLoader(Resource* r) noexcept
 ResourceHandle* ResourceCache::loadRaw(
     ResourceContainer_sptr file, ResourceLoader_sptr loader, Resource* r)
 {
-    unsigned int rawSize = file->vGetRawResourceSize(*r);
+    unsigned int rawSize = file->v_getRawResourceSize(*r);
     char *rawBuffer = allocate(rawSize);
 
     if (rawBuffer == nullptr) {
         getLogger()->fatal("out of memory");
     }
 
-    file->vGetRawResource(*r, rawBuffer);
+    file->v_loadRawResource(*r, rawBuffer);
     return new ResourceHandle(*r, rawBuffer, rawSize);
 }
 
 ResourceHandle* ResourceCache::loadNonRaw(
     ResourceContainer_sptr file, ResourceLoader_sptr loader, Resource* r)
 {
-    unsigned int rawSize = file->vGetRawResourceSize(*r);
+    unsigned int rawSize = file->v_getRawResourceSize(*r);
 
     // this is going to be just a temporary buffer.
     auto rawBuffer = new char[rawSize];
@@ -230,7 +230,7 @@ ResourceHandle* ResourceCache::loadNonRaw(
         getLogger()->fatal("out of memory");
     }
 
-    file->vGetRawResource(*r, rawBuffer);
+    file->v_loadRawResource(*r, rawBuffer);
 
     auto size = loader->v_getLoadedResourceSize(rawBuffer, rawSize);
     char* buffer = allocate(size);

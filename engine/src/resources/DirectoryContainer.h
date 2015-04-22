@@ -21,11 +21,11 @@ public:
 	DirectoryContainer(const std::string& path);
 	virtual ~DirectoryContainer();
 
-	virtual bool vOpen(void) override;
-	virtual int vGetNumResources(void) const override;
-	virtual std::string vGetResourceName(int) const override;
-	virtual int vGetRawResourceSize(const Resource&) override;
-	virtual int vGetRawResource(const Resource&, char*) override;
+	virtual bool v_open(void) override;
+	virtual int v_getResourceCount(void) const override;
+	virtual std::string v_getResourceName(int) const override;
+	virtual int v_getRawResourceSize(const Resource &) override;
+	virtual int v_loadRawResource(const Resource &, char *) override;
 
 private:
 	std::string m_Path;
