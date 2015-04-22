@@ -24,7 +24,7 @@ protected:
     std::list<ResourceHandle_sptr>              m_lruResources;
     std::map<std::string, ResourceHandle_sptr>  m_resources;
     std::list<ResourceLoader_sptr>              m_loaders;
-    std::list<ResourceContainer_uptr>              m_containers;
+    std::list<ResourceContainer_sptr>           m_containers;
 
     unsigned int m_cacheSize;
     unsigned int m_allocated;
@@ -33,7 +33,7 @@ public:
     ResourceCache (const unsigned int);
     virtual ~ResourceCache ();
 
-    void addContainer(ResourceContainer_uptr);
+    void addContainer(ResourceContainer_sptr);
     bool init();
     void registerLoader(ResourceLoader_sptr);
 
@@ -46,6 +46,15 @@ protected:
     ResourceHandle_sptr load(Resource*);
 
     void update(ResourceHandle_sptr);
+
+    /**
+    *
+     * NOTE this won't guarantee any new memory!
+     * Erasing the handle will reduce the ref count on the
+     * ResourcEHandle, therefore possibly resulting in the
+     * Resources desturction and subsecuent call to destructor,
+     * which in turn will inform the cache.
+    */
     void free(ResourceHandle_sptr);
 
     bool makeRoom(unsigned int);
@@ -54,8 +63,11 @@ protected:
     void memoryHasBeenFreed(unsigned int);
 
 private:
-    ResourceHandle_sptr loadRawFile(ResourceLoader_sptr, Resource*);
-    ResourceHandle_sptr loadNonRawFile(ResourceLoader_sptr, Resource*);
+    /**
+     * Private function to separate different load scenarios.
+     */
+    ResourceHandle* loadRaw(ResourceContainer_sptr, ResourceLoader_sptr, Resource*);
+    ResourceHandle* loadNonRaw(ResourceContainer_sptr, ResourceLoader_sptr, Resource*);
 };
 
 using ResourceCache_sptr = std::shared_ptr<ResourceCache>;

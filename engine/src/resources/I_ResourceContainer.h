@@ -13,6 +13,14 @@ public:
 	{};
 
 	/**
+	 * @brief Returns an identifier for the specific container
+	 * object
+	 *
+	 * @return string representing the name of the object
+	 */
+	virtual std::string v_getName() const noexcept = 0;
+
+	/**
 	 * @brief Open the associated resource file.
 	 *
 	 * @return true if everything went okay, otherwise false.

@@ -20,7 +20,7 @@ ResourceCache::~ResourceCache()
     }
 }
 
-void ResourceCache::addContainer(ResourceContainer_uptr container)
+void ResourceCache::addContainer(ResourceContainer_sptr container)
 {
     m_containers.push_back(container);
 }
@@ -34,20 +34,15 @@ bool ResourceCache::init()
     {
         if (container->vOpen()) {
             registerLoader(ResourceLoader_sptr(new DefaultResourceLoader()));
-            retval = true;
         }
         else
         {
+            getLogger()->warn("Unable to open container {}", container->v_getName());
             retval = false;
         }
 
     }
 
-    if (file->vOpen())
-    {
-        registerLoader(ResourceLoader_sptr(new DefaultResourceLoader()));
-        retval = true;
-    }
     return retval;
 }
 
@@ -96,86 +91,86 @@ void ResourceCache::update(ResourceHandle_sptr rh)
 
 void ResourceCache::free(ResourceHandle_sptr rh)
 {
+    // ResourceHande shared_ptr destruction triggers acctuall release of memory.
+    // This simply removes the cache reference to the shared_ptr.
     m_resources.erase(rh->getResourceName());
+
     m_lruResources.remove(rh);
 }
 
 ResourceHandle_sptr ResourceCache::load(Resource* r)
 {
-    ResourceLoader_sptr loader;
-    ResourceHandle_sptr handle;
+    for (auto i = m_loaders.begin(); i != m_loaders.end(); ++i) {
+        if (std::regex_search(r->getName(), (*i)->vGetRegex())) {
+            auto loader = (*i);
 
-    for (auto i = m_loaders.begin(); i != m_loaders.end(); ++i)
-    {
-        if (std::regex_search(r->getName(), (*i)->vGetRegex()))
-        {
-            loader = (*i);
-            break;
+            ResourceHandle* rawPointer;
+            if (loader->vUseRawFile()) {
+                rawPointer = loadRaw(loader, r);
+            }
+            else {
+                rawPointer =  loadNonRaw(loader, r);
+            }
+            // TODO do something here?
+
+            auto handle = std::shared_ptr<ResourceHandle>(
+                rawPointer,
+                [=](ResourceHandle* p) {
+                    memoryHasBeenFreed(p->getSize());
+                    delete p;
+                });
+
+            m_lruResources.push_back(handle);
+            m_resources[r->getName()] = handle;
+            return handle;
         }
     }
 
-    if (!loader)
-    {
-        assert(loader && "DefaultResourceLoader not found");
-        return nullptr;
-    }
+    getLogger()->error("Unable to find loader for {}", r);
+    return ResourceHandle_sptr();
+}
 
+ResourceHandle* loadRaw(ResourceContainer_sptr file, ResourceLoader_sptr loader, Resource* r)
+{
     unsigned int rawSize = file->vGetRawResourceSize(*r);
-
-    char *rawBuffer;
-    if (loader->vUseRawFile())
-    {
-        rawBuffer = allocate(rawSize);
-    }
-    else
-    {
-        // this is going to be just a temporary buffer.
-        rawBuffer = new char[rawSize];
-    }
+    char *rawBuffer = allocate(rawSize);
 
     if (rawBuffer == nullptr) {
         getLogger()->fatal("out of memory");
-        exit(-1);
     }
 
     file->vGetRawResource(*r, rawBuffer);
-    char* buffer = nullptr;
-    unsigned int size = 0;
-
-    if (loader->vUseRawFile())
-    {
-        buffer = rawBuffer;
-        handle = ResourceHandle_sptr(new ResourceHandle(*r, buffer, rawSize, this));
-    }
-    else
-    {
-        size = loader->vGetLoadedResourceSize(rawBuffer, rawSize);
-
-        buffer = allocate(size);
-
-        if (buffer == nullptr) {
-            getLogger()->fatal("out of memory");
-        }
-
-        handle = ResourceHandle_sptr(
-            new ResourceHandle(*r, buffer, size, this));
-
-        bool success = loader->vLoadResource(rawBuffer, rawSize, handle);
-        safeDeleteArray(rawBuffer);
-
-        if (!success)
-            return nullptr;
-    }
-
-    m_lruResources.push_back(handle);
-    return m_resources[r->getName()];
+	return new ResourceHandle(*r rawBuffer, rawSize, this);
 }
 
-//ResourceHandle_sptr loadRawFile(ResourceLoader_sptr, Resource*);
-//ResourceHandle_sptr loadNonRawFile(ResourceLoader_sptr, Resource*);
+ResourceHandle* loadNonRaw(ResourceContainer_sptr file, ResourceLoader_sptr, Resource*)
+{
+    unsigned int rawSize = file->vGetRawResourceSize(*r);
 
+	// this is going to be just a temporary buffer.
+	rawBuffer = new char[rawSize];
 
-// void memoryHasBeenFreed(unsigned int);
+    if (rawBuffer == nullptr) {
+        getLogger()->fatal("out of memory");
+    }
+
+    file->vGetRawResource(*r, rawBuffer);
+
+	auto size = loader->vGetLoadedResourceSize(rawBuffer, rawSize);
+	char* buffer = allocate(size);
+
+    if (buffer == nullptr) {
+        getLogger()->fatal("out of memory");
+    }
+
+    auto handle = new ResourceHandle(*r, buffer, size, this);
+
+    bool success = loader->vLoadResource(rawBuffer, rawSize, handle);
+    safeDeleteArray(rawBuffer);
+
+    if (!success) return nullptr;
+    return handle;
+}
 
 char* ResourceCache::allocate(unsigned int size)
 {
