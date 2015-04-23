@@ -13,28 +13,11 @@ include_directories(
 
 foreach(BIN_SOURCE ${MY_BIN_SOURCES})
     string(REGEX REPLACE "^.*/(.*)\\.cpp$" "\\1"
-        BIN_FILENAME
+        bin_name
         ${BIN_SOURCE})
 
-    add_executable(${BIN_FILENAME} ${BIN_SOURCE} 
+    add_executable(${bin_name} ${BIN_SOURCE}
         ${MY_HEADER_FILES} ${MY_SOURCE_FILES})
 
-    target_link_libraries(${BIN_FILENAME}
-        pdEngine)
-
+    target_link_libraries(${bin_name} pdEngine)
 endforeach(BIN_SOURCE)
-
-if (${pd_debug_cmake})
-    message("demo")
-    message("Spdlog_INCLUDE_DIR ${Spdlog_INCLUDE_DIR}")
-    message("Spdlog_LIBRARY ${Spdlog_LIBRARY}")
-    message("SDL2_INCLUDE_DIR ${SDL2_INCLUDE_DIR}")
-    message("SDL2_LIBRARY ${SDL2_LIBRARY}")
-    message("GLEW_INCLUDE_DIR ${GLEW_INCLUDE_DIR}")
-    message("GLEW_LIBRARY ${GLEW_LIBRARY}")
-    message("Boost_LIBRARIES: ${Boost_LIBRARIES}")
-    if (${pd_test})
-        message("GTEST_LIBRARIES ${GTEST_LIBRARIES}")
-        message("GMOCK_LIBRARIES ${GMOCK_LIBRARIES}")
-    endif()
-endif()
