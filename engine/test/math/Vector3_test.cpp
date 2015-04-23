@@ -24,20 +24,20 @@ TEST_F(Vector3_test, ConstrucorsAndGetters)
 {
     Vector3 vec0 { 0.0f, 0.0f, 0.0f };
     Vector3 vec1 { 1.0f, 1.0f, 1.0f };
-    ASSERT_EQ(vec0.getX(), 0.0f);
-    ASSERT_EQ(vec0.getY(), 0.0f);
-    ASSERT_EQ(vec0.getZ(), 0.0f);
-    ASSERT_EQ(vec1.getX(), 1.0f);
-    ASSERT_EQ(vec1.getY(), 1.0f);
-    ASSERT_EQ(vec1.getZ(), 1.0f);
+    ASSERT_EQ(vec0[0], 0.0f);
+    ASSERT_EQ(vec0[1], 0.0f);
+    ASSERT_EQ(vec0[2], 0.0f);
+    ASSERT_EQ(vec1.x, 1.0f);
+    ASSERT_EQ(vec1.y, 1.0f);
+    ASSERT_EQ(vec1.z, 1.0f);
 }
 
 TEST_F(Vector3_test, DefaultConstructor)
 {
 	Vector3 def {};
-    ASSERT_EQ(def.getX(), 0.0f);
-    ASSERT_EQ(def.getY(), 0.0f);
-    ASSERT_EQ(def.getZ(), 0.0f);
+    ASSERT_EQ(def.x, 0.0f);
+    ASSERT_EQ(def.y, 0.0f);
+    ASSERT_EQ(def.z, 0.0f);
 }
 
 TEST_F(Vector3_test, Equality)

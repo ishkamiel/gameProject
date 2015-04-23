@@ -9,14 +9,14 @@ namespace pdEngine
 
 SDLInitFailedException::SDLInitFailedException(std::string str)
 {
-	std::ostringstream cnvt;
-	cnvt << str << ", SDL Error: " << SDL_GetError();
-	m_what = cnvt.str();
+	std::ostringstream ss;
+	ss << str << ", SDL Error: " << SDL_GetError();
+	m_what = ss.str();
 }
 
 SDLInitFailedException::SDLInitFailedException(const SDLInitFailedException& other)
 {
-	//m_what = ohter->m_what;
+	m_what = other.m_what;
 }
 
 SDLInitFailedException::~SDLInitFailedException()

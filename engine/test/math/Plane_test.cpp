@@ -125,8 +125,8 @@ TEST_F(Plane_test, NormalAndDistanceValues2d)
     ASSERT_FLOAT_EQ(p.getNormal().length(), 1.0f);
     ASSERT_TRUE(p.isValid());
 
-    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().getX(), 0.0001f);
-    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().getY(), 0.0001f);
+    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().x, 0.0001f);
+    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().y, 0.0001f);
 
     p = Plane {
         Vector3 { 10.0f, 10.0f, 0.0f },
@@ -137,8 +137,8 @@ TEST_F(Plane_test, NormalAndDistanceValues2d)
     ASSERT_FLOAT_EQ(p.getNormal().length(), 1.0f);
     ASSERT_TRUE(p.isValid());
 
-    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().getX(), 0.0001f);
-    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().getY(), 0.0001f);
+    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().x, 0.0001f);
+    ASSERT_NEAR(std::sqrt(0.5f), p.getNormal().y, 0.0001f);
 }
 
 TEST_F(Plane_test, NormalAndDistanceValues)
