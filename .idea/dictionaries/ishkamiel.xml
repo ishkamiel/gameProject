@@ -2,6 +2,7 @@
   <dictionary name="ishkamiel">
     <words>
       <w>ishkamiel</w>
+      <w>multithreading</w>
       <w>pugi</w>
       <w>retval</w>
       <w>spdlog</w>

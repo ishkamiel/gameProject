@@ -2,8 +2,8 @@
 
 namespace pdEngine 
 {
-    InputManagerSDL::InputManagerSDL(EventManager_sptr em)
-        : m_EventManager(em), m_Event(new SDL_Event())
+    InputManagerSDL::InputManagerSDL()
+        : m_EventManager(EventManager::get()), m_Event(new SDL_Event())
     {
 		assert (m_Event != nullptr);
 		assert (m_EventManager);

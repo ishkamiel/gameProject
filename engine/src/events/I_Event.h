@@ -8,9 +8,6 @@
 namespace pdEngine
 {
 
-class I_Event;
-using Event_sptr = std::shared_ptr<I_Event>;
-
 class I_Event
 {
 public:

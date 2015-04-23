@@ -11,7 +11,7 @@ namespace pdEngine
 class InputManagerSDL : public InputManager
 {
 public:
-	InputManagerSDL(EventManager_sptr);
+	InputManagerSDL();
 	virtual ~InputManagerSDL();
 
 	std::string v_getTaskName(void) const noexcept override { return "SDL Input Manager"; }

@@ -1,6 +1,8 @@
-#include "events/DefaultEvent.h"
 #include "events/EventManagerImpl.h"
-#include "utils/Memory.h"
+
+#include "events/I_Event.h"
+#include "events/DefaultEvent.h"
+#include "events/ListenerHandle.h"
 #include "utils/Logger.h"
 
 #include <cassert>
@@ -28,38 +30,45 @@ namespace pdEngine
 
         std::swap(eventQueueIn, eventsProcessing);
 
-        while (eventsProcessing.size() > 0)
-        {
-            auto data = eventsProcessing.front();
+        while (eventsProcessing.size() > 0) {
+            auto event = eventsProcessing.front();
             eventsProcessing.pop();
 
-            assert(data != nullptr);
-            PDE_DEBUG << "Processing event of type " << data->getTypeID();
-			auto listeners_called = 0;
+            assert(event);
+            PDE_DEBUG << "Processing event of type " << event->getTypeID();
 
-            auto list = findEventList(data->getTypeID());
-            if (list != nullptr) 
-            {
-                PDE_DEBUG << "Found " << list->size() << " listeners";
+            auto listenersCalled = 0;
 
-                for (auto i : *list)
-                {
-                    PDE_DEBUG << "Trying to call listener";
-                    i(data);
-					++listeners_called;
+            auto found = eventMap.find(event->getTypeID());
+
+            if (found != eventMap.end()) {
+                auto list = found->second;
+
+                PDE_DEBUG << "Found " << list.size() << " listeners";
+
+                for (auto i : list) {
+                    if (auto listener = i.lock()) {
+                        PDE_DEBUG << "Calling listener";
+                        listener->call(event);
+                        ++listenersCalled;
+                    }
+                    else {
+                        // TODO: probably shouldn't be here, unless multithreading?
+                        assert(false);
+                    }
                 }
             }
 
-            PDE_DEBUG << "Event processed by " << listeners_called << " listeners";
+            PDE_DEBUG << "Event processed by " << listenersCalled << " listeners";
         }
     }
 
-    void EventManagerImpl::queueEvent(const EventTypeID id)
+    void EventManagerImpl::queueEvent(const EventTypeID id) noexcept
     {
         eventQueueIn.push(std::make_shared<DefaultEvent>(id));
     }
 
-    void EventManagerImpl::queueEvent(const Event_sptr eventPtr)
+    void EventManagerImpl::queueEvent(const Event_sptr eventPtr) noexcept
     {
         PDE_DEBUG << "Queing new event EventTypeID: " << eventPtr->getTypeID();
         eventQueueIn.push(eventPtr);
@@ -72,30 +81,47 @@ namespace pdEngine
     }
     */
 
-    void EventManagerImpl::addListener(
-            const EventTypeID eventID,
-            EventListener listener)
+    ListenerHandle_sptr EventManagerImpl::addListener(
+            const EventTypeID& eventID, EventListener listener) noexcept
     {
+        auto handle_ptr = std::shared_ptr<ListenerHandle>(
+            new ListenerHandle(eventID, listener),
+            [=](ListenerHandle*) {
+                // TODO do the cleanup here!
+            });
 
-        auto list = findEventList(eventID, true);
-        assert(list != nullptr);
+        auto found = eventMap.find(eventID);
 
-        list->push_back(listener);
-        assert(list->size() != 0);
-        assert(list->size() == eventMap[eventID]->size());
+        if (found == eventMap.end()) {
+            /**
+             * If no list was found, create one with emplace which conveniently
+             * returns iterator to newly created pair.
+             */
+            auto pair = eventMap.emplace(std::make_pair(eventID, ListenerList()));
+            assert(pair.second == true); // true if insertion happened
+            found = pair.first;
+        }
+
+        auto listeners = found->second;
+
+        listeners.push_back(handle_ptr);
+
+        //assert(list->size() != 0);
+        //assert(list->size() == eventMap[eventID]->size());
 
         PDE_DEBUG << "Added listener for event, EventTypeID << " << eventID;
+        return handle_ptr;
     }
 
-	auto EventManagerImpl::findEventList(EventTypeID id, bool create)
-		-> EventListenerList*
+/*
+	ListenerList* EventManagerImpl::findEventList(EventTypeID id, bool create)
     {
         auto f = eventMap.find(id);
         if (f == eventMap.end()) 
         {
             if (create)
             {
-                eventMap.insert(EventMapPair(id, new EventListenerList()));
+                eventMap.insert(EventMapPair(id, new ListenerList()));
                 return findEventList(id);
             }
             return nullptr;
@@ -103,4 +129,5 @@ namespace pdEngine
 
         return f->second;
     }
+    */
 }

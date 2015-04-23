@@ -1,8 +1,6 @@
 #pragma once
 
-#include "events/I_Event.h"
 #include "events/EventManager.h"
-#include "events/EventListener.h"
 #include "tasks/Task.h"
 
 #include <functional>
@@ -16,9 +14,9 @@
 namespace pdEngine {
 
 class EventManagerImpl : public Task, public EventManager {
-    using EventListenerList = std::vector<EventListener>;
-    using EventMap = std::map<EventTypeID, EventListenerList*>;
-    using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
+    using ListenerList = std::vector<std::weak_ptr<ListenerHandle>>;
+    using EventMap = std::map<EventTypeID, ListenerList>;
+    //using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
     using EventQueue = std::queue<Event_sptr>;
 
     EventMap eventMap{};
@@ -31,18 +29,17 @@ public:
 
     std::string v_getTaskName(void) const noexcept override { return "Event Manager"; }
 
-    EventManagerImpl(const EventManagerImpl&) = delete;
-    EventManagerImpl& operator=(const EventManagerImpl&) = delete;
 
     void onUpdate(int deltaMs) noexcept override;
 
-    void queueEvent(const Event_sptr) override;
-    void queueEvent(const EventTypeID) override;
+    void queueEvent(const Event_sptr) noexcept override;
+    void queueEvent(const EventTypeID) noexcept override;
 
-    void addListener(const EventTypeID, EventListener) override;
+    ListenerHandle_sptr addListener(const EventTypeID&, EventListener) noexcept override;
 
-private:
-    EventListenerList* findEventList(EventTypeID, bool = false);
+    // disable making of copies
+    EventManagerImpl(const EventManagerImpl&) = delete;
+    EventManagerImpl& operator=(const EventManagerImpl&) = delete;
 };
 
 }

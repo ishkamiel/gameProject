@@ -99,11 +99,10 @@ void Application::initializeLogging(void) {
 }
 
 void Application::initializeEventManager(void) {
-	auto em = EventManager::getSingleton();
-	getRoot()->setEventManager(em);
+	auto em = EventManager::get();
 
 	taskManager->addTask(std::dynamic_pointer_cast<Task>(em));
-	taskManager->addTask(std::make_shared<InputManagerSDL>(em));
+	taskManager->addTask(std::make_shared<InputManagerSDL>());
 
 	using namespace std::placeholders;
 
@@ -150,7 +149,7 @@ bool Application::onShutdown(Event_sptr e) {
 bool Application::onRequestQuit(Event_sptr e) {
 	(void) e;
 	PDE_DEBUG << "Received ev_RequestQuit, sending ev_Shutdown";
-	EventManager::getSingleton()->queueEvent(ev_Shutdown);
+	EventManager::get()->queueEvent(ev_Shutdown);
 	return true;
 }
 

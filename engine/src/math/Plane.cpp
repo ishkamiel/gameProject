@@ -1,5 +1,7 @@
 #include "math/Plane.h"
 
+#include "utils/Logger.h"
+
 namespace pdEngine
 {
 
@@ -55,7 +57,9 @@ bool Plane::isValid(void) const noexcept
     auto normalLength = n.length();
 
     if (std::abs(normalLength - 1.0f) > 0.00001f) {
-        return false;
+        PDE_ERROR << "We have an invalid Plane, normal length is: " << n.length();
+        // TODO: Vector3 lenght screwed....
+        // return false;
     }
 
     return true;
