@@ -14,18 +14,6 @@ std::shared_ptr<Root> Root::get(void) noexcept
 	return root;
 }
 
-std::shared_ptr<EventManager> Root::getEventManager() const noexcept
-{
-	assert(m_eventManager);
-	return m_eventManager;
-}
-
-std::shared_ptr<ResourceManager> Root::getResourceManager() const noexcept
-{
-	assert(m_resourceManager);
-	return m_resourceManager;
-}
-
 void Root::setEventManager(std::shared_ptr<EventManager> em) noexcept
 {
 	assert(em);
@@ -37,5 +25,28 @@ void Root::setResourceManager(std::shared_ptr<ResourceManager> rm) noexcept
 	assert(rm);
 	m_resourceManager = rm;
 }
+
+void Root::setLogger(std::shared_ptr<Logger> l) noexcept
+{
+	assert(l);
+	m_Logger = l;
+}
+
+void Root::reset(void) noexcept
+{
+	m_Logger.reset();
+	m_resourceManager.reset();
+	m_eventManager.reset();
+}
+
+bool Root::isAllSet(void) noexcept
+{
+	if (!m_Logger) return false;
+	if (!m_eventManager) return false;
+	if (!m_resourceManager) return false;
+	return true;
+}
+
+
 
 }
