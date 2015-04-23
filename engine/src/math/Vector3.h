@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/Deprecated.h"
+
 #include<glm/vec3.hpp>
 #include<glm/geometric.hpp>
 
@@ -29,9 +31,9 @@ public:
 
     virtual ~Vector3();
 
-    inline float getX(void) const noexcept __attribute__ ((deprecated));
-    inline float getY(void) const noexcept __attribute__ ((deprecated));
-	inline float getZ(void) const noexcept __attribute__ ((deprecated));
+    DEPRECATED(inline float getX(void) const noexcept);
+    DEPRECATED(inline float getY(void) const noexcept);
+	DEPRECATED(inline float getZ(void) const noexcept);
 
 	//inline float length(void) const noexcept;
 
