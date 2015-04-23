@@ -1,43 +1,43 @@
 #include "Logger.h"
-#include "spdlog/spdlog.h"
+
+#include <cassert>
 
 namespace pdEngine
 {
-static std::shared_ptr<pdLogger> g_TheLogger;
 
-
-pdLogger::pdLogger()
-	: m_L(spdlog::rotating_logger_mt("default_logger", "log", 1048576 * 5, 3))
+void setGlobalLogLevel(LogLevel level) noexcept
 {
-#ifndef DONT_SET_DEBUG_STUFF
-	m_L->set_level(spdlog::level::debug);
-#endif
-}
+	auto boostLevel = boost::log::trivial::fatal;
 
-pdLogger::pdLogger(std::shared_ptr<spdlog::logger> l)
-: m_L(l)
-{}
-
-pdLogger::~pdLogger() = default;
-
-void setLogger(std::shared_ptr<pdLogger> logger)
-{
-	g_TheLogger = logger;
-}
-
-void setLogger(std::shared_ptr<spdlog::logger> l)
-{
-	g_TheLogger.reset(new pdLogger(l));
-}
-
-std::shared_ptr<pdLogger> getLogger() noexcept
-{
-	if (!g_TheLogger)
-	{
-		g_TheLogger.reset(new pdLogger());
+	switch (level) {
+		case LogLevel::all:
+		case LogLevel::trace:
+			boostLevel = boost::log::trivial::trace;
+			break;
+		case LogLevel::debug:
+			boostLevel = boost::log::trivial::debug;
+	        break;
+		case LogLevel::info:
+			boostLevel = boost::log::trivial::info;
+	        break;
+		case LogLevel::warn:
+			boostLevel = boost::log::trivial::warning;
+	        break;
+		case LogLevel::error:
+			boostLevel = boost::log::trivial::error;
+	        break;
+		case LogLevel::fatal:
+			boostLevel = boost::log::trivial::fatal;
+	        break;
+		default:
+			assert(false);
+	        boostLevel = boost::log::trivial::trace;
 	}
 
-	return g_TheLogger;
+
+	boost::log::core::get()->set_filter(
+        boost::log::trivial::severity >= boostLevel
+    );
 }
 
 }

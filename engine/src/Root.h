@@ -3,7 +3,6 @@
 #include <cassert>
 #include <memory>
 
-
 namespace pdEngine
 {
 
@@ -18,18 +17,17 @@ class Root
 {
 	std::shared_ptr<EventManager> m_eventManager;
 	std::shared_ptr<ResourceManager>  m_resourceManager;
-	std::shared_ptr<Logger> m_Logger;
 
 public:
+	virtual ~Root();
+
 	static std::shared_ptr<Root> get() noexcept;
 
 	std::shared_ptr<EventManager> getEventManager() const noexcept;
 	std::shared_ptr<ResourceManager> getResourceManager() const noexcept;
-	std::shared_ptr<Logger> getLogger() const noexcept;
 
 	void setEventManager(std::shared_ptr<EventManager>) noexcept;
 	void setResourceManager(std::shared_ptr<ResourceManager>) noexcept;
-	void setLogger(std::shared_ptr<Logger>) noexcept;
 
 	/**
 	 * @brief Resets all shared pointers.
@@ -44,7 +42,6 @@ public:
 	bool isAllSet(void) noexcept;
 private:
 	Root();
-	virtual ~Root();
 };
 
 inline std::shared_ptr<Root> getRoot() noexcept
@@ -62,12 +59,6 @@ inline std::shared_ptr<ResourceManager> Root::getResourceManager() const noexcep
 {
 	assert(m_resourceManager);
 	return m_resourceManager;
-}
-
-inline std::shared_ptr<Logger> Root::getLogger() const noexcept
-{
-	assert(m_Logger);
-	return m_Logger;
 }
 
 }

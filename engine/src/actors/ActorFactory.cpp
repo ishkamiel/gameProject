@@ -21,7 +21,7 @@ Actor_sptr ActorFactory::createActor(const char* res) noexcept
 
     if (!xmlRoot)
     {
-        getLogger()->error("Failed to load actor resources {}", res);
+        PDE_ERROR  << "Failed to load actor resources " <<  res;
         return Actor_sptr();
     }
 
@@ -29,7 +29,7 @@ Actor_sptr ActorFactory::createActor(const char* res) noexcept
 
     if (!actor->init())
     {
-        getLogger()->error("Failed to initialize actor {}", res);
+        PDE_ERROR << "Failed to initialize actor "  << res;
         return Actor_sptr();
     }
 
@@ -38,7 +38,7 @@ Actor_sptr ActorFactory::createActor(const char* res) noexcept
         ActorComponent_sptr comp = v_createComponent(&it);
         if (!comp)
         {
-            getLogger()->error("Failed to create actor subcomponent for {]", res);
+            PDE_ERROR << "Failed to create actor subcomponent for " << res;
             return Actor_sptr();
         }
 
@@ -56,7 +56,7 @@ ActorComponent_sptr ActorFactory::v_createComponent(const pugi::xml_node* data) 
 
     auto f = m_actorComponentCreators.find(name);
     if (f == m_actorComponentCreators.end()) {
-        getLogger()->error("Cannot find actor component creator for {}", name);
+        PDE_ERROR << "Cannot find actor component creator for " << name;
         return ActorComponent_sptr();
     }
 

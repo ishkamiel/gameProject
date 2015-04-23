@@ -5,12 +5,14 @@
 namespace pdEngine
 {
 
-Root::Root() = default;
+Root::Root()
+{}
+
 Root::~Root() = default;
 
 std::shared_ptr<Root> Root::get(void) noexcept
 {
-	static std::shared_ptr<Root> root {};
+	static std::shared_ptr<Root> root = std::shared_ptr<Root> (new Root());
 	return root;
 }
 
@@ -26,22 +28,14 @@ void Root::setResourceManager(std::shared_ptr<ResourceManager> rm) noexcept
 	m_resourceManager = rm;
 }
 
-void Root::setLogger(std::shared_ptr<Logger> l) noexcept
-{
-	assert(l);
-	m_Logger = l;
-}
-
 void Root::reset(void) noexcept
 {
-	m_Logger.reset();
 	m_resourceManager.reset();
 	m_eventManager.reset();
 }
 
 bool Root::isAllSet(void) noexcept
 {
-	if (!m_Logger) return false;
 	if (!m_eventManager) return false;
 	if (!m_resourceManager) return false;
 	return true;

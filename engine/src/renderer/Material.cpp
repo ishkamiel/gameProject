@@ -12,25 +12,25 @@ Material::~Material()
 
 void Material::setDiffuse(const Color& color)
 {
-	PD_debug("Material::setDiffuse not implemented");
 	(void)color;
+	PDE_WARN << "Material::setDiffuse not implemented";
 }
 
 bool Material::hasAlpha() const
 {
-	PD_debug("Material::hasAlpha not implemented");
+	PDE_WARN << "Material::hasAlpha not implemented";
 	return false;
 }
 
 float Material::getAlpha() const
 {
-	PD_debug("Material::getAlpha not implemented");
+	PDE_WARN << "Material::getAlpha not implemented";
 	return 0.0f;
 }
 
 void Material::setAlpha(const float alpha)
 {
-	PD_debug("Material::setAlpha not implemented");
+	PDE_WARN << "Material::setAlpha not implemented";
 	(void)alpha;
 }
 

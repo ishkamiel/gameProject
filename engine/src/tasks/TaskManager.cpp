@@ -11,8 +11,6 @@ TaskManager::~TaskManager() {}
 
 bool TaskManager::initAll()
 {
-    auto log = getLogger();
-
     for (auto t : taskList)
     {
         if (t->isUninitialized())
@@ -20,7 +18,7 @@ bool TaskManager::initAll()
             t->onInit();
             if (t->state != TaskState::ready)
             {
-                log->error("Failed to intiialize {}", t->v_getTaskName());
+                // TODO:  PDE_ERROR << "Failed to initialize " << t->v_getTaskName();
                 return false;
             }
         }

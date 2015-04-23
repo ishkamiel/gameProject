@@ -31,9 +31,8 @@ Application::~Application() {
 
 bool Application::init(void) {
     initializeLogging();
-    auto log = getLogger();
 
-    log->info("Starting application initialization sequence...");
+	PDE_INFO << "Starting application initialization sequence...";
 
     taskManager = std::make_shared<TaskManager>();
     initializeEventManager();
@@ -41,27 +40,28 @@ bool Application::init(void) {
 	initializeWindow();
 	initializeRenderer();
 
-    log->debug("Initializing task manager tasks.");
+	PDE_DEBUG << "Initializing task manager tasks.";
     if (!taskManager->initAll()) {
-        log->error("Some tasks failed initialization.");
+	    PDE_FATAL << "Some tasks failed initialization.";
         return (false);
     }
 
     initOk = true;
-	log->info("Application successfully initialized!");
+	PDE_INFO << "Application successfully initialized!";
     return (true);
 }
 
 bool Application::start(void) 
 {
-    auto log = getLogger();
-
-    if (!initOk) throw std::runtime_error("Application not successfully initialized before start!");
+    if (!initOk) {
+	    PDE_FATAL << "Application not successfully initialized before start!";
+	    exit(EXIT_FAILURE);
+    }
 
     auto timer = Timer(updateFrequency);
 	const int deltaTime = timer.getStepDeltaMs();
 
-    log->info("Entering main loop");
+	PDE_INFO << "Entering main loop";
     while (!doShutdown) {
 
 	    while (timer.step()) {
@@ -73,7 +73,8 @@ bool Application::start(void)
         m_Renderer->v_Render();
 		window->swapFrame();
     }
-    log->info("Leaving main loop after {0} seconds", timer.totalSeconds());
+
+	PDE_INFO << "Leaving main loop after " << timer.totalSeconds() << " seconds";
 
     shutdown();
     return true;
@@ -81,11 +82,10 @@ bool Application::start(void)
 
 void Application::shutdown(void) 
 {
-    auto log = getLogger();
     if (!doShutdown)
         throw std::runtime_error("shutdown() called while main loop running");
 
-    log->info("Shutting down");
+	PDE_INFO << "Shutting down";
 
     taskManager->abortAllNow();
 
@@ -96,22 +96,7 @@ void Application::shutdown(void)
 }
 
 void Application::initializeLogging(void) {
-	if (m_LogToConsole) {
-		std::shared_ptr<spdlog::logger> log{
-			spdlog::stderr_logger_mt("pdengine")
-		};
-		log->set_level(spdlog::level::debug);
-		setLogger(log);
-	} else {
-		size_t q_size = 1048576; //queue size must be power of 2
-		spdlog::set_async_mode(q_size);
-		std::shared_ptr<spdlog::logger> log{
-			spdlog::daily_logger_mt("pdengine", "pdengine")
-		};
-		setLogger(log);
-	}
-
-	auto l = getLogger();
+	setGlobalLogLevel(LogLevel::all);
 }
 
 void Application::initializeEventManager(void) {
@@ -136,9 +121,7 @@ void Application::initializeResourceManager(void) {
 
 void Application::initializeWindow(void)
 {
-	auto log = getLogger();
-
-	log->info("Creating and opening main window.");
+	PDE_INFO << "Creating and opening main window.";
 	auto w = std::make_shared<SDLWindow>();
 	w->onInit();
 
@@ -149,9 +132,8 @@ void Application::initializeWindow(void)
 
 void Application::initializeRenderer(void)
 {
-	auto log = getLogger();
+	PDE_INFO << "Initializing rendering.";
 
-	log->info("Initializing rendering.");
 	m_Renderer = window->createRenderer();
 
 	m_Renderer->onInit();
@@ -161,14 +143,14 @@ void Application::initializeRenderer(void)
 
 bool Application::onShutdown(Event_sptr e) {
 	(void) e;
-	PD_debug("Received ev_Shutdown event, shutting down");
+	PDE_DEBUG << "Received ev_Shutdown event, shutting down";
 	doShutdown = true;
 	return false;
 }
 
 bool Application::onRequestQuit(Event_sptr e) {
 	(void) e;
-	PD_debug("Received ev_RequestQuit, sending ev_Shutdown");
+	PDE_DEBUG << "Received ev_RequestQuit, sending ev_Shutdown";
 	EventManager::getSingleton()->queueEvent(ev_Shutdown);
 	return true;
 }

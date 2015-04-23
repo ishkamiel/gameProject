@@ -12,7 +12,6 @@ namespace pdEngine
 
 bool ShaderProgram::compileBuffer(const GLenum type, const GLchar* source)
 {
-    auto log = getLogger();
     GLuint shader = glCreateShader(type);
 
     glShaderSource(shader, 1, &source, nullptr);
@@ -22,6 +21,7 @@ bool ShaderProgram::compileBuffer(const GLenum type, const GLchar* source)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
     if (compileOk != GL_TRUE)
     {
+        // TODO: noexcept and PDE_FATAL
 		throw std::runtime_error("throw GLShaderCompileError(shader);");
     }
 

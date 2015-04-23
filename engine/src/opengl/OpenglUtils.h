@@ -57,7 +57,9 @@ void fatalOnOpenGLError(const std::string& msg)
                 error = "UNKOWN ERROR";
                 break;
         }
-        getLogger()->fatal("{}: {}, {}", msg, errorValue, error);
+
+        PDE_FATAL << msg << " (error value: " << errorValue  << ") "<< error;
+        exit(EXIT_FAILURE);
     }
 }
 

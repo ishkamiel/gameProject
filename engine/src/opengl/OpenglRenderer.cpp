@@ -33,14 +33,13 @@ void OpenglRenderer::onUpdate(int delta) noexcept
 }
 
 void OpenglRenderer::printDebugMsg(const std::string& msg) const {
-    PD_debug(msg);
+    PDE_DEBUG << msg;
 }
 
 void OpenglRenderer::onInit(void) noexcept {
     Task::onInit();
-    auto log = getLogger();
 
-    log->info("We are running opengl {}", epoxy_gl_version());
+    PDE_INFO << "We are running opengl " << epoxy_gl_version();
     fatalOnOpenGLError("OpenGL is in incorrect state");
 
     loadShaderProgram();
@@ -58,27 +57,25 @@ void OpenglRenderer::onInit(void) noexcept {
     //m_Thing = SimpleProgram();
     //m_Thing.init();
 
-	log->info("Renderer initialization done");
+    PDE_INFO << "Renderer initialization done";
     readyToRun();
 }
 
 void OpenglRenderer::loadShaderProgram(void) noexcept
 {
-    auto log = getLogger();
-
     m_programID = glCreateProgram();
 
-    log->debug("Compiling vertex shader");
+    PDE_DEBUG << "Compiling vertex shader";
     SimpleVertexShader vertexShader{};
     vertexShader.load();
     vertexShader.compile();
 
-    log->debug("Compiling fragment shader");
+    PDE_DEBUG << "Compiling fragment shader";
     SimpleFragmentShader fragmentShader{};
     fragmentShader.load();
     fragmentShader.compile();
 
-    log->debug("Linking OpenGL program");
+    PDE_DEBUG << "Linking OpenGL program";
     glAttachShader(m_programID, vertexShader.getID());
     glAttachShader(m_programID, fragmentShader.getID());
     glLinkProgram(m_programID);
@@ -86,7 +83,8 @@ void OpenglRenderer::loadShaderProgram(void) noexcept
     GLint programSuccess = GL_TRUE;
     glGetProgramiv(m_programID, GL_LINK_STATUS, &programSuccess);
     if (programSuccess != GL_TRUE) {
-        log->fatal("Error linking opengGL program {0}", m_programID);
+        PDE_FATAL << "Error linking opengGL program " << m_programID;
+        exit(EXIT_FAILURE);
     }
 
 	m_modelUniformLocation = glGetUniformLocation(m_programID, "Model");

@@ -6,6 +6,8 @@
 #include <chrono>
 #include <thread>
 
+#include <boost/log/trivial.hpp>
+
 namespace pdEngine
 {
 Timer::Timer(int freq)
@@ -19,7 +21,8 @@ Timer::Timer(int freq)
     rest = timeSlice - std::chrono::duration_cast<Duration>(
         std::chrono::milliseconds(getStepDeltaMs()));
 	*/
-    PD_debug("Updates per second set to {0} ({1} per update)", freq, timeSlice.count());
+
+    PDE_DEBUG << "Updates per second set to " << freq << ", milliseconds per update: " << timeSlice.count();
 }
 
 int Timer::getStepDeltaMs(void) const noexcept

@@ -23,8 +23,8 @@ namespace pdEngine
         (void)deltaMs;
 
         if (eventQueueIn.size() == 0) return;
-        auto log = getLogger();
-        log->debug("EventManager processing queued events");
+
+        PDE_DEBUG << "EventManager processing queued events";
 
         std::swap(eventQueueIn, eventsProcessing);
 
@@ -34,22 +34,23 @@ namespace pdEngine
             eventsProcessing.pop();
 
             assert(data != nullptr);
-            PD_debug("Processing event of type {}", data->getTypeID());
+            PDE_DEBUG << "Processing event of type " << data->getTypeID();
 			auto listeners_called = 0;
 
             auto list = findEventList(data->getTypeID());
             if (list != nullptr) 
             {
-                log->debug("Found {} listeners", list->size());
+                PDE_DEBUG << "Found " << list->size() << " listeners";
 
                 for (auto i : *list)
                 {
-                    log->debug("Trying to call listener");
+                    PDE_DEBUG << "Trying to call listener";
                     i(data);
 					++listeners_called;
                 }
             }
-            PD_debug("Event processed by {0} listeners", listeners_called);
+
+            PDE_DEBUG << "Event processed by " << listeners_called << " listeners";
         }
     }
 
@@ -60,7 +61,7 @@ namespace pdEngine
 
     void EventManagerImpl::queueEvent(const Event_sptr eventPtr)
     {
-        PD_debug("Queing new event EventTypeID: {0}", eventPtr->getTypeID());
+        PDE_DEBUG << "Queing new event EventTypeID: " << eventPtr->getTypeID();
         eventQueueIn.push(eventPtr);
     }
 
@@ -75,7 +76,6 @@ namespace pdEngine
             const EventTypeID eventID,
             EventListener listener)
     {
-        auto log = getLogger();
 
         auto list = findEventList(eventID, true);
         assert(list != nullptr);
@@ -84,7 +84,7 @@ namespace pdEngine
         assert(list->size() != 0);
         assert(list->size() == eventMap[eventID]->size());
 
-        log->debug("Added listener for event, EventTypeID {}", eventID, "\n");
+        PDE_DEBUG << "Added listener for event, EventTypeID << " << eventID;
     }
 
 	auto EventManagerImpl::findEventList(EventTypeID id, bool create)

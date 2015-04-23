@@ -1,6 +1,5 @@
 #include "math/Frustum.h"
 #include "math/Vector3.h"
-#include "Logger.h"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -31,7 +30,6 @@ class Frustum_test : public ::testing::Test
 TEST_F(Frustum_test, IsInsideEasyFrustum)
 {
     Frustum f { 3, 1, 0.0f, 100.0f };
-    PD_debug("Frustum is: {}", f);
 
     ASSERT_TRUE(f.isInside(Vector3(0,0,10)));
 
@@ -52,8 +50,6 @@ TEST_F(Frustum_test, DefaultFrustum)
 TEST_F(Frustum_test, ISInsiderustumWithNegativeZ)
 {
     Frustum f { PI/2.0f, 1, -10.0f, -100.0f };
-
-    PD_debug("Frustum is: {}", f);
 
     ASSERT_TRUE(f.isInside(Vector3(0,0,-11)));
     ASSERT_TRUE(f.isInside(Vector3(1,1,-20)));

@@ -37,7 +37,7 @@ bool ResourceCache::init()
         }
         else
         {
-            getLogger()->warn("Unable to open container {}", container->v_getName());
+            PDE_WARN << "Unable to open container " << container->v_getName();
             retval = false;
         }
 
@@ -103,12 +103,12 @@ ResourceHandle_sptr ResourceCache::load(Resource* r)
 {
     auto container = getContainer(r);
     if (!container) {
-        getLogger()->warn("Unable to find ResourceContianer for {}", r->getName());
+        PDE_WARN << "Unable to find ResourceContianer for " << r->getName();
         return ResourceHandle_sptr();
     }
     auto loader = getLoader(r);
     if (!loader) {
-        getLogger()->warn("Unable to find ResourceLoader for {]", r->getName());
+        PDE_WARN << "Unable to find ResourceLoader for " << r->getName();
         return ResourceHandle_sptr();
     }
 
@@ -147,7 +147,7 @@ char* ResourceCache::allocate(unsigned int size)
         mem = new char[size];
     }
     catch (const std::bad_alloc& e) {
-        getLogger()->error("out of memory: ", e.what());
+        PDE_FATAL <<  "out of memory: " << e.what();
         assert(false);
         return nullptr;
     }
@@ -211,7 +211,8 @@ ResourceHandle* ResourceCache::loadRaw(
     char *rawBuffer = allocate(rawSize);
 
     if (rawBuffer == nullptr) {
-        getLogger()->fatal("out of memory");
+        PDE_FATAL << "Out of memory";
+        exit(EXIT_FAILURE);
     }
 
     file->v_loadRawResource(*r, rawBuffer);
@@ -227,7 +228,8 @@ ResourceHandle* ResourceCache::loadNonRaw(
     auto rawBuffer = new char[rawSize];
 
     if (rawBuffer == nullptr) {
-        getLogger()->fatal("out of memory");
+        PDE_FATAL << "Out of memory";
+        exit(EXIT_FAILURE);
     }
 
     file->v_loadRawResource(*r, rawBuffer);
@@ -236,7 +238,8 @@ ResourceHandle* ResourceCache::loadNonRaw(
     char* buffer = allocate(size);
 
     if (buffer == nullptr) {
-        getLogger()->fatal("out of memory");
+        PDE_FATAL << "Out of memory";
+        exit(EXIT_FAILURE);
     }
 
     auto handle = new ResourceHandle(*r, buffer, size);

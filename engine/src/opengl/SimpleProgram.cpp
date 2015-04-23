@@ -59,21 +59,19 @@ void SimpleProgram::render(void) const
 
 void SimpleProgram::init(void)
 {
-	auto log = getLogger();
-
     m_ProgramID = glCreateProgram();
 
-	log->debug("Compiling vertex shader");
+	PDE_DEBUG << "Compiling vertex shader";
 	SimpleVertexShader vertexShader{};
 	vertexShader.load();
 	vertexShader.compile();
 
-	log->debug("Compiling fragment shader");
+	PDE_DEBUG << "Compiling fragment shader";
 	SimpleFragmentShader fragmentShader{};
 	fragmentShader.load();
 	fragmentShader.compile();
 
-	log->debug("Linking OpenGL program");
+	PDE_DEBUG << "Linking OpenGL program";
 	glAttachShader(m_ProgramID, vertexShader.getID());
 	glAttachShader(m_ProgramID, fragmentShader.getID());
 	glLinkProgram(m_ProgramID);
@@ -81,7 +79,8 @@ void SimpleProgram::init(void)
 	GLint programSuccess = GL_TRUE;
 	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &programSuccess);
 	if (programSuccess != GL_TRUE) {
-			log->fatal("Error linking opengGL program {0}", m_ProgramID);
+		PDE_FATAL << "Error linking opengGL program " << m_ProgramID;
+		exit(EXIT_FAILURE); // TODO
 	}
 
 	fatalOnOpenGLError("Failed after OpenGL program linking");
@@ -144,7 +143,8 @@ void SimpleProgram::init(void)
 
     glBindVertexArray(0);
 	glUseProgram(0);
-	log->info("OpenGL program initialized");
+
+	PDE_INFO << "OpenGL program initialized";
 }
 
 }
