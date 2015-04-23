@@ -7,15 +7,14 @@
 
 #include "Application.h"
 
-#include "Logger.h"
+#include "utils/Logger.h"
 #include "Root.h"
 
 #include "events/EventManager.h"
 #include "opengl/OpenglRenderer.h"
 #include "renderer/SDLWindow.h"
 #include "resources/ResourceManager.h"
-#include "Utils.h"
-#include "Timer.h"
+#include "utils/Timer.h"
 #include "input/InputManagerSDL.h"
 
 #include <functional>

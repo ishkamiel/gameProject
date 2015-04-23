@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Timer.h"
-
 #include <assert.h>
 #include <memory>
 

@@ -1,7 +1,7 @@
 #include "events/DefaultEvent.h"
 #include "events/EventManagerImpl.h"
-#include "Logger.h"
-#include "Utils.h"
+#include "utils/Memory.h"
+#include "utils/Logger.h"
 
 #include <cassert>
 #include <algorithm>

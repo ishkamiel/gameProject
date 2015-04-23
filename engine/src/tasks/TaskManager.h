@@ -2,7 +2,6 @@
 
 #include "events/EventManagerImpl.h"
 #include "tasks/Task.h"
-#include "Timer.h"
 
 #include <list>
 #include <memory>

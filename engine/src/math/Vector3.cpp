@@ -1,9 +1,5 @@
 #include "math/Vector3.h"
 
-#include "Utils.h"
-
-#include <glm/vec3.hpp>
-
 namespace pdEngine
 {
 

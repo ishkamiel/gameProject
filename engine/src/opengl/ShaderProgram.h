@@ -1,5 +1,4 @@
 #pragma once
-#include "Logger.h"
 
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>

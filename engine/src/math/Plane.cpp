@@ -1,7 +1,5 @@
 #include "math/Plane.h"
 
-#include "Utils.h"
-
 namespace pdEngine
 {
 

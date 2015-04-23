@@ -1,6 +1,6 @@
 #include "renderer/Material.h"
 
-#include "Logger.h"
+#include "utils/Logger.h"
 
 namespace pdEngine {
 

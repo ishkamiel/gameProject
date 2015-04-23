@@ -1,7 +1,7 @@
 #include "resources/ResourceCache.h"
 #include "resources/DefaultResourceLoader.h"
-#include "Logger.h"
-#include "Utils.h"
+#include "utils/Logger.h"
+#include "utils/Memory.h"
 
 #include <cassert>
 #include <regex>

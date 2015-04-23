@@ -1,8 +1,6 @@
-#define GLM_FORCE_RADIANS
-
 #include "math/Frustum.h"
-#include "Utils.h"
 
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 

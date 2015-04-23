@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Logger.h"
 #include "renderer/I_Window.h"
 
 #include <SDL2/SDL.h>

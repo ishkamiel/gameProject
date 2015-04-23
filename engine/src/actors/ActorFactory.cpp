@@ -1,6 +1,6 @@
 #include "actors/ActorFactory.h"
 
-#include "Logger.h"
+#include "utils/Logger.h"
 #include "resources/ResourceManager.h"
 
 #include <pugixml.hpp>

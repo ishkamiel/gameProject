@@ -16,7 +16,7 @@ OpenglException::OpenglException(const GLuint logTarget)
 : std::runtime_error("OpenglException")
 {
     std::ostringstream cnvt;
-    cnvt << "Shader compile error: " << OpenglUtils::getGLLog(logTarget);
+    cnvt << "Shader compile error: " << getGLInfoLog(logTarget);
     m_what = cnvt.str();
 }
 

@@ -1,8 +1,8 @@
 #include "opengl/ShaderProgram.h"
 
 #include "opengl/OpenglUtils.h"
+#include "utils/Logger.h"
 
-#include "Logger.h"
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
 #include <SDL_opengl.h>
@@ -21,8 +21,8 @@ bool ShaderProgram::compileBuffer(const GLenum type, const GLchar* source)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
     if (compileOk != GL_TRUE)
     {
-        // TODO: noexcept and PDE_FATAL
-		throw std::runtime_error("throw GLShaderCompileError(shader);");
+        PDE_FATAL << "Error compiling shader " << getGLInfoLog(shader);
+        exit(EXIT_FAILURE);
     }
 
     setID(shader);

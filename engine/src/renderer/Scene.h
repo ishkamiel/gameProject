@@ -1,7 +1,6 @@
 #pragma once
 
 #include "actors/Actor.h"
-#include "Timer.h"
 #include "renderer/I_Renderer.h"
 #include "math/Matrix4.h"
 

@@ -3,7 +3,7 @@
 
 #include "resources/SimpleResourceFile.h"
 #include "resources/Resource.h"
-#include "Utils.h"
+#include "utils/Memory.h"
 
 #include <cstdio>
 #include <fstream>

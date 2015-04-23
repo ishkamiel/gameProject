@@ -1,5 +1,4 @@
-#ifndef I_SCENENODE_H_
-#define I_SCENENODE_H_
+#pragma once
 
 #include "renderer/Scene.h"
 #include "renderer/RenderPass.h"
@@ -7,7 +6,6 @@
 #include "math/Matrix4.h"
 #include "math/Vector3.h"
 #include "actors/Actor.h"
-#include "Timer.h"
 
 #include <memory>
 
@@ -53,4 +51,3 @@ public:
 using SceneNode_sptr = std::shared_ptr<I_SceneNode>;
 
 }
-#endif /* I_SCENENODE_H_ */

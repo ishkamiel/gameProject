@@ -1,6 +1,6 @@
 #include "opengl/SimpleProgram.h"
 
-#include "Logger.h"
+#include "utils/Logger.h"
 
 #include "opengl/SimpleFragmentShader.h"
 #include "opengl/SimpleVertexShader.h"
@@ -79,7 +79,7 @@ void SimpleProgram::init(void)
 	GLint programSuccess = GL_TRUE;
 	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &programSuccess);
 	if (programSuccess != GL_TRUE) {
-		PDE_FATAL << "Error linking opengGL program " << m_ProgramID;
+		PDE_FATAL << "Error linking opengGL program: " << getGLInfoLog(m_ProgramID);
 		exit(EXIT_FAILURE); // TODO
 	}
 

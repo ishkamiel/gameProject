@@ -1,6 +1,7 @@
 #pragma once
 
-#include "opengl/Epoxy.h"
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 #include <stdexcept>
 

@@ -3,7 +3,7 @@
 
 #include "opengl/OpenglRenderer.h"
 #include "exceptions/SDLInitFailedException.h"
-#include "Logger.h"
+#include "utils/Logger.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>

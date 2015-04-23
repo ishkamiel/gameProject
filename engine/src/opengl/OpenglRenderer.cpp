@@ -6,8 +6,8 @@
 #include "opengl/SimpleFragmentShader.h"
 #include "opengl/SimpleVertexShader.h"
 #include "renderer/CameraNode.h"
-#include "Logger.h"
-#include "Utils.h"
+#include "utils/Logger.h"
+#include "utils/Memory.h"
 
 namespace pdEngine {
 

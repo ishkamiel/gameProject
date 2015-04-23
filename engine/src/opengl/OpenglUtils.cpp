@@ -1,13 +1,13 @@
 #include "opengl/OpenglUtils.h"
 
-#include "Logger.h"
+#include "utils/Logger.h"
+
+
 
 namespace pdEngine
 {
-namespace OpenglUtils
-{
 
-std::string getGLLog(GLuint const logTarget)
+std::string getGLInfoLog(GLuint const logTarget) noexcept
 {
     int length = 0;
     int maxLength = length;
@@ -16,8 +16,10 @@ std::string getGLLog(GLuint const logTarget)
         glGetProgramiv(logTarget, GL_INFO_LOG_LENGTH, &maxLength);
     else if (glIsShader(logTarget))
         glGetShaderiv(logTarget, GL_INFO_LOG_LENGTH, &maxLength);
-    else
-        throw std::logic_error("Unrecognized logTarget");
+    else {
+        PDE_WARN << "Unrecognized logTarget when trying to retrieve OpenGL InfoLog.";
+        return "";
+    }
 
     char* infoLog = new char[maxLength];
 
@@ -25,13 +27,10 @@ std::string getGLLog(GLuint const logTarget)
         glGetProgramInfoLog(logTarget, maxLength, &length, infoLog);
     else if (glIsShader(logTarget))
         glGetShaderInfoLog(logTarget, maxLength, &length, infoLog);
-    else
-        throw std::logic_error("Unrecognized logTarget");
 
     std::string retval{infoLog};
     delete infoLog;
     return retval;
 }
 
-}
 }

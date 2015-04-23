@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/Deprecated.h"
+
 #include <cassert>
 #include <memory>
 
@@ -21,7 +23,7 @@ class Root
 public:
 	virtual ~Root();
 
-	static std::shared_ptr<Root> get() noexcept;
+	DEPRECATED(static std::shared_ptr<Root> get() noexcept);
 
 	std::shared_ptr<EventManager> getEventManager() const noexcept;
 	std::shared_ptr<ResourceManager> getResourceManager() const noexcept;
@@ -43,6 +45,12 @@ public:
 private:
 	Root();
 };
+
+DEPRECATED(inline std::shared_ptr<Root> getRoot() noexcept);
+
+/***************************************************************************************************
+ * Definitions
+ */
 
 inline std::shared_ptr<Root> getRoot() noexcept
 {

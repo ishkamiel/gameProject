@@ -1,5 +1,5 @@
 #pragma once
-#include "Logger.h"
+
 #include "exceptions/InitFailedException.h"
 
 #include <epoxy/gl.h>

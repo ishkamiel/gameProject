@@ -1,37 +1,38 @@
 #pragma once
 
-#include "Epoxy.h"
+#include "utils/Logger.h"
+
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 
 #include <string>
 
 namespace pdEngine
 {
 
-inline void fatalOnOpenGLError(const std::string&);
+/**
+ * @brief check for OpenGL errors, and quit on error.
+ */
+inline void fatalOnOpenGLError(const std::string&) noexcept;
 
-namespace OpenglUtils
-{
+/**
+ * @brief Retrieve InfoLog for OpenGL error.
+ */
+std::string getGLInfoLog(const GLuint) noexcept;
 
-std::string getGLLog(const GLuint);
-
-}
-
-
-
-/*
- * Definitions
+/***************************************************************************************************
+ * Definitions...
  */
 
-void fatalOnOpenGLError(const std::string& msg)
+void fatalOnOpenGLError(const std::string& msg) noexcept
 {
     //GLenum errno = glGetError();
     const GLenum errorValue = glGetError();
 
-    if (errorValue != GL_NO_ERROR)
-    {
+    if (errorValue != GL_NO_ERROR) {
         std::string error;
 
-        switch(errorValue) {
+        switch (errorValue) {
             case GL_INVALID_ENUM:
                 error = "An unacceptable value is specified for an enumerated argument.";
                 break;
@@ -58,7 +59,7 @@ void fatalOnOpenGLError(const std::string& msg)
                 break;
         }
 
-        PDE_FATAL << msg << " (error value: " << errorValue  << ") "<< error;
+        PDE_FATAL << msg << " (error value: " << errorValue << ") " << error;
         exit(EXIT_FAILURE);
     }
 }

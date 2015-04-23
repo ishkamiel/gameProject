@@ -2,7 +2,6 @@
 
 #include "renderer/RootNode.h"
 #include "renderer/CameraNode.h"
-#include "Timer.h"
 
 #include <cassert>
 

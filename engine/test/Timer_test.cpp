@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "Timer.h"
+#include "utils/Timer.h"
 
 #include <chrono>
 #include <thread>
