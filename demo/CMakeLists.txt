@@ -8,7 +8,8 @@ file(GLOB MY_BIN_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/bins/*.cpp")
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-	${include_output_path}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
+    ${include_output_path}
     )
 
 foreach(BIN_SOURCE ${MY_BIN_SOURCES})
