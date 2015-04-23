@@ -10,12 +10,12 @@ namespace pdEngine
 class GLShaderCompileError : public InitFailedException
 {
 public:
-	GLShaderCompileError() =delete;
+	GLShaderCompileError(void) =delete;
 	GLShaderCompileError(const GLuint);
 	GLShaderCompileError(const GLShaderCompileError&);
-	virtual ~GLShaderCompileError();
+	virtual ~GLShaderCompileError(void);
 
-	virtual const char* what();	
+	virtual const char* what(void);
 
 private:
 	std::string m_what;

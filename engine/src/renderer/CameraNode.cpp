@@ -86,12 +86,12 @@ auto CameraNode::getWorldViewProjection(Scene*) -> Matrix4
     //return m_Projection;
 }
 
-auto CameraNode::getProjection() noexcept -> Matrix4&
+auto CameraNode::getProjection(void) noexcept -> Matrix4&
 { 
     return m_Projection;
 }
 
-auto CameraNode::getView() noexcept -> Matrix4&
+auto CameraNode::getView(void) noexcept -> Matrix4&
 { 
     return m_View;
 }

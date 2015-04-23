@@ -147,13 +147,11 @@ char* ResourceCache::allocate(unsigned int size)
         mem = new char[size];
     }
     catch (const std::bad_alloc& e) {
-        PDE_FATAL <<  "out of memory: " << e.what();
-        assert(false);
+        PDE_WARN <<  "ResourceCache out allocated memory: " << e.what();
         return nullptr;
     }
 
-    if (mem != nullptr)
-        m_allocated += size;
+	m_allocated += size;
 
     return mem;
 }
@@ -225,10 +223,13 @@ ResourceHandle* ResourceCache::loadNonRaw(
     unsigned int rawSize = file->v_getRawResourceSize(*r);
 
     // this is going to be just a temporary buffer.
-    auto rawBuffer = new char[rawSize];
+    char* rawBuffer;
 
-    if (rawBuffer == nullptr) {
-        PDE_FATAL << "Out of memory";
+    try {
+        rawBuffer = new char[rawSize];
+    }
+    catch (const std::bad_alloc& e) {
+        PDE_FATAL << "Failed to allocate memory for temporary buffer: " << e.what();
         exit(EXIT_FAILURE);
     }
 
@@ -238,7 +239,7 @@ ResourceHandle* ResourceCache::loadNonRaw(
     char* buffer = allocate(size);
 
     if (buffer == nullptr) {
-        PDE_FATAL << "Out of memory";
+        PDE_FATAL << "Failed to allocate memory for resource";
         exit(EXIT_FAILURE);
     }
 

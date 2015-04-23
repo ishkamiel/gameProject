@@ -18,7 +18,7 @@ GLShaderCompileError::GLShaderCompileError(const GLShaderCompileError& other)
     m_what = other.m_what;
 }
 
-GLShaderCompileError::~GLShaderCompileError() 
+GLShaderCompileError::~GLShaderCompileError(void)
 {}
 
 

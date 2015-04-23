@@ -4,12 +4,12 @@
 namespace pdEngine
 {
 
-TaskManager::TaskManager()
+TaskManager::TaskManager(void)
 {}
 
-TaskManager::~TaskManager() {}
+TaskManager::~TaskManager(void) {}
 
-bool TaskManager::initAll()
+bool TaskManager::initAll(void)
 {
     for (auto t : taskList)
     {
@@ -26,7 +26,7 @@ bool TaskManager::initAll()
     return true;
 }
 
-void TaskManager::abortAllNow()
+void TaskManager::abortAllNow(void)
 {
     for (auto t : taskList)
     {
@@ -79,7 +79,7 @@ void TaskManager::updateTasks(int deltaMs)
     }
 }
 
-void TaskManager::pauseTasks()
+void TaskManager::pauseTasks(void)
 {
     for (auto t : taskList)
     {
@@ -87,7 +87,7 @@ void TaskManager::pauseTasks()
     }
 }
 
-void TaskManager::unPauseTasks()
+void TaskManager::unPauseTasks(void)
 {
     for (auto t : taskList)
     {
@@ -101,7 +101,7 @@ void TaskManager::addTask(Task_sptr newTask)
 }
 
 
-bool TaskManager::areAnyDead() {
+bool TaskManager::areAnyDead(void) {
     for (auto t : taskList) {
         if (t->isDead()) {
             return true;

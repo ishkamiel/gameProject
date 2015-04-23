@@ -10,7 +10,7 @@ namespace pdEngine
 
 class SimpleProgram {
 public:
-    SimpleProgram();
+    SimpleProgram(void);
 
     void render(void) const;
     void init(void);

@@ -29,9 +29,6 @@ void setGlobalLogLevel(LogLevel level) noexcept
 		case LogLevel::fatal:
 			boostLevel = boost::log::trivial::fatal;
 	        break;
-		default:
-			assert(false);
-	        boostLevel = boost::log::trivial::trace;
 	}
 
 

@@ -36,8 +36,7 @@ void Root::reset(void) noexcept
 
 bool Root::isAllSet(void) noexcept
 {
-	if (!m_eventManager) return false;
-	if (!m_resourceManager) return false;
+	if (!m_eventManager || !m_resourceManager) return false;
 	return true;
 }
 

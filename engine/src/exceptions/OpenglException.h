@@ -10,12 +10,12 @@ namespace pdEngine
 class OpenglException : public std::runtime_error
 {
 public:
-    OpenglException() = delete;
+    OpenglException(void) = delete;
     OpenglException(std::string);
     OpenglException(const GLuint);
     OpenglException(const OpenglException&);
     virtual ~OpenglException();
-    virtual const char* what();
+    virtual const char* what(void);
 private:
     std::string m_what;
 };
