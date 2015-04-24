@@ -84,6 +84,7 @@ namespace pdEngine
     ListenerHandle_sptr EventManagerImpl::addListener(
             const EventTypeID& eventID, EventListener listener) noexcept
     {
+        // TODO FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         auto handle_ptr = std::shared_ptr<ListenerHandle>(
             new ListenerHandle(eventID, listener),
             [=](ListenerHandle*) {

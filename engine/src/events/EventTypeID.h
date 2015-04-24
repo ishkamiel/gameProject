@@ -9,21 +9,26 @@ using EventTypeID = std::size_t;
 
 constexpr EventTypeID getEventID(const char*);
 
+template<size_t idx>
+constexpr uint32_t crc32(const char*);
+
+template<>
+constexpr uint32_t crc32<size_t(-1)>(const char*);
+
 // const EventTypeID VARIABLE_IS_NOT_USED ev_RequestQuit    = getEventID("RequestQuit");
 // const EventTypeID VARIABLE_IS_NOT_USED ev_Shutdown       = getEventID("Shutdown");
 const EventTypeID ev_RequestQuit = getEventID("RequestQuit");
 const EventTypeID ev_Shutdown = getEventID("Shutdown");
 
-/*
- * CRC solution by Clement JACOB, from StackOverflow:
- * http://stackoverflow.com/questions/2111667/compile-time-string-hashing
+
+/***************************************************************************************************
+ * Implementations
  */
 
-template<size_t idx>
-    constexpr uint32_t crc32(const char*);
-
-template<>
-    constexpr uint32_t crc32<size_t(-1)>(const char*);
+/*
+ * CRC solution provided by Clement JACOB, from StackOverflow:
+ * http://stackoverflow.com/questions/2111667/compile-time-string-hashing
+ */
 
 constexpr EventTypeID getEventID(const char* eventName) {
     return (crc32<sizeof (eventName) - 2 > (eventName) ^ 0xFFFFFFFF);

@@ -1,5 +1,4 @@
-#ifndef PDENGINE_EVENTBASIC_H_
-#define PDENGINE_EVENTBASIC_H_
+#pragma once
 
 #include "events/I_Event.h"
 
@@ -13,19 +12,18 @@ namespace pdEngine
     public:
         DefaultEvent(void) =delete;
         DefaultEvent(const EventTypeID&);
+        DefaultEvent(const std::string&);
         virtual ~DefaultEvent();
 
-        virtual inline const EventTypeID& getTypeID(void) const override;
-        virtual float getTimestamp(void) const override;
+        virtual inline const EventTypeID& getTypeID(void) const noexcept override;
+        virtual float getTimestamp(void) const noexcept override;
     };
 }
 
 namespace pdEngine
 {
-    inline const EventTypeID& DefaultEvent::getTypeID(void) const 
+    inline const EventTypeID& DefaultEvent::getTypeID(void) const  noexcept
     {
         return typeID;
     }
 }
-
-#endif /* PDENGINE_EVENTBASIC_H_ */

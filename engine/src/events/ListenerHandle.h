@@ -11,11 +11,9 @@ class ListenerHandle
 	EventListener m_listener;
 
 public:
-	ListenerHandle(EventTypeID id, EventListener listener)
-	: m_eventType(id), m_listener(listener)
-	{}
+	ListenerHandle(EventTypeID id, EventListener listener);
+	virtual ~ListenerHandle();
 
-	virtual ~ListenerHandle() = default;
 	inline bool call(Event_sptr) const noexcept;
 };
 

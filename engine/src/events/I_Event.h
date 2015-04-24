@@ -12,8 +12,8 @@ class I_Event
 {
 public:
 	virtual ~I_Event() {};
-    virtual const EventTypeID& getTypeID(void) const =0;
-    virtual float getTimestamp(void) const =0;
+    virtual const EventTypeID& getTypeID(void) const noexcept =0;
+    virtual float getTimestamp(void) const noexcept =0;
 };
 
 }
