@@ -1,6 +1,7 @@
 #pragma once
 
 #include "events/EventTypeID.h"
+#include "tasks/Task.h"
 #include "utils/Deprecated.h"
 
 #include <memory>
@@ -17,7 +18,7 @@ using ListenerHandle_sptr = std::shared_ptr<ListenerHandle>;
 
 using EventListener = std::function<bool(Event_sptr)>;
 
-class EventManager {
+class EventManager : public Task {
 public:
     EventManager() {};
     virtual ~EventManager() {};

@@ -15,6 +15,7 @@ public:
 	virtual ~ListenerHandle();
 
 	inline bool call(Event_sptr) const noexcept;
+	inline EventTypeID getEventType(void) const noexcept;
 };
 
 /***************************************************************************************************
@@ -24,6 +25,11 @@ public:
 inline bool ListenerHandle::call(Event_sptr event) const noexcept
 {
 	return m_listener(event);
+}
+
+inline EventTypeID ListenerHandle::getEventType(void) const noexcept
+{
+	return m_eventType;
 }
 
 }

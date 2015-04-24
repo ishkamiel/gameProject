@@ -47,13 +47,13 @@ public:
     Task_sptr removeChild(void) noexcept;
     Task_sptr peekChild(void) const noexcept;
 
-protected:
     virtual void onInit(void) noexcept;
     virtual void onUpdate(int deltaMs) noexcept =0;
     virtual void onSuccess(void) noexcept;
     virtual void onFail(void) noexcept;
     virtual void onAbort(void) noexcept;
 
+protected:
     inline void readyToRun(void) noexcept { state = TaskState::ready; }
 
 private:

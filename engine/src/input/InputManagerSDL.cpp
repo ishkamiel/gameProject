@@ -1,5 +1,7 @@
 #include "InputManagerSDL.h"
 
+#include "events/DefaultEvent.h"
+
 namespace pdEngine 
 {
     InputManagerSDL::InputManagerSDL()
@@ -24,7 +26,7 @@ namespace pdEngine
         {
             if (m_Event->type == SDL_QUIT)
             {
-                m_EventManager->queueEvent(ev_RequestQuit);
+                m_EventManager->queueEvent(std::make_shared<DefaultEvent>(ev_RequestQuit));
             }
         }
     }

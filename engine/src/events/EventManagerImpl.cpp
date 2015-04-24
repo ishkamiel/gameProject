@@ -11,124 +11,133 @@
 
 namespace pdEngine
 {
-    EventManagerImpl::EventManagerImpl()
-    {}
 
-    EventManagerImpl::~EventManagerImpl()
-    {
-        //TODO Do we need to clean something up?
+EventManagerImpl::EventManagerImpl()
+{}
+
+EventManagerImpl::~EventManagerImpl()
+{
+    //TODO Do we need to clean something up?
+}
+
+
+void EventManagerImpl::onUpdate(int deltaMs) noexcept
+{
+    (void) deltaMs; // ignore
+
+    /*
+     * Remove expired listener weak pointers.
+     * Set ensures lists are iterated only once. Needs to be done separately from event
+     * processing since event processing might actually cause expiration of listeners.
+     */
+    while (!m_cleanupList.empty()) {
+        auto iter = m_cleanupList.begin();
+
+        auto f = eventMap.find(*iter);
+        if (f != eventMap.end()) {
+            auto list = f->second;
+            list->erase(std::remove_if(list->begin(),
+                                       list->end(),
+                                       [](auto p) { return p.expired(); }),
+                        list->end());
+        }
+
+        m_cleanupList.erase(iter);
     }
 
-
-    void EventManagerImpl::onUpdate(int deltaMs) noexcept
-    {
-        (void)deltaMs;
-
-        if (eventQueueIn.size() == 0) return;
-
+    /*
+     * Process events
+     */
+    if (eventQueueIn.size() != 0) {
         PDE_DEBUG << "EventManager processing queued events";
 
+        /*
+         * Keep separate processing and in queues to make sure that events procuding more events
+         * don't end up in a endless loop.
+         */
         std::swap(eventQueueIn, eventsProcessing);
 
         while (eventsProcessing.size() > 0) {
+            auto listenersCalled = 0;
             auto event = eventsProcessing.front();
             eventsProcessing.pop();
 
-            assert(event);
-            PDE_DEBUG << "Processing event of type " << event->getTypeID();
-
-            auto listenersCalled = 0;
+            PDE_TRACE << "Processing event of type " << event->getTypeID();
 
             auto found = eventMap.find(event->getTypeID());
-
             if (found != eventMap.end()) {
                 auto list = found->second;
 
-                PDE_DEBUG << "Found " << list.size() << " listeners";
+                PDE_TRACE << "Found " << list->size() << " listeners";
 
-                for (auto i : list) {
+                for (auto i : *list) {
                     if (auto listener = i.lock()) {
-                        PDE_DEBUG << "Calling listener";
+                        PDE_TRACE << "Calling listener";
                         listener->call(event);
                         ++listenersCalled;
                     }
                     else {
-                        // TODO: probably shouldn't be here, unless multithreading?
-                        assert(false);
+                        /*
+                         * Since processed events could trigger ListenerHandle destruction some
+                         * listeners might get expired during this loop, and therefore end up here.
+                         * Logging this to get some indication of missed cleanup.
+                         */
+                        PDE_DEBUG << "Encountered dead ListenerHandle in onUpdate";
                     }
                 }
             }
 
-            PDE_DEBUG << "Event processed by " << listenersCalled << " listeners";
+            PDE_TRACE << "Event processed by " << listenersCalled << " listeners";
         }
     }
+}
 
-    void EventManagerImpl::queueEvent(const EventTypeID id) noexcept
-    {
-        eventQueueIn.push(std::make_shared<DefaultEvent>(id));
+void EventManagerImpl::queueEvent(const EventTypeID id) noexcept
+{
+    eventQueueIn.push(std::make_shared<DefaultEvent>(id));
+}
+
+void EventManagerImpl::queueEvent(const Event_sptr eventPtr) noexcept
+{
+    PDE_DEBUG << "Queing new event EventTypeID: " << eventPtr->getTypeID();
+    eventQueueIn.push(eventPtr);
+}
+
+ListenerHandle_sptr EventManagerImpl::addListener(
+    const EventTypeID& eventID, EventListener listener) noexcept
+{
+    auto found = eventMap.find(eventID);
+
+    if (found == eventMap.end()) {
+        PDE_TRACE << "Creating new ListenerList for event type " << eventID;
+        /**
+		 * If no list was found, create one with emplace which conveniently
+		 * returns iterator to newly created pair.
+		 */
+        auto pair = eventMap.emplace(std::make_pair(eventID, new ListenerList()));
+        assert(pair.second == true); // true if insertion happened
+        found = pair.first;
+
+        // Make sure this trickery worked!
+        assert(eventMap.find(eventID) != eventMap.end());
     }
 
-    void EventManagerImpl::queueEvent(const Event_sptr eventPtr) noexcept
-    {
-        PDE_DEBUG << "Queing new event EventTypeID: " << eventPtr->getTypeID();
-        eventQueueIn.push(eventPtr);
-    }
+    auto listPointer = found->second;
 
-    /*
-    void EventManager::addListener( const EventTypeName eventName, EventListener listener)
-    {
-        addListener(getEventID(eventName), listener);
-    }
-    */
+    auto handle_ptr = std::shared_ptr<ListenerHandle>(
+        new ListenerHandle(eventID, listener),
+        [=](ListenerHandle* rawPointer) {
+            PDE_TRACE << "Cleaning up event listener for event of type "
+                      << rawPointer->getEventType();
+            m_cleanupList.insert(rawPointer->getEventType());
+            delete rawPointer;
+        });
 
-    ListenerHandle_sptr EventManagerImpl::addListener(
-            const EventTypeID& eventID, EventListener listener) noexcept
-    {
-        // TODO FIXME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        auto handle_ptr = std::shared_ptr<ListenerHandle>(
-            new ListenerHandle(eventID, listener),
-            [=](ListenerHandle*) {
-                // TODO do the cleanup here!
-            });
+    listPointer->push_back(handle_ptr);
+    assert(listPointer->size() != 0);
 
-        auto found = eventMap.find(eventID);
+    PDE_DEBUG << "Added listener for event of type " << eventID;
+    return handle_ptr;
+}
 
-        if (found == eventMap.end()) {
-            /**
-             * If no list was found, create one with emplace which conveniently
-             * returns iterator to newly created pair.
-             */
-            auto pair = eventMap.emplace(std::make_pair(eventID, ListenerList()));
-            assert(pair.second == true); // true if insertion happened
-            found = pair.first;
-        }
-
-        auto listeners = found->second;
-
-        listeners.push_back(handle_ptr);
-
-        //assert(list->size() != 0);
-        //assert(list->size() == eventMap[eventID]->size());
-
-        PDE_DEBUG << "Added listener for event, EventTypeID << " << eventID;
-        return handle_ptr;
-    }
-
-/*
-	ListenerList* EventManagerImpl::findEventList(EventTypeID id, bool create)
-    {
-        auto f = eventMap.find(id);
-        if (f == eventMap.end()) 
-        {
-            if (create)
-            {
-                eventMap.insert(EventMapPair(id, new ListenerList()));
-                return findEventList(id);
-            }
-            return nullptr;
-        }
-
-        return f->second;
-    }
-    */
 }

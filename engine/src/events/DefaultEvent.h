@@ -15,8 +15,8 @@ namespace pdEngine
         DefaultEvent(const std::string&);
         virtual ~DefaultEvent();
 
-        virtual inline const EventTypeID& getTypeID(void) const noexcept override;
-        virtual float getTimestamp(void) const noexcept override;
+        virtual inline const EventTypeID& getTypeID(void) const noexcept final override;
+        virtual float getTimestamp(void) const noexcept final override;
     };
 }
 

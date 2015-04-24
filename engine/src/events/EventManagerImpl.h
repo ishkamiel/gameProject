@@ -1,6 +1,7 @@
 #pragma once
 
 #include "events/EventManager.h"
+#include "events/ListenerHandle.h"
 #include "tasks/Task.h"
 
 #include <functional>
@@ -10,18 +11,20 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
 
 namespace pdEngine {
 
-class EventManagerImpl : public Task, public EventManager {
+class EventManagerImpl : public EventManager {
     using ListenerList = std::vector<std::weak_ptr<ListenerHandle>>;
-    using EventMap = std::map<EventTypeID, ListenerList>;
+    using EventMap = std::map<EventTypeID, ListenerList*>;
     //using EventMapPair = std::pair<EventTypeID, EventListenerList*>;
     using EventQueue = std::queue<Event_sptr>;
 
     EventMap eventMap{};
     EventQueue eventQueueIn{};
     EventQueue eventsProcessing{};
+    std::unordered_set<EventTypeID> m_cleanupList {};
 
 public:
     EventManagerImpl();
