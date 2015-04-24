@@ -152,9 +152,6 @@ TEST_F(test_EventManager, ListenerCanCancelCallChain)
 {
     auto id = getEventID("TestEvent");
 
-    auto callsToFirst = 0;
-    auto callsToSecond = 0;
-
     auto first = em->addListener(
         id,
         [&](Event_sptr event) {

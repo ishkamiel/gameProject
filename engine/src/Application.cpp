@@ -8,9 +8,9 @@
 #include "Application.h"
 
 #include "utils/Logger.h"
-#include "Root.h"
 
 #include "events/EventManager.h"
+#include "events/DefaultEvent.h"
 #include "opengl/OpenglRenderer.h"
 #include "renderer/SDLWindow.h"
 #include "resources/ResourceManager.h"
@@ -112,7 +112,6 @@ void Application::initializeEventManager(void) {
 
 void Application::initializeResourceManager(void) {
 	auto rm = std::make_shared<ResourceManager>();
-	getRoot()->setResourceManager(rm);
 
 	taskManager->addTask(std::shared_ptr<Task>(rm));
 }
@@ -149,7 +148,7 @@ bool Application::onShutdown(Event_sptr e) {
 bool Application::onRequestQuit(Event_sptr e) {
 	(void) e;
 	PDE_DEBUG << "Received ev_RequestQuit, sending ev_Shutdown";
-	EventManager::get()->queueEvent(ev_Shutdown);
+	EventManager::get()->queueEvent(std::make_shared<DefaultEvent>(ev_Shutdown));
 	return true;
 }
 

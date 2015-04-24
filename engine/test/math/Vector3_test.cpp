@@ -93,9 +93,9 @@ TEST_F(Vector3_test, NormalizeOneOneOneVector)
     v.normalize();
 
     ASSERT_FLOAT_EQ(1.0f, v.length());
-    ASSERT_FLOAT_EQ(v.getX(), v.getY());
-    ASSERT_FLOAT_EQ(v.getX(), v.getZ());
-    ASSERT_FLOAT_EQ(v.getX() * l, 1.0f);
+    ASSERT_FLOAT_EQ(v[0], v[1]);
+    ASSERT_FLOAT_EQ(v[0], v[2]);
+    ASSERT_FLOAT_EQ(v[0] * l, 1.0f);
 }
 
 TEST_F(Vector3_test, GetNormalizedFromOneOneOneVector)
@@ -107,9 +107,9 @@ TEST_F(Vector3_test, GetNormalizedFromOneOneOneVector)
 
     ASSERT_FLOAT_EQ(n.length(), 1.0f);
 
-    ASSERT_FLOAT_EQ(n.getX(), n.getY());
-    ASSERT_FLOAT_EQ(n.getX(), n.getZ());
-    ASSERT_FLOAT_EQ(n.getX() * l, 1.0f);
+    ASSERT_FLOAT_EQ(n[0], n[1]);
+    ASSERT_FLOAT_EQ(n[0], n[2]);
+    ASSERT_FLOAT_EQ(n[0] * l, 1.0f);
 }
 
 TEST_F(Vector3_test, NormalizeVector)
@@ -128,13 +128,13 @@ TEST_F(Vector3_test, NormalizeVector)
 
     ASSERT_FLOAT_EQ(v.length(), 1.0f);
 
-    ASSERT_FLOAT_EQ(v.getX() * l, x);
-    ASSERT_FLOAT_EQ(v.getY() * l, y);
-    ASSERT_FLOAT_EQ(v.getZ() * l, z);
+    ASSERT_FLOAT_EQ(v[0] * l, x);
+    ASSERT_FLOAT_EQ(v[1] * l, y);
+    ASSERT_FLOAT_EQ(v[2] * l, z);
 
-    ASSERT_FLOAT_EQ(n.getX(), v.getX());
-    ASSERT_FLOAT_EQ(n.getY(), v.getY());
-    ASSERT_FLOAT_EQ(n.getZ(), v.getZ());
+    ASSERT_FLOAT_EQ(n[0], v[0]);
+    ASSERT_FLOAT_EQ(n[1], v[1]);
+    ASSERT_FLOAT_EQ(n[2], v[2]);
 }
 
 
@@ -151,24 +151,24 @@ TEST_F(Vector3_test, OperatorStarEquals)
 {
     Vector3 a { 2.0f, 3.0f, 4.0f };
     a *= 2.0f;
-    ASSERT_THAT(a.getX(), FloatEq(4.0f));
-    ASSERT_THAT(a.getY(), FloatEq(6.0f));
-    ASSERT_THAT(a.getZ(), FloatEq(8.0f));
+    ASSERT_THAT(a[0], FloatEq(4.0f));
+    ASSERT_THAT(a[1], FloatEq(6.0f));
+    ASSERT_THAT(a[2], FloatEq(8.0f));
 }
 
 TEST_F(Vector3_test, ScalarProduct)
 {
     Vector3 a { 2.0f, 3.0f, 4.0f };
     a *= 2;
-    ASSERT_FLOAT_EQ(a.getX(), 4.0f);
-    ASSERT_FLOAT_EQ(a.getY(), 6.0f);
-    ASSERT_FLOAT_EQ(a.getZ(), 8.0f);
+    ASSERT_FLOAT_EQ(a[0], 4.0f);
+    ASSERT_FLOAT_EQ(a[1], 6.0f);
+    ASSERT_FLOAT_EQ(a[2], 8.0f);
 
     Vector3 b = (a*123);
     a = b*(1.0f/246.0f);
-    ASSERT_FLOAT_EQ(a.getX(), 2.0f);
-    ASSERT_FLOAT_EQ(a.getY(), 3.0f);
-    ASSERT_FLOAT_EQ(a.getZ(), 4.0f);
+    ASSERT_FLOAT_EQ(a[0], 2.0f);
+    ASSERT_FLOAT_EQ(a[1], 3.0f);
+    ASSERT_FLOAT_EQ(a[2], 4.0f);
 }
 
 TEST_F(Vector3_test, CrossProduct)
