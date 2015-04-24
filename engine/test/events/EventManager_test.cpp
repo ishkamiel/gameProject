@@ -178,8 +178,9 @@ TEST_F(test_EventManager, ListenerCanCancelCallChain)
 TEST_F(test_EventManager, SeveralListenersAndEventTypes)
 {
     auto callCount = 0;
-    auto typesToCreate = 1000;
-    auto listenersToCreate = 100;
+    auto expected = 0;
+    auto typesToCreate = 100;
+    auto listenersToCreate = 10;
 
     std::list<EventTypeID> ids;
     std::list<ListenerHandle_sptr> handles;
@@ -201,26 +202,33 @@ TEST_F(test_EventManager, SeveralListenersAndEventTypes)
 
     em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
     emTask->onUpdate(10);
-    ASSERT_EQ(callCount, 100);
+
+    expected += listenersToCreate;
+    ASSERT_EQ(callCount, expected);
 
     em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
     em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
     em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
     emTask->onUpdate(10);
-    ASSERT_EQ(callCount, 400);
+
+    expected += 3*listenersToCreate;
+    ASSERT_EQ(callCount, expected);
 
     for (auto id : ids) {
         em->queueEvent(std::make_shared<DefaultEvent>(id));
     }
     emTask->onUpdate(10);
-    ASSERT_EQ(callCount, 100000+400);
+
+    expected += listenersToCreate*typesToCreate;
+    ASSERT_EQ(callCount, expected);
 
     handles.clear();
     for (auto id : ids) {
         em->queueEvent(std::make_shared<DefaultEvent>(id));
     }
     emTask->onUpdate(10);
-    ASSERT_EQ(callCount, 100000+400);
+
+    ASSERT_EQ(callCount, expected);
 }
 
 }
