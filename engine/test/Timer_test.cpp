@@ -46,8 +46,9 @@ TEST_F(Timer_test, TimerTotalTimes)
 
   auto micro = t.totalMicro();
   auto milli = t.totalMilli();
-  EXPECT_EQ(micro/1000, milli);
-  EXPECT_EQ(milli/1000, t.totalSeconds());
+  auto seconds = t.totalSeconds();
+  EXPECT_TRUE(micro/1000 <= milli);
+  EXPECT_TRUE(milli/1000 <= seconds);
 }
 
 TEST_F(Timer_test, OneSecondStep)
@@ -62,12 +63,8 @@ TEST_F(Timer_test, OneMsStep)
   pdEngine::Timer t {1000};
   EXPECT_TRUE(t.step());
   EXPECT_FALSE(t.step());
-  EXPECT_FALSE(t.step());
-  EXPECT_FALSE(t.step());
   std::this_thread::sleep_for(std::chrono::milliseconds(1));
   EXPECT_TRUE(t.step());
-  EXPECT_FALSE(t.step());
-  EXPECT_FALSE(t.step());
 }
 
 }
