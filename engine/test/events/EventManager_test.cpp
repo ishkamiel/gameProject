@@ -9,6 +9,7 @@
 #include "utils/Logger.h"
 
 #include <cstring>
+#include <list>
 
 namespace pdEngine
 {
@@ -22,7 +23,7 @@ public:
 protected:
     virtual void SetUp()
     {
-        setGlobalLogLevel(LogLevel::trace);
+        setGlobalLogLevel(LogLevel::fatal);
         em = EventManager::get();
         emTask = std::static_pointer_cast<Task>(em);
         emTask->onInit();
@@ -73,6 +74,153 @@ TEST_F(test_EventManager, SingleEventReachesListener)
     emTask->onUpdate(10);
 
     ASSERT_TRUE(wasCalled);
+}
+
+TEST_F(test_EventManager, SeveralListenersSeveralUpdates)
+{
+    auto id = getEventID("TestEvent");
+
+    auto callsToFirst = 0;
+    auto callsToSecond = 0;
+
+    ListenerHandle_sptr first = em->addListener(
+        id,
+        [&](Event_sptr event) {
+            ++callsToFirst;
+            return true;
+        });
+
+    ListenerHandle_sptr second = em->addListener(
+        id,
+        [&](Event_sptr event) {
+            ++callsToSecond;
+            return true;
+        });
+
+    emTask->onUpdate(10);
+
+    ASSERT_EQ(callsToFirst, 0);
+    ASSERT_EQ(callsToSecond, 0);
+    em->queueEvent(std::make_shared<DefaultEvent>(id));
+    emTask->onUpdate(10);
+    ASSERT_EQ(callsToFirst, 1);
+    ASSERT_EQ(callsToSecond, 1);
+
+    emTask->onUpdate(10);
+    emTask->onUpdate(10);
+    emTask->onUpdate(10);
+    ASSERT_EQ(callsToFirst, 1);
+    ASSERT_EQ(callsToSecond, 1);
+    first.reset();
+    em->queueEvent(std::make_shared<DefaultEvent>(id));
+    em->onUpdate(10);
+    ASSERT_EQ(callsToFirst, 1);
+    ASSERT_EQ(callsToSecond, 2);
+}
+
+TEST_F(test_EventManager, EventProcessingResettingEvent)
+{
+    auto id = getEventID("TestEvent");
+
+    auto callsToFirst = 0;
+    auto callsToSecond = 0;
+
+    ListenerHandle_sptr second;
+
+    ListenerHandle_sptr first = em->addListener(
+        id,
+        [&](Event_sptr event) {
+            ++callsToFirst;
+            second.reset();
+            return true;
+        });
+
+    second = em->addListener(
+        id,
+        [&](Event_sptr event) {
+            ++callsToSecond;
+            return true;
+        });
+
+    em->queueEvent(std::make_shared<DefaultEvent>(id));
+    emTask->onUpdate(10);
+    ASSERT_EQ(callsToFirst, 1);
+    ASSERT_EQ(callsToSecond, 0);
+}
+
+TEST_F(test_EventManager, ListenerCanCancelCallChain)
+{
+    auto id = getEventID("TestEvent");
+
+    auto callsToFirst = 0;
+    auto callsToSecond = 0;
+
+    auto first = em->addListener(
+        id,
+        [&](Event_sptr event) {
+            return false;
+        });
+
+
+    auto wasCalled = false;
+    auto second = em->addListener(
+        id,
+        [&](Event_sptr event) {
+            wasCalled = true;
+            return true;
+        });
+
+    em->queueEvent(std::make_shared<DefaultEvent>(id));
+    emTask->onUpdate(10);
+    ASSERT_FALSE(wasCalled);
+}
+
+TEST_F(test_EventManager, SeveralListenersAndEventTypes)
+{
+    auto callCount = 0;
+    auto typesToCreate = 1000;
+    auto listenersToCreate = 100;
+
+    std::list<EventTypeID> ids;
+    std::list<ListenerHandle_sptr> handles;
+
+    for (auto i = 0; i < typesToCreate; ++i) {
+        ids.push_back(i+1248);
+    }
+
+    for (auto id : ids) {
+        for (auto i = 0; i < listenersToCreate; ++i) {
+            handles.push_back(em->addListener(
+                id,
+                [&](Event_sptr event) {
+                    ++callCount;
+                    return true;
+                }));
+        }
+    }
+
+    em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
+    emTask->onUpdate(10);
+    ASSERT_EQ(callCount, 100);
+
+    em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
+    em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
+    em->queueEvent(std::make_shared<DefaultEvent>(ids.front()));
+    emTask->onUpdate(10);
+    ASSERT_EQ(callCount, 400);
+
+    for (auto id : ids) {
+        em->queueEvent(std::make_shared<DefaultEvent>(id));
+    }
+    emTask->onUpdate(10);
+    ASSERT_EQ(callCount, 100000+400);
+
+    handles.clear();
+    for (auto id : ids) {
+        em->queueEvent(std::make_shared<DefaultEvent>(id));
+    }
+    emTask->onUpdate(10);
+    ASSERT_EQ(callCount, 100000+400);
 }
 
 }

@@ -58,7 +58,7 @@ bool Plane::isValid(void) const noexcept
 
     if (std::abs(normalLength - 1.0f) > 0.00001f) {
         PDE_ERROR << "We have an invalid Plane, normal length is: " << n.length();
-        // TODO: Vector3 lenght screwed....
+        // TODO: Vector3 length screwed....
         // return false;
     }
 

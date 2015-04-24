@@ -40,6 +40,8 @@ void EventManagerImpl::onUpdate(int deltaMs) noexcept
                                        list->end(),
                                        [](auto p) { return p.expired(); }),
                         list->end());
+
+            // TODO check if list is empty, and delete it if so.
         }
 
         m_cleanupList.erase(iter);
@@ -58,7 +60,6 @@ void EventManagerImpl::onUpdate(int deltaMs) noexcept
         std::swap(eventQueueIn, eventsProcessing);
 
         while (eventsProcessing.size() > 0) {
-            auto listenersCalled = 0;
             auto event = eventsProcessing.front();
             eventsProcessing.pop();
 
@@ -67,27 +68,30 @@ void EventManagerImpl::onUpdate(int deltaMs) noexcept
             auto found = eventMap.find(event->getTypeID());
             if (found != eventMap.end()) {
                 auto list = found->second;
-
                 PDE_TRACE << "Found " << list->size() << " listeners";
-
-                for (auto i : *list) {
-                    if (auto listener = i.lock()) {
-                        PDE_TRACE << "Calling listener";
-                        listener->call(event);
-                        ++listenersCalled;
-                    }
-                    else {
-                        /*
-                         * Since processed events could trigger ListenerHandle destruction some
-                         * listeners might get expired during this loop, and therefore end up here.
-                         * Logging this to get some indication of missed cleanup.
-                         */
-                        PDE_DEBUG << "Encountered dead ListenerHandle in onUpdate";
-                    }
-                }
+                p_processEvent(list, event);
             }
+        }
+    }
+}
 
-            PDE_TRACE << "Event processed by " << listenersCalled << " listeners";
+void EventManagerImpl::p_processEvent(
+    const ListenerList* list, const Event_sptr event) const noexcept
+{
+    for (auto i : *list) {
+        if (auto listener = i.lock()) {
+            PDE_TRACE << "Calling listener";
+            if (!listener->call(event)) {
+                return;
+            }
+        }
+        else {
+            /*
+			 * Since processed events could trigger ListenerHandle destruction some
+			 * listeners might get expired during this loop, and therefore end up here.
+			 * Logging this to get some indication of missed cleanup.
+			 */
+            PDE_DEBUG << "Encountered dead ListenerHandle in onUpdate";
         }
     }
 }

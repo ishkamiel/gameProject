@@ -43,6 +43,10 @@ public:
     // disable making of copies
     EventManagerImpl(const EventManagerImpl&) = delete;
     EventManagerImpl& operator=(const EventManagerImpl&) = delete;
+
+private:
+    inline void p_processEvent(
+        const ListenerList* list, const Event_sptr event) const noexcept;
 };
 
 }
