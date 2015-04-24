@@ -106,8 +106,9 @@ void Application::initializeEventManager(void) {
 
 	using namespace std::placeholders;
 
-	em->addListener(ev_RequestQuit, std::bind(&Application::onRequestQuit, this, _1));
-	em->addListener(ev_Shutdown, std::bind(&Application::onShutdown, this, _1));
+	// keep the handlers in static program lasting globals
+	static auto quitHandler = em->addListener(ev_RequestQuit, std::bind(&Application::onRequestQuit, this, _1));
+	static auto shutdownHandler = em->addListener(ev_Shutdown, std::bind(&Application::onShutdown, this, _1));
 }
 
 void Application::initializeResourceManager(void) {
