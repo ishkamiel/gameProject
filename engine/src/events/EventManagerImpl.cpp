@@ -4,6 +4,7 @@
 #include "events/DefaultEvent.h"
 #include "events/ListenerHandle.h"
 #include "utils/Logger.h"
+#include "utils/Memory.h"
 
 #include <cassert>
 #include <algorithm>
@@ -17,7 +18,10 @@ EventManagerImpl::EventManagerImpl()
 
 EventManagerImpl::~EventManagerImpl()
 {
-    //TODO Do we need to clean something up?
+    for (auto pair : eventMap) {
+        safeDelete(pair.second);
+        pair.second = nullptr;
+    }
 }
 
 
@@ -41,7 +45,12 @@ void EventManagerImpl::onUpdate(int deltaMs) noexcept
                                        [](auto p) { return p.expired(); }),
                         list->end());
 
-            // TODO check if list is empty, and delete it if so.
+            if (list->empty()) {
+                // FIXME: Not thread safe, addListener might be accessing at same time!
+                safeDelete(f->second);
+                f->second = nullptr;
+                eventMap.erase(f);
+            }
         }
 
         m_cleanupList.erase(iter);
