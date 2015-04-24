@@ -35,7 +35,7 @@ public:
     DEPRECATED(inline float getY(void) const noexcept);
 	DEPRECATED(inline float getZ(void) const noexcept);
 
-	//inline float length(void) const noexcept;
+	inline float length(void) const noexcept;
 
     inline Vector3& normalize(void) noexcept;
     inline Vector3 getNormalized(void) const noexcept;
@@ -59,12 +59,10 @@ float Vector3::getZ(void) const noexcept
     return z;
 }
 
-/*
 float Vector3::length(void) const noexcept
 {
     return glm::length(static_cast<glm::vec3>(*this));
 }
- */
 
 Vector3& Vector3::normalize(void) noexcept
 {
