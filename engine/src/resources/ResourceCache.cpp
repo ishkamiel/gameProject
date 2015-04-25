@@ -10,48 +10,60 @@ namespace pdEngine
 {
 ResourceCache::ResourceCache (const unsigned int s)
     : m_cacheSize(s*1024*1024), m_allocated(0)
-{}
+{
+
+}
 
 ResourceCache::~ResourceCache()
 {
-    while (!m_lruResources.empty())
-    {
+    clear();
+}
+
+void ResourceCache::clear(void)
+{
+    while (!m_lruResources.empty()) {
         freeOneResource();
     }
 }
 
-void ResourceCache::addContainer(ResourceContainer_sptr container)
+void ResourceCache::reset(void) noexcept
 {
-    m_containers.push_back(container);
+    /*
+     * Does not reset m_cacheSize or m_allocated. Resetting does not guarantee any actual resources
+     * are released, since resource handles might be kept somewhere else!
+     */
+
+    clear();
+    m_lruResources.clear();
+    m_resources.clear();
+    m_loaders.clear();
+    m_containers.clear();
 }
 
-
-bool ResourceCache::init()
+void ResourceCache::setCacheSizeMB(unsigned int size)
 {
-    bool retval = true;
+    m_cacheSize = size*1024*1024;
+	assert(size >= m_allocated);
+}
 
-    for (auto container : m_containers)
-    {
-        if (container->v_open()) {
-            registerLoader(ResourceLoader_sptr(new DefaultResourceLoader()));
-        }
-        else
-        {
-            PDE_WARN << "Unable to open container " << container->v_getName();
-            retval = false;
-        }
-
+bool ResourceCache::addContainer(ResourceContainer_sptr container)
+{
+    if (container->v_open()) {
+        m_containers.push_back(container);
+        return true;
     }
 
-    return retval;
+	PDE_ERROR << "Unable to open container " << container->v_getName();
+	return false;
 }
 
-void ResourceCache::registerLoader(ResourceLoader_sptr l)
+bool ResourceCache::registerLoader(ResourceLoader_sptr l)
 {
     m_loaders.push_back(l);
+    return true;
 }
 
-ResourceHandle_sptr ResourceCache::getHandle(Resource* r)
+ResourceHandle_sptr ResourceCache::getHandle(std::shared_ptr<Resource> r)
 {
     ResourceHandle_sptr handle { find(r) };
 
@@ -70,11 +82,8 @@ int ResourceCache::preLoad(const std::string p, void (*callback)(int, bool&))
     throw std::runtime_error("preLoad not implemented");
 }
 
-void ResourceCache::flush(void)
-{
-}
 
-ResourceHandle_sptr ResourceCache::find(Resource* r)
+ResourceHandle_sptr ResourceCache::find(std::shared_ptr<Resource> r)
 {
     auto f = m_resources.find(r->getName());
     if (f == m_resources.end())
@@ -91,34 +100,35 @@ void ResourceCache::update(ResourceHandle_sptr rh)
 
 void ResourceCache::free(ResourceHandle_sptr rh)
 {
-    // ResourceHande shared_ptr destruction triggers acctuall release of memory.
-    // This simply removes the cache reference to the shared_ptr.
-    m_resources.erase(rh->getResourceName());
-
+    /*
+     * The ResourceHanlde shared_ptr custom destructor triggers the actuall release of the
+     * resource. This only guarantees the internal reference is removed!
+     */
+    m_resources.erase(rh->getName());
     m_lruResources.remove(rh);
 }
 
 
-ResourceHandle_sptr ResourceCache::load(Resource* r)
+ResourceHandle_sptr ResourceCache::load(std::shared_ptr<Resource> resource)
 {
-    auto container = getContainer(r);
+    auto container = getContainer(resource);
     if (!container) {
-        PDE_WARN << "Unable to find ResourceContianer for " << r->getName();
+        PDE_WARN << "Unable to find ResourceContianer for " << resource->getName();
         return ResourceHandle_sptr();
     }
-    auto loader = getLoader(r);
+    auto loader = getLoader(resource);
     if (!loader) {
-        PDE_WARN << "Unable to find ResourceLoader for " << r->getName();
+        PDE_WARN << "Unable to find ResourceLoader for " << resource->getName();
         return ResourceHandle_sptr();
     }
 
     ResourceHandle *rawPointer;
 
     if (loader->v_usesRawFile()) {
-        rawPointer = loadRaw(container, loader, r);
+        rawPointer = loadRaw(container, loader, resource);
     }
     else {
-        rawPointer = loadNonRaw(container, loader, r);
+        rawPointer = loadNonRaw(container, loader, resource);
     }
 
     auto handle = std::shared_ptr<ResourceHandle>(
@@ -131,7 +141,7 @@ ResourceHandle_sptr ResourceCache::load(Resource* r)
         });
 
     m_lruResources.push_back(handle);
-    m_resources[r->getName()] = handle;
+    m_resources[handle->getName()] = handle;
     return handle;
 }
 
@@ -177,7 +187,7 @@ void ResourceCache::freeOneResource()
     ResourceHandle_sptr h = *(--(m_lruResources.end()));
 
     m_lruResources.pop_front();
-    m_resources.erase(h->getResourceName());
+    m_resources.erase(h->getName());
 }
 
 void ResourceCache::memoryHasBeenFreed(unsigned int m)
@@ -186,13 +196,13 @@ void ResourceCache::memoryHasBeenFreed(unsigned int m)
     m_allocated -= m;
 }
 
-ResourceContainer_sptr ResourceCache::getContainer(Resource* r) noexcept
+ResourceContainer_sptr ResourceCache::getContainer(std::shared_ptr<Resource> r) noexcept
 {
     // TODO implement this!!!!
     return ResourceContainer_sptr();
 }
 
-ResourceLoader_sptr ResourceCache::getLoader(Resource* r) noexcept
+ResourceLoader_sptr ResourceCache::getLoader(std::shared_ptr<Resource> r) noexcept
 {
     for (auto l : m_loaders) {
         if (std::regex_search(r->getName(), l->v_getRegex())) {
@@ -203,9 +213,9 @@ ResourceLoader_sptr ResourceCache::getLoader(Resource* r) noexcept
 }
 
 ResourceHandle* ResourceCache::loadRaw(
-    ResourceContainer_sptr file, ResourceLoader_sptr loader, Resource* r)
+    ResourceContainer_sptr file, ResourceLoader_sptr loader, std::shared_ptr<Resource> r)
 {
-    unsigned int rawSize = file->v_getRawResourceSize(*r);
+    unsigned int rawSize = file->v_getRawResourceSize(r);
     char *rawBuffer = allocate(rawSize);
 
     if (rawBuffer == nullptr) {
@@ -213,14 +223,14 @@ ResourceHandle* ResourceCache::loadRaw(
         exit(EXIT_FAILURE);
     }
 
-    file->v_loadRawResource(*r, rawBuffer);
-    return new ResourceHandle(*r, rawBuffer, rawSize);
+    file->v_loadRawResource(r, rawBuffer);
+    return new ResourceHandle(r, rawBuffer, rawSize);
 }
 
 ResourceHandle* ResourceCache::loadNonRaw(
-    ResourceContainer_sptr file, ResourceLoader_sptr loader, Resource* r)
+    ResourceContainer_sptr file, ResourceLoader_sptr loader, std::shared_ptr<Resource> r)
 {
-    unsigned int rawSize = file->v_getRawResourceSize(*r);
+    unsigned int rawSize = file->v_getRawResourceSize(r);
 
     // this is going to be just a temporary buffer.
     char* rawBuffer;
@@ -233,7 +243,7 @@ ResourceHandle* ResourceCache::loadNonRaw(
         exit(EXIT_FAILURE);
     }
 
-    file->v_loadRawResource(*r, rawBuffer);
+    file->v_loadRawResource(r, rawBuffer);
 
     auto size = loader->v_getLoadedResourceSize(rawBuffer, rawSize);
     char* buffer = allocate(size);
@@ -243,7 +253,7 @@ ResourceHandle* ResourceCache::loadNonRaw(
         exit(EXIT_FAILURE);
     }
 
-    auto handle = new ResourceHandle(*r, buffer, size);
+    auto handle = new ResourceHandle(r, buffer, size);
 
     bool success = loader->v_loadResource(rawBuffer, rawSize, handle);
     safeDeleteArray(rawBuffer);

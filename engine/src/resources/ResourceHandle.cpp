@@ -5,9 +5,9 @@
 
 namespace pdEngine
 {
-        //ResourceHandle(Resource&, char*, unsigned int, ResourceCache_sptr);
-    ResourceHandle::ResourceHandle(Resource& r, char* b, unsigned int s)
-        : resource(r), buffer(b), size(s)
+    ResourceHandle::ResourceHandle(
+        std::shared_ptr<Resource> r, char* b, unsigned int s)
+        : m_resource(r), buffer(b), size(s)
     {}
 
     ResourceHandle::~ResourceHandle()
@@ -15,22 +15,23 @@ namespace pdEngine
         safeDeleteArray(buffer);
     }
 
-    unsigned int ResourceHandle::getSize(void) const {
+    unsigned int ResourceHandle::getSize(void) const noexcept
+    {
         return size;
     }
 
-    char* ResourceHandle::getBuffer(void) const
+    const char* ResourceHandle::getBuffer(void) const noexcept
     {
         return buffer;
     }
 
-    char* ResourceHandle::getWritableBuffer(void)
+    char* ResourceHandle::getWritableBuffer(void) noexcept
     {
         return buffer;
     }
 
-    const std::string ResourceHandle::getResourceName(void)
+    const std::string& ResourceHandle::getName(void) const noexcept
     {
-        return resource.getName();
+        return m_resource->getName();
     }
 }

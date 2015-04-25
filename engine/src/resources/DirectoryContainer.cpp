@@ -36,12 +36,12 @@ std::string DirectoryContainer::v_getResourceName(int i) const {
     throw std::out_of_range("Unknown resource");
 }
 
-int DirectoryContainer::v_getRawResourceSize(Resource const &r) {
+int DirectoryContainer::v_getRawResourceSize(std::shared_ptr<Resource> r) {
     (void) r;
     throw std::out_of_range("Unknown resource");
 }
 
-int DirectoryContainer::v_loadRawResource(Resource const &r, char *buffer) {
+int DirectoryContainer::v_loadRawResource(std::shared_ptr<Resource> r, char *buffer) {
     (void) r;
     (void) buffer;
     throw std::out_of_range("Unknown resource");

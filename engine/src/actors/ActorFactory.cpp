@@ -17,7 +17,7 @@ ActorFactory::~ActorFactory(void)
 
 Actor_sptr ActorFactory::createActor(const char* res) noexcept
 {
-    pugi::xml_document* xmlRoot = m_resourceManager->loadResourceXML(res);
+    auto xmlRoot = ResourceManager::get()->loadXML(res);
 
     if (!xmlRoot)
     {

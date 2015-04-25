@@ -34,7 +34,7 @@ public:
 	 *
 	 * @return size of the resource.
 	 */
-	virtual int v_getRawResourceSize(const Resource &res) =0;
+	virtual int v_getRawResourceSize(std::shared_ptr<Resource> resource) =0;
 
 	/**
 	 * @brief Reads the requested resource raw data into memory
@@ -44,7 +44,7 @@ public:
 	 *
 	 * @return Number of bytes read.
 	 */
-	virtual int v_loadRawResource(const Resource &res, char *buf)= 0;
+	virtual int v_loadRawResource(std::shared_ptr<Resource> resource, char *buffer)= 0;
 
 	/**
 	 * @brief Fetch the number of resources contained in File.

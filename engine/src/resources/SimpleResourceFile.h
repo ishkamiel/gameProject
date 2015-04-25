@@ -30,8 +30,8 @@ public:
 	virtual bool v_open(void) override;
 	virtual int v_getResourceCount(void) const override;
 	virtual std::string v_getResourceName(int) const override;
-	virtual int v_getRawResourceSize(const Resource &) override;
-	virtual int v_loadRawResource(const Resource &, char *) override;
+	virtual int v_getRawResourceSize(std::shared_ptr<Resource>) override;
+	virtual int v_loadRawResource(std::shared_ptr<Resource>, char *) override;
 
 private:
 	std::string filename;

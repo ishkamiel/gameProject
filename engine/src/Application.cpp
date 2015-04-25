@@ -112,7 +112,7 @@ void Application::initializeEventManager(void) {
 }
 
 void Application::initializeResourceManager(void) {
-	auto rm = std::make_shared<ResourceManager>();
+	auto rm = ResourceManager::get();
 
 	taskManager->addTask(std::shared_ptr<Task>(rm));
 }

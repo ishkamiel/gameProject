@@ -37,12 +37,12 @@ namespace pdEngine
         return false;
     }
 
-    int SimpleResourceFile::v_getRawResourceSize(const Resource &r)
+    int SimpleResourceFile::v_getRawResourceSize(std::shared_ptr<Resource> r)
     {
         if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
-        if (r.getName() != resourceName) 
+        if (r->getName() != resourceName)
         {
-            PDE_WARN << "Cannot find resource " << r.getName() << " in " << filename;
+            PDE_WARN << "Cannot find resource " << r->getName() << " in " << filename;
             throw std::out_of_range("Unknown resource");
         }
         (void)r;
@@ -50,12 +50,12 @@ namespace pdEngine
         return rawSize;
     }
 
-    int SimpleResourceFile::v_loadRawResource(const Resource &r, char *buffer)
+    int SimpleResourceFile::v_loadRawResource(std::shared_ptr<Resource> r, char *buffer)
     {
         if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
-        if (r.getName() != resourceName) 
+        if (r->getName() != resourceName)
         {
-            PDE_WARN << "Cannot find resource " << r.getName() << " in " << filename;
+            PDE_WARN << "Cannot find resource " << r->getName() << " in " << filename;
             throw std::out_of_range("Unknown resource");
         }
 

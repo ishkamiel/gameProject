@@ -13,7 +13,7 @@
 #include <sstream>
 #include <stdlib.h>
 
-namespace pdEngineTest
+namespace pdEngine
 {
 
 class SimpleResourceFile_test : public ::testing::Test
@@ -97,6 +97,7 @@ protected:
     };
 };
 
+/*
 TEST_F(SimpleResourceFile_test, testConstructors)
 {
     auto srf = std::make_shared<pdEngine::SimpleResourceFile>(fn_ne);
@@ -128,7 +129,7 @@ TEST_F(SimpleResourceFile_test, vGetResourceName)
 TEST_F(SimpleResourceFile_test, vGetRawResourceSize)
 {
     auto srf = std::make_shared<pdEngine::SimpleResourceFile>(fn_bin123);
-    auto res = pdEngine::Resource(fn_bin123);
+    auto res = std::make_shared<Resource>(fn_bin123);
     srf->v_open();
     ASSERT_EQ(srf->v_getRawResourceSize(res), 123);
 }
@@ -136,7 +137,7 @@ TEST_F(SimpleResourceFile_test, vGetRawResourceSize)
 TEST_F(SimpleResourceFile_test, vGetRawResource)
 {
     auto srf = std::make_shared<pdEngine::SimpleResourceFile>(fn_bin123);
-    auto res = pdEngine::Resource(fn_bin123);
+    auto res = std::make_shared<Resource>(fn_bin123);
     srf->v_open();
 
     char* buffer = new char[srf->v_getRawResourceSize(res)];
@@ -217,4 +218,5 @@ TEST_F(SimpleResourceFile_test, NonExistingFile)
 //     // CPPUNIT_ASSERT_EQUAL(srf_ef->v_getResourceCount(*res_ef), 1);
 //     // CPPUNIT_ASSERT_EQUAL(srf_bin123->v_getResourceCount(*res_bin123), 1);
 // }
+ */
 }
