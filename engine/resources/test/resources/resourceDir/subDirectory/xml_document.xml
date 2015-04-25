@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testingDocument>
+    <firstElement>
+        <childNodeWithText>Howdy Ho</childNodeWithText>
+        <emptyChildNode></emptyChildNode>
+        <childWithAttribute myAttrbute="justTesting">Some stuff here</childWithAttribute>
+    </firstElement>
+    <secondElement>
+        <childNodeWithText>Second howdy Ho</childNodeWithText>
+        <emptyChildNode></emptyChildNode>
+        <childWithAttribute myAttrbute="justTestingToo">Some more stuff here</childWithAttribute>
+    </secondElement>
+</testingDocument>

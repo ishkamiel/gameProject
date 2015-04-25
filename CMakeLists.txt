@@ -12,6 +12,8 @@ set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}/cmake"  )
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(include_output_path ${PROJECT_BINARY_DIR}/include)
+set(resource_output_path ${PROJECT_BINARY_DIR}/resources)
+set(config_output_path ${PROJECT_BINARY_DIR}/config)
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Debug")

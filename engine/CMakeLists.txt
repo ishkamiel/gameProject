@@ -6,6 +6,7 @@ include(GetPugixml)
 set(include_dir ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(source_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(test_dir ${CMAKE_CURRENT_SOURCE_DIR}/test)
+set(resource_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
 # Find source files to compile
 file(GLOB_RECURSE sources ${source_dir}/*.cpp)
@@ -52,7 +53,15 @@ if(${BUILD_TESTS})
     target_link_libraries(test_pdEngine libgmock libgtest pdEngine)
 
     #install(TARGETS test_pdEngine DESTINATION bin)
+    install(TARGETS test_pdEngine DESTINATION bin)
+        #//RUNTIME DESTINATION bin
+        #//LIBRARY DESTINATION lib
+        #//ARCHIVE DESTINATION lib/static)
+
+    message("COPY ${resource_dir}/test DESTINATION ${resource_output_path}")
+    file(COPY ${resource_dir}/test DESTINATION ${resource_output_path})
 
     # make CMake testing facilities aware of test_pdEngine
     add_test(NAME pdEngine COMMAND test_pdEngine)
+
 endif()
