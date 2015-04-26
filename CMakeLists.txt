@@ -9,11 +9,30 @@ cmake_minimum_required (VERSION 2.8)
 ###################
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}/cmake"  )
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-set(include_output_path ${PROJECT_BINARY_DIR}/include)
-set(resource_output_path ${PROJECT_BINARY_DIR}/resources)
-set(config_output_path ${PROJECT_BINARY_DIR}/config)
+#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+#set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+#set(include_output_path ${PROJECT_BINARY_DIR}/include)
+#set(resource_output_path ${PROJECT_BINARY_DIR}/resources)
+#set(config_output_path ${PROJECT_BINARY_DIR}/config)
+
+set(output_path ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+if (NOT DEFINED output_path)
+    set(output_path ${CMAKE_BINARY_DIR})
+endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${output_path}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${output_path}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${output_path}/lib)
+set(include_output_path ${output_path}/include)
+set(resource_output_path ${output_path}/resources)
+set(config_output_path ${output_path}/config)
+
+#message(WARNING "output_path: ${output_path}")
+
+#message(WARNING "OUTPUT ${CMAKE_OUTPUT_DIRECTORY}")
+#message(WARNING "RUNTIME: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(WARNING "LIBRARY: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Debug")

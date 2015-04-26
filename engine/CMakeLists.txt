@@ -52,14 +52,12 @@ if(${BUILD_TESTS})
     # link to the engine and testing libraries
     target_link_libraries(test_pdEngine libgmock libgtest pdEngine)
 
-    #install(TARGETS test_pdEngine DESTINATION bin)
-    install(TARGETS test_pdEngine DESTINATION bin)
-        #//RUNTIME DESTINATION bin
-        #//LIBRARY DESTINATION lib
-        #//ARCHIVE DESTINATION lib/static)
+    # add target for testing resources
+    add_custom_target(testResources ALL
+        COMMAND rsync -rq ${resource_dir}/test ${resource_output_path} VERBATIM)
 
-    message("COPY ${resource_dir}/test DESTINATION ${resource_output_path}")
-    file(COPY ${resource_dir}/test DESTINATION ${resource_output_path})
+    # add dependancies to ensure resources are moved
+    add_dependencies(test_pdEngine testResources pdEngine)
 
     # make CMake testing facilities aware of test_pdEngine
     add_test(NAME pdEngine COMMAND test_pdEngine)
