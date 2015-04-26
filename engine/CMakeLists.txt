@@ -29,8 +29,15 @@ target_link_libraries(pdEngine
     ${epoxy_LIBRARY}
     ${Boost_LIBRARIES})
 
+# add target for config fiels
+add_custom_target(configFiles ALL
+COMMAND rsync -rq ${resource_dir}/config/ ${config_output_path} VERBATIM)
+
+# add dependancies to ensure resources are moved
+add_dependencies(pdEngine configFiles)
+
 # copy header files to include output directory
-file(COPY ${include_dir}/ DESTINATION  ${include_output_path} FILES_MATCHING PATTERN "*.h")
+#file(COPY ${include_dir}/ DESTINATION  ${include_output_path} FILES_MATCHING PATTERN "*.h")
 
 #################
 # Testing stuff #
@@ -54,10 +61,13 @@ if(${BUILD_TESTS})
 
     # add target for testing resources
     add_custom_target(testResources ALL
-        COMMAND rsync -rq ${resource_dir}/test ${resource_output_path} VERBATIM)
+        COMMAND rsync -rq ${resource_dir}/test/resources ${output_path}/test_files/ VERBATIM)
+
+    add_custom_target(testConfigFiles ALL
+        COMMAND rsync -rq ${resource_dir}/test/config/ ${config_output_path} VERBATIM)
 
     # add dependancies to ensure resources are moved
-    add_dependencies(test_pdEngine testResources pdEngine)
+    add_dependencies(test_pdEngine testResources testConfigFiles pdEngine)
 
     # make CMake testing facilities aware of test_pdEngine
     add_test(NAME pdEngine COMMAND test_pdEngine)

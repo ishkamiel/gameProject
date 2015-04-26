@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resourceTestConfig>
+    <resources>
+        <DirectoryContainer>
+            <containerName>testResources</containerName>
+            <relativePath>test_files/resources/resourceDir</relativePath>
+    </DirectoryContainer>
+    </resources>
+</resourceTestConfig>

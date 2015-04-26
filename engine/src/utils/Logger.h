@@ -27,3 +27,19 @@ void setGlobalLogLevel(LogLevel) noexcept;
 #define PDE_WARN BOOST_LOG_TRIVIAL(warning)
 #define PDE_ERROR BOOST_LOG_TRIVIAL(error)
 #define PDE_FATAL BOOST_LOG_TRIVIAL(fatal)
+
+#define PDE_NOT_IMPLEMENTED_FATAL() \
+	PDE_FATAL << "not implemeneted [" << __FILE__ << ":" << __LINE__ << "]"; \
+	exit(EXIT_FAILURE);
+
+#define QUOTE(x) "x"
+#define PDE_ASSERT(check, message) \
+	if (!(check)) {\
+        PDE_FATAL << message << ", on[" << __FILE__ << ":" << __LINE__<< "]";\
+        exit(EXIT_FAILURE);}
+
+#ifdef NDEBUG
+#undef PDE_ASSERT
+#define PDE_ASSERT(check, message)
+#endif /* NDEBUG */
+
