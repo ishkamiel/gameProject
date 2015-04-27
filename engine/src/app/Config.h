@@ -10,35 +10,33 @@ class Config_Impl;
 
 class Config
 {
-	std::unique_ptr<Config_Impl> m_Impl;
 public:
 	/**
 	 * @brief Returns a (possibly uninitialized Config object
 	 */
 	static std::shared_ptr<Config> get(void) noexcept;
 
-	virtual ~Config(void);
+	virtual ~Config(void) = 0;
 
 	/**
 	 * @brief initializes the Config object.
 	 */
-	 bool init(void) noexcept;
+	virtual bool init(void) noexcept = 0;
 
 	/**
 	 * @brief Resets Config object and unloads any loaded files. Config object will need to be
 	 * re-initialized.
 	 */
-	void reset(void) noexcept;
+	virtual void reset(void) noexcept = 0;
 
-	std::string getRootPath(void) const noexcept;
+	virtual std::string getRootPath(void) const noexcept =0;
 
-	std::string get(const std::string& var) const noexcept;
-	std::string get(const std::string& var, const std::string& defaultVal) const noexcept;
+	virtual std::string get(const std::string& var) const noexcept = 0;
+	virtual std::string get(const std::string& var, const std::string& defaultVal) const noexcept = 0;
 
-	void set(const std::string& var, std::string val) noexcept;
+	virtual void set(const std::string& var, std::string val) noexcept = 0;
 
 private:
-	Config(void);
 };
 
 

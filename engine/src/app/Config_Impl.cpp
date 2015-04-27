@@ -1,31 +1,21 @@
-//
-// Created by ishkamiel on 27.4.2015.
-//
-
 #include "app/Config_Impl.h"
+
+#include "utils/Logger.h"
 
 namespace pdEngine
 {
 
 namespace fs =  boost::filesystem;
 
-std::shared_ptr<Config> Config::get(void) noexcept
-{
-	static auto raw = new Config();
-	static auto pointer = std::shared_ptr<Config>(raw);
-	return pointer;
-}
+Config_Impl::Config(void)
+{ }
 
-Config::Config(void)
-{
-}
-
-Config::~Config(void)
+Config_Impl::~Config(void)
 {
 	reset();
 }
 
-bool Config::init(void) noexcept
+bool Config_Impl::init(void) noexcept
 {
 	PDE_ASSERT(!m_isInitialized, "already initialized");
 
@@ -45,28 +35,13 @@ bool Config::init(void) noexcept
 	return true;
 }
 
-void Config::reset(void) noexcept
+void Config_Impl::reset(void) noexcept
 {
 	m_configfileEngine.reset();
 	m_isInitialized = false;
 }
 
-std::string Config::getEngineConfigfile(void) const noexcept
-{
-	auto filename = boost::filesystem::path(getRootPath());
-	filename /= "config";
-	filename /= "engine.config";
-	return filename.string();
-}
-
-bool Config::foundEngineConfig(void) const noexcept
-{
-	PDE_ASSERT(m_isInitialized, "not initialized");
-	return fs::exists(*m_configfileEngine);
-}
-
-
-std::string Config::getRootPath(void) const noexcept
+std::string Config_Impl::getRootPath(void) const noexcept
 {
 	auto path = boost::filesystem::current_path();
 	if (fs::exists(path / "bin")) return path.string();
@@ -75,78 +50,46 @@ std::string Config::getRootPath(void) const noexcept
 	return "";
 }
 
-std::string Config::get(const std::string& var) const noexcept
+std::string Config_Impl::get(const std::string& var) const noexcept
 {
-	try {
-		auto node = m_configEngine->first_element_by_path(var.c_str());
-		if (node.text()) {
-			PDE_TRACE << "Returning config value for " << var;
-			return node.child_value();
-		}
+}
 
-		PDE_ERROR << "Did not find config option for " << var;
-		PDE_ASSERT(node.text(), "config not found");
-	}
-	catch (const pugi::xpath_exception& e) {
-		PDE_ERROR << "Select failed: " << e.what();
-	}
-
+std::string Config_Impl::get(const std::string& var, const std::string& defaultVal) const noexcept
+{
+	PDE_NOT_IMPLEMENTED_FATAL();
+	(void)var;
+	(void)defaultVal;
 	return "";
 }
 
-std::string Config::get(const std::string& var, const std::string& defaultVal) const noexcept
-{
-	try {
-		auto node = m_configEngine->first_element_by_path(var.c_str());
-		if (node.text()) {
-			PDE_TRACE << "Returning config value for " << var;
-			return node.child_value();
-		}
-		PDE_INFO <<"Found no config value for " << var << ", returning provided default";
-	}
-	catch (const pugi::xpath_exception& e) {
-		PDE_ERROR << "Select failed: " << e.what();
-	}
-
-	return defaultVal;
-}
-
-void Config::set(const std::string& var, std::string val) noexcept
+void Config_Impl::set(const std::string& var, std::string val) noexcept
 {
 	PDE_NOT_IMPLEMENTED_FATAL();
 	(void)var;
 	(void)val;
 }
 
-bool Config::checkFile(Filename file) const noexcept
+bool Config_Impl::checkFile(const fs::path& file) const noexcept
 {
-	if (! fs::exists(*file)) {
-		PDE_ERROR << "Unable to find config file " << file->string();
+	if (! fs::exists(file)) {
+		PDE_ERROR << "Unable to find config file " << file.string();
 		return false;
 	}
 
-	if (! fs::is_regular(*file)) {
-		PDE_ERROR << "Config file " << file->string() << " is not a regular file";
+	if (! fs::is_regular(file)) {
+		PDE_ERROR << "Config file " << file.string() << " is not a regular file";
 		return false;
 	}
 
 	return true;
 }
 
-auto Config::loadFile(Filename file) const noexcept -> ConfigXML
+fs::path Config_Impl::getEngineConfigfilePath(void) const noexcept
 {
-	auto doc =  std::make_shared<pugi::xml_document>();
-	auto result = doc->load_file(file->string().c_str());
-
-	if (result) {
-		PDE_INFO << "Successfully read configuration from XML file " << file->string();
-	}
-	else {
-		PDE_ERROR << "Error parsing config file " << file->string() << ": " << result.description();
-		return ConfigXML();
-	}
-
-	return doc;
+	auto filename = boost::filesystem::path(getRootPath());
+	filename /= "config";
+	filename /= "engine.config";
+	return filename;
 }
 
 }
