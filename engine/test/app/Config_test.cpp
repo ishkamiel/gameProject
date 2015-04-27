@@ -46,14 +46,17 @@ TEST_F(test_Config, InitializationWorks)
 	PDE_TRACE << "InitializationWorks test done";
 }
 
-
 TEST_F(test_Config, FindsEngineConfigFile)
 {
 	auto conf = Config::get();
 
+	/*
 	auto configFile = fs::current_path();
 	configFile /= "config";
 	configFile /= "engine.conf";
+
+	conf->addConfigFile(configFile.string());
+	 */
 
 	ASSERT_TRUE(conf->foundEngineConfig());
 }
@@ -64,6 +67,17 @@ TEST_F(test_Config, GetterAndValues)
 
 	auto val = conf->get("pdEngine/name");
 	ASSERT_EQ(val, "pdEngine");
+}
+
+TEST_F(test_Config, FindsAddedConfigfile)
+{
+	auto conf = Config::get();
+
+	auto configFile = fs::current_path();
+	configFile /= "config";
+	configFile /= "engine.conf";
+
+	ASSERT_TRUE(conf->addConfigFile(configFile.string()));
 }
 
 TEST_F(test_Config, GetterWithDefaultValues)
