@@ -79,7 +79,7 @@ find_package(SDL2 REQUIRED)
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
-find_package(Boost COMPONENTS log thread date_time filesystem system REQUIRED)
+find_package(Boost COMPONENTS program_options log thread date_time filesystem system REQUIRED)
 #log log_setup thread date_time filesystem system
 
 ###################
