@@ -3,7 +3,7 @@
 #include "utils/Logger.h"
 
 #include <fstream>
-#include <iostream>
+#include <ostream>
 #include <string>
 
 namespace pdEngine
@@ -18,12 +18,19 @@ std::shared_ptr<Config> Config::get(void) noexcept
     static auto pointer = std::shared_ptr<Config_Impl>(raw);
     return pointer;
 }
+	boost::filesystem::path m_engineConfigfile;
 
 Config_Impl::Config_Impl(void)
+:
+	m_Variables(new boost::program_options::variables_map()),
+	m_cmdlineOptions(new boost::program_options::options_description()),
+	m_fileOptions(new boost::program_options::options_description())
 {
 	m_engineConfigfile = boost::filesystem::path(getRootPath());
 	m_engineConfigfile /= "config";
 	m_engineConfigfile /= "engine.config";
+
+	loadEngineConfig();
 }
 
 Config_Impl::~Config_Impl(void)
@@ -31,23 +38,24 @@ Config_Impl::~Config_Impl(void)
 	//reset();
 }
 
-bool Config_Impl::init(void) noexcept
+void Config_Impl::loadEngineConfig(void) noexcept
 {
-	PDE_ASSERT(!m_isInitialized, "already initialized");
-
 	po::options_description generic("Generic options");
 	generic.add_options()
 		("version,v", "print version string")
-		("help", "produce help message")
-		;
+		("help", "produce help message");
 
 	po::options_description engine_config("Engine Config");
 	engine_config.add_options()
-		("engine.name", po::value<std::string>(), "engine name")
-		;
+		("engine.name", po::value<std::string>(), "engine name");
 
-	m_cmdlineOptions.add(generic);
-	m_fileOptions.add(engine_config);
+	m_cmdlineOptions->add(generic);
+	m_fileOptions->add(engine_config);
+}
+
+bool Config_Impl::init(void) noexcept
+{
+	PDE_ASSERT(!m_isInitialized, "already initialized");
 
 	if (!parseFile(m_engineConfigfile, true)) return false;
 
@@ -55,13 +63,13 @@ bool Config_Impl::init(void) noexcept
 	return true;
 }
 
-void Config_Impl::reset(void) noexcept
+auto Config_Impl::getOptionDescriptor(void) const noexcept -> OptionDescription
 {
-	PDE_NOT_IMPLEMENTED_FATAL();
-	//m_cmdlineOptions = po::options_description();
-	//m_fileOptions = po::options_description();
-	//m_Variables = po::variables_map();
-	m_isInitialized = false;
+	if (m_isInitialized) {
+		PDE_FATAL << "Config getOptionDescriptor called after init";
+		exit(EXIT_FAILURE);
+	}
+	return m_fileOptions;
 }
 
 bool Config_Impl::parseFile(const fs::path& file, bool allowUnknown) noexcept
@@ -78,31 +86,32 @@ bool Config_Impl::parseFile(const fs::path& file, bool allowUnknown) noexcept
 
 	std::ifstream fs(file.string());
 
+
+	auto retval = false;
+
 	try {
 		po::store(
-			po::parse_config_file(fs, m_fileOptions, allowUnknown),
-			m_Variables
+			po::parse_config_file(fs, *m_fileOptions, allowUnknown),
+			*m_Variables
 		);
-		po::notify(m_Variables);
+		po::notify(*m_Variables);
+		retval = true;
 		PDE_INFO << "Successfully read config file: " << file.string();
 	}
-	catch (const std::exception& ex)
-	{
-		if (fs.is_open()) fs.close();
-		PDE_ERROR << "Parse error [" << file.string() << "]: " << ex.what();
-		return false;
+	catch (const std::exception& e) {
+		PDE_ERROR << "Parse error [" << file.string() << "]: " << e.what();
 	}
 
 	if (fs.is_open()) fs.close();
-	return true;
+	return retval;
 }
 
 bool Config_Impl::parseCommandLine(int ac, char** av) noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
-	po::store(po::parse_command_line(ac, av, m_cmdlineOptions), m_Variables);
+	po::store(po::parse_command_line(ac, av, *m_cmdlineOptions), *m_Variables);
 
-	if (m_Variables.count("help")) {
+	if (m_Variables->count("help")) {
 		std::cout << m_cmdlineOptions << "\n";
 		return false;
 	}
@@ -133,11 +142,11 @@ fs::path Config_Impl::getRootPath(void) const noexcept
 bool Config_Impl::hasVariable(const std::string& var) const noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
-	if (m_Variables.count(var) != 0) {
+	if (m_Variables->count(var) != 0) {
 		return true;
 	}
 
-	PDE_TRACE << "No such variable: '" << var << "'";
+	PDE_TRACE << "hasVariable(" << var << ") -> false";
 	return false;
 }
 
@@ -147,7 +156,7 @@ std::string Config_Impl::getString(const std::string& var, std::string defaultVa
 	if (!hasVariable(var)) return defaultValue;
 
 	try {
-		return m_Variables[var].as<std::string>();
+		return (*m_Variables)[var].as<std::string>();
 	}
 	catch (const std::exception& e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
@@ -161,7 +170,7 @@ bool Config_Impl::getBool(const std::string& var, bool defaultValue) const noexc
 	if (!hasVariable(var)) return defaultValue;
 
 	try {
-		return m_Variables[var].as<bool>();
+		return (*m_Variables)[var].as<bool>();
 	}
 	catch (const std::exception& e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
@@ -175,7 +184,7 @@ int Config_Impl::getInt(const std::string& var, int defaultValue) const noexcept
 	if (!hasVariable(var)) return defaultValue;
 
 	try {
-		return m_Variables[var].as<int>();
+		return (*m_Variables)[var].as<int>();
 	}
 	catch (const std::exception& e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
@@ -189,7 +198,7 @@ float Config_Impl::getFloat(const std::string& var, float defaultValue) const no
 	if (!hasVariable(var)) return defaultValue;
 
 	try {
-		return m_Variables[var].as<float>();
+		return (*m_Variables)[var].as<float>();
 	}
 	catch (const std::exception& e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
@@ -199,8 +208,22 @@ float Config_Impl::getFloat(const std::string& var, float defaultValue) const no
 
 void Config_Impl::dump(std::ostream& os) const noexcept
 {
-	for (auto v : m_Variables) {
-		os << v.first << "=" << v.second.as<std::string>() << std::endl;
+	for (const auto& it  : *m_Variables) {
+		os << it.first << "=";
+
+		auto& value = it.second.value();
+		if (auto v = boost::any_cast<float>(&value))
+			os << *v;
+		else if (auto v = boost::any_cast<int>(&value))
+			os << *v;
+		else if (auto v = boost::any_cast<std::string>(&value))
+			os << *v;
+		else {
+			PDE_ERROR << "Config::dump, Unable to recognize value for '" << it.first << "'";
+			os << "<<UNKNOWN>>";
+		}
+
+		os << std::endl;
 	}
 }
 

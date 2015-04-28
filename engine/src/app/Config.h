@@ -4,11 +4,21 @@
 #include <string>
 #include <memory>
 
+// Forward declare so we don't need to include the boost headers.
+namespace boost {
+namespace program_options {
+class options_description;
+}
+}
+
 namespace pdEngine
 {
 
 class Config
 {
+protected:
+	using OptionDescription = std::shared_ptr<boost::program_options::options_description>;
+
 public:
 	/**
 	 * @brief Returns a (possibly uninitialized Config object
@@ -21,14 +31,11 @@ public:
 	 * @brief initializes the Config object.
 	 */
 	virtual bool init(void) noexcept = 0;
+	virtual bool isInitialized(void) const noexcept = 0;
 
 	virtual bool addConfigFile(const std::string&) noexcept = 0;
 
-	/**
-	 * @brief Resets Config object and unloads any loaded files. Config object will need to be
-	 * re-initialized.
-	 */
-	virtual void reset(void) noexcept = 0;
+	virtual OptionDescription getOptionDescriptor(void) const noexcept = 0;
 
 	virtual bool hasVariable(const std::string& var) const noexcept = 0;
 
