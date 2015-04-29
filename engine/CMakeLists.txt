@@ -7,6 +7,7 @@ set(include_dir ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(source_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(test_dir ${CMAKE_CURRENT_SOURCE_DIR}/test)
 set(resource_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources)
+set(config_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources/config)
 
 # Find source files to compile
 file(GLOB_RECURSE sources ${source_dir}/*.cpp)
@@ -30,14 +31,30 @@ target_link_libraries(pdEngine
     ${Boost_LIBRARIES})
 
 # add target for config fiels
-add_custom_target(configFiles ALL
-COMMAND rsync -rq ${resource_dir}/config/ ${config_output_path} VERBATIM)
-
-# add dependancies to ensure resources are moved
-add_dependencies(pdEngine configFiles)
+configure_file(${config_dir}/engine.config ${config_output_path}/engine.config)
 
 # copy header files to include output directory
 #file(COPY ${include_dir}/ DESTINATION  ${include_output_path} FILES_MATCHING PATTERN "*.h")
+
+if(DOXYGEN_FOUND)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in 
+        ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+
+    set(my_docpath ${doc_output_path}/engine)
+
+    add_custom_target(docEnginePaths COMMAND mkdir -p ${my_docpath})
+
+    add_custom_target(docEngine
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        DEPENDS docEnginePaths
+        WORKING_DIRECTORY ${my_docpath}
+        COMMENT "Generating API documentation with Doxygen" VERBATIM
+        ) 
+
+    add_dependencies(doc docEngine)
+
+endif(DOXYGEN_FOUND)
 
 #################
 # Testing stuff #
@@ -63,11 +80,12 @@ if(${BUILD_TESTS})
     add_custom_target(testResources ALL
         COMMAND rsync -rq ${resource_dir}/test/resources ${output_path}/test_files/ VERBATIM)
 
-    add_custom_target(testConfigFiles ALL
-        COMMAND rsync -rq ${resource_dir}/test/config/ ${config_output_path} VERBATIM)
+    # configure testing.config file
+    #configure_file(${config_fir}/testing.config ${config_output_path}/testing.config)
+    configure_file(${resource_dir}/test/config/testing.config ${config_output_path}/testing.config)
 
     # add dependancies to ensure resources are moved
-    add_dependencies(test_pdEngine testResources testConfigFiles pdEngine)
+    add_dependencies(test_pdEngine testResources pdEngine)
 
     # make CMake testing facilities aware of test_pdEngine
     add_test(NAME pdEngine COMMAND test_pdEngine)

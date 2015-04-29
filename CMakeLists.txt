@@ -26,6 +26,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${output_path}/lib)
 set(include_output_path ${output_path}/include)
 set(resource_output_path ${output_path}/resources)
 set(config_output_path ${output_path}/config)
+set(doc_output_path ${output_path}/doc)
 
 #message(WARNING "output_path: ${output_path}")
 
@@ -39,6 +40,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
 endif ()
 
 message(STATUS "Creating ${CMAKE_BUILD_TYPE} build")
+
 
 if (NOT DEFINED BUILD_TESTS)
     set(BUILD_TESTS true)
@@ -69,6 +71,10 @@ find_package(Epoxy REQUIRED)
 # ====
 find_package(SDL2 REQUIRED)
 # find_package(SDL2_ttf REQUIRED)
+
+# Doxygen (documentation
+# =======
+find_package(Doxygen)
 
 # CEGUI (GUI library)
 # =====
@@ -111,6 +117,10 @@ endif()
 
 if(${BUILD_TESTS})
     enable_testing()
+endif()
+
+if(DOXYGEN_FOUND)
+    add_custom_target(doc)
 endif()
 
 add_subdirectory(engine)
