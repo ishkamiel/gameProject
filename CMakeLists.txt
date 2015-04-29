@@ -9,24 +9,26 @@ cmake_minimum_required (VERSION 2.8)
 ###################
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}/cmake"  )
 
-#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-#set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-#set(include_output_path ${PROJECT_BINARY_DIR}/include)
-#set(resource_output_path ${PROJECT_BINARY_DIR}/resources)
-#set(config_output_path ${PROJECT_BINARY_DIR}/config)
+# These are engine wide foncifurations
+set(PDE_BIN_DIR         "bin")
+set(PDE_LIB_DIR         "lib")
+set(PDE_DATA_DIR        "data")
+set(PDE_CONFIG_DIR      "config")
+set(PDE_INCLUDE_DIR     "include")
 
 set(output_path ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 if (NOT DEFINED output_path)
     set(output_path ${CMAKE_BINARY_DIR})
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${output_path}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${output_path}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${output_path}/lib)
-set(include_output_path ${output_path}/include)
-set(resource_output_path ${output_path}/resources)
-set(config_output_path ${output_path}/config)
-set(doc_output_path ${output_path}/doc)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${output_path}/${PDE_BIN_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${output_path}/${PDE_LIB_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${output_path}/${PDE_LIB_DIR})
+set(include_output_path             ${output_path}/${PDE_INCLUDE_DIR})
+set(resource_output_path            ${output_path}/${PDE_DATA_DIR})
+set(config_output_path              ${output_path}/${PDE_CONFIG_DIR})
+set(doc_output_path                 ${output_path}/doc)
 
 #message(WARNING "output_path: ${output_path}")
 

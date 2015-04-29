@@ -7,7 +7,7 @@ set(include_dir ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(source_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(test_dir ${CMAKE_CURRENT_SOURCE_DIR}/test)
 set(resource_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources)
-set(config_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources/config)
+set(config_dir ${CMAKE_CURRENT_SOURCE_DIR}/config)
 
 # Find source files to compile
 file(GLOB_RECURSE sources ${source_dir}/*.cpp)
@@ -35,6 +35,10 @@ configure_file(${config_dir}/engine.config ${config_output_path}/engine.config)
 
 # copy header files to include output directory
 #file(COPY ${include_dir}/ DESTINATION  ${include_output_path} FILES_MATCHING PATTERN "*.h")
+
+#################
+# Documentation #
+#################
 
 if(DOXYGEN_FOUND)
     configure_file(
@@ -78,11 +82,11 @@ if(${BUILD_TESTS})
 
     # add target for testing resources
     add_custom_target(testResources ALL
-        COMMAND rsync -rq ${resource_dir}/test/resources ${output_path}/test_files/ VERBATIM)
+        COMMAND rsync -rq ${resource_dir}/testResourceDir ${resource_output_path}
+        VERBATIM)
 
     # configure testing.config file
-    #configure_file(${config_fir}/testing.config ${config_output_path}/testing.config)
-    configure_file(${resource_dir}/test/config/testing.config ${config_output_path}/testing.config)
+    configure_file(${config_dir}/testing.config ${config_output_path}/testing.config)
 
     # add dependancies to ensure resources are moved
     add_dependencies(test_pdEngine testResources pdEngine)
