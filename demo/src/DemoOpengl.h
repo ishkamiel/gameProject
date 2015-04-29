@@ -1,5 +1,4 @@
-#ifndef PDDEMO_DEMOOPENGL_H_
-#define PDDEMO_DEMOOPENGL_H_
+#pragma once
 
 #include "Application.h"
 
@@ -13,4 +12,3 @@ namespace pdEngineDemo
     };
 }
 
-#endif /* PDDEMO_DEMOOPENGL_H_ */
