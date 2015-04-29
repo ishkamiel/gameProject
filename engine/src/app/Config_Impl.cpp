@@ -14,13 +14,13 @@ namespace po = boost::program_options;
 
 std::shared_ptr<Config> Config::get(void) noexcept
 {
-    static auto raw = new Config_Impl();
-    static auto pointer = std::shared_ptr<Config_Impl>(raw);
-    return pointer;
+	static auto raw = new Config_Impl();
+	static auto pointer = std::shared_ptr<Config_Impl>(raw);
+	return pointer;
 }
 
 Config_Impl::Config_Impl(void)
-:
+	:
 	m_Variables(new boost::program_options::variables_map()),
 	m_cmdlineOptions(new boost::program_options::options_description()),
 	m_fileOptions(new boost::program_options::options_description())
@@ -37,7 +37,7 @@ Config_Impl::~Config_Impl(void)
 	//reset();
 }
 
-bool Config_Impl::init(int argc, char** argv) noexcept
+bool Config_Impl::init(int argc, char **argv) noexcept
 {
 	PDE_ASSERT(!m_isInitialized, "already initialized");
 
@@ -62,8 +62,7 @@ auto Config_Impl::getOptionDescriptor(void) const noexcept -> OptionDescription
 }
 
 
-
-bool Config_Impl::addConfigFile(const std::string& filename) noexcept
+bool Config_Impl::addConfigFile(const std::string &filename) noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	auto path = getRootPath();
@@ -73,8 +72,7 @@ bool Config_Impl::addConfigFile(const std::string& filename) noexcept
 }
 
 
-
-bool Config_Impl::hasVariable(const std::string& var) const noexcept
+bool Config_Impl::hasVariable(const std::string &var) const noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	if (m_Variables->count(var) != 0) {
@@ -85,7 +83,7 @@ bool Config_Impl::hasVariable(const std::string& var) const noexcept
 	return false;
 }
 
-std::string Config_Impl::getString(const std::string& var, std::string defaultValue) const noexcept
+std::string Config_Impl::getString(const std::string &var, std::string defaultValue) const noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	if (!hasVariable(var)) return defaultValue;
@@ -93,13 +91,13 @@ std::string Config_Impl::getString(const std::string& var, std::string defaultVa
 	try {
 		return (*m_Variables)[var].as<std::string>();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
 	};
 	return defaultValue;
 }
 
-bool Config_Impl::getBool(const std::string& var, bool defaultValue) const noexcept
+bool Config_Impl::getBool(const std::string &var, bool defaultValue) const noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	if (!hasVariable(var)) return defaultValue;
@@ -107,13 +105,13 @@ bool Config_Impl::getBool(const std::string& var, bool defaultValue) const noexc
 	try {
 		return (*m_Variables)[var].as<bool>();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
 	};
 	return defaultValue;
 }
 
-int Config_Impl::getInt(const std::string& var, int defaultValue) const noexcept
+int Config_Impl::getInt(const std::string &var, int defaultValue) const noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	if (!hasVariable(var)) return defaultValue;
@@ -121,13 +119,13 @@ int Config_Impl::getInt(const std::string& var, int defaultValue) const noexcept
 	try {
 		return (*m_Variables)[var].as<int>();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
 	};
 	return defaultValue;
 }
 
-float Config_Impl::getFloat(const std::string& var, float defaultValue) const noexcept
+float Config_Impl::getFloat(const std::string &var, float defaultValue) const noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	if (!hasVariable(var)) return defaultValue;
@@ -135,24 +133,27 @@ float Config_Impl::getFloat(const std::string& var, float defaultValue) const no
 	try {
 		return (*m_Variables)[var].as<float>();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		PDE_ERROR << "Failed to get value for '" << var << "', " << e.what();
 	};
 	return defaultValue;
 }
 
-void Config_Impl::dump(std::ostream& os) const noexcept
+void Config_Impl::dump(std::ostream &os) const noexcept
 {
-	for (const auto& it  : *m_Variables) {
+	for (const auto &it  : *m_Variables) {
 		os << it.first << "=";
 
-		auto& value = it.second.value();
-		if (auto v = boost::any_cast<float>(&value))
+		auto &value = it.second.value();
+		if (auto v = boost::any_cast<float>(&value)) {
 			os << *v;
-		else if (auto v = boost::any_cast<int>(&value))
+		}
+		else if (auto v = boost::any_cast<int>(&value)) {
 			os << *v;
-		else if (auto v = boost::any_cast<std::string>(&value))
+		}
+		else if (auto v = boost::any_cast<std::string>(&value)) {
 			os << *v;
+		}
 		else {
 			PDE_ERROR << "Config::dump, Unable to recognize value for '" << it.first << "'";
 			os << "<<UNKNOWN>>";
@@ -193,12 +194,12 @@ void Config_Impl::loadEngineConfig(void) noexcept
 	m_fileOptions->add(engine_config);
 }
 
-bool Config_Impl::parseCommandLine(int ac, char** av) noexcept
+bool Config_Impl::parseCommandLine(int ac, char **av) noexcept
 {
 	try {
 		po::store(po::parse_command_line(ac, av, *m_cmdlineOptions), *m_Variables);
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		std::cout << e.what() << std::endl;
 		return false;
 	}
@@ -219,14 +220,14 @@ bool Config_Impl::parseCommandLine(int ac, char** av) noexcept
 }
 
 
-bool Config_Impl::parseFile(const fs::path& file, bool allowUnknown) noexcept
+bool Config_Impl::parseFile(const fs::path &file, bool allowUnknown) noexcept
 {
-	if (! fs::exists(file)) {
+	if (!fs::exists(file)) {
 		PDE_ERROR << "Cannot find: " << file.string();
 		return false;
 	}
 
-	if (! fs::is_regular(file)) {
+	if (!fs::is_regular(file)) {
 		PDE_ERROR << "Not a regular file: " << file.string();
 		return false;
 	}
@@ -245,7 +246,7 @@ bool Config_Impl::parseFile(const fs::path& file, bool allowUnknown) noexcept
 		retval = true;
 		PDE_INFO << "Successfully read config file: " << file.string();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception &e) {
 		PDE_ERROR << "Parse error [" << file.string() << "]: " << e.what();
 	}
 
