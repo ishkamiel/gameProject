@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utils/NotUsed.h"
+
 #include <memory>
 #include <string>
 
@@ -15,11 +17,8 @@ constexpr uint32_t crc32(const char*);
 template<>
 constexpr uint32_t crc32<size_t(-1)>(const char*);
 
-// const EventTypeID VARIABLE_IS_NOT_USED ev_RequestQuit    = getEventID("RequestQuit");
-// const EventTypeID VARIABLE_IS_NOT_USED ev_Shutdown       = getEventID("Shutdown");
-const EventTypeID ev_RequestQuit = getEventID("RequestQuit");
-const EventTypeID ev_Shutdown = getEventID("Shutdown");
-
+const EventTypeID VARIABLE_IS_NOT_USED ev_RequestQuit    = getEventID("RequestQuit");
+const EventTypeID VARIABLE_IS_NOT_USED ev_Shutdown       = getEventID("Shutdown");
 
 /***************************************************************************************************
  * Implementations
