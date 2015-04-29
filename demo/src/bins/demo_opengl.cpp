@@ -1,14 +1,18 @@
 #include "DemoOpengl.h"
 
+#include "app/Config.h"
+
 #include <iostream>
 
 int main(int argc, char** argv)
 {
-    (void) argc;
-    (void) argv;
+    if (!pdEngine::Config::get()->init(argc, argv)) {
+        exit(EXIT_FAILURE);
+    }
 
     try {
         pdEngineDemo::DemoOpengl app {};
+
 
         if (app.init())
         {

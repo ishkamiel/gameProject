@@ -30,7 +30,7 @@ public:
 	/**
 	 * @brief initializes the Config object.
 	 */
-	virtual bool init(void) noexcept = 0;
+	virtual bool init(int argc = 0, char** argv = nullptr) noexcept = 0;
 	virtual bool isInitialized(void) const noexcept = 0;
 
 	virtual bool addConfigFile(const std::string&) noexcept = 0;

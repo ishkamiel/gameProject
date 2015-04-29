@@ -18,7 +18,6 @@ std::shared_ptr<Config> Config::get(void) noexcept
     static auto pointer = std::shared_ptr<Config_Impl>(raw);
     return pointer;
 }
-	boost::filesystem::path m_engineConfigfile;
 
 Config_Impl::Config_Impl(void)
 :
@@ -38,28 +37,18 @@ Config_Impl::~Config_Impl(void)
 	//reset();
 }
 
-void Config_Impl::loadEngineConfig(void) noexcept
-{
-	po::options_description generic("Generic options");
-	generic.add_options()
-		("version,v", "print version string")
-		("help", "produce help message");
-
-	po::options_description engine_config("Engine Config");
-	engine_config.add_options()
-		("engine.name", po::value<std::string>(), "engine name");
-
-	m_cmdlineOptions->add(generic);
-	m_fileOptions->add(engine_config);
-}
-
-bool Config_Impl::init(void) noexcept
+bool Config_Impl::init(int argc, char** argv) noexcept
 {
 	PDE_ASSERT(!m_isInitialized, "already initialized");
 
 	if (!parseFile(m_engineConfigfile, true)) return false;
 
 	m_isInitialized = true;
+
+	if (argc > 0) {
+		if (!parseCommandLine(argc, argv)) return false;
+	}
+
 	return true;
 }
 
@@ -72,52 +61,6 @@ auto Config_Impl::getOptionDescriptor(void) const noexcept -> OptionDescription
 	return m_fileOptions;
 }
 
-bool Config_Impl::parseFile(const fs::path& file, bool allowUnknown) noexcept
-{
-	if (! fs::exists(file)) {
-		PDE_ERROR << "Cannot find: " << file.string();
-		return false;
-	}
-
-	if (! fs::is_regular(file)) {
-		PDE_ERROR << "Not a regular file: " << file.string();
-		return false;
-	}
-
-	std::ifstream fs(file.string());
-
-
-	auto retval = false;
-
-	try {
-		po::store(
-			po::parse_config_file(fs, *m_fileOptions, allowUnknown),
-			*m_Variables
-		);
-		po::notify(*m_Variables);
-		retval = true;
-		PDE_INFO << "Successfully read config file: " << file.string();
-	}
-	catch (const std::exception& e) {
-		PDE_ERROR << "Parse error [" << file.string() << "]: " << e.what();
-	}
-
-	if (fs.is_open()) fs.close();
-	return retval;
-}
-
-bool Config_Impl::parseCommandLine(int ac, char** av) noexcept
-{
-	PDE_ASSERT(m_isInitialized, "not initialized");
-	po::store(po::parse_command_line(ac, av, *m_cmdlineOptions), *m_Variables);
-
-	if (m_Variables->count("help")) {
-		std::cout << m_cmdlineOptions << "\n";
-		return false;
-	}
-
-	return true;
-}
 
 
 bool Config_Impl::addConfigFile(const std::string& filename) noexcept
@@ -130,14 +73,6 @@ bool Config_Impl::addConfigFile(const std::string& filename) noexcept
 }
 
 
-fs::path Config_Impl::getRootPath(void) const noexcept
-{
-	auto path = boost::filesystem::current_path();
-	if (fs::exists(path / "bin")) return path.string();
-	path = path.parent_path();
-	if (fs::exists(path / "bin")) return path.string();
-	return "";
-}
 
 bool Config_Impl::hasVariable(const std::string& var) const noexcept
 {
@@ -228,13 +163,94 @@ void Config_Impl::dump(std::ostream& os) const noexcept
 }
 
 
-/*
-void Config_Impl::set(const std::string& var, std::string val) noexcept
-{
-	PDE_NOT_IMPLEMENTED_FATAL();
-	(void)var;
-	(void)val;
-}
+/***************************************************************************************************
+ * Private functions
  */
+
+fs::path Config_Impl::getRootPath(void) const noexcept
+{
+	auto path = boost::filesystem::current_path();
+	if (fs::exists(path / "bin")) return path.string();
+	path = path.parent_path();
+	if (fs::exists(path / "bin")) return path.string();
+	return "";
+}
+
+void Config_Impl::loadEngineConfig(void) noexcept
+{
+	po::options_description generic("Generic options");
+	generic.add_options()
+		("version,v", "print version string")
+		("help", "produce help message");
+
+	po::options_description engine_config("Engine Config");
+	engine_config.add_options()
+		("engine.version", po::value<float>(), "engine verison")
+		("engine.build_type", po::value<std::string>(), "engine build type")
+		("engine.name", po::value<std::string>(), "engine name");
+
+	m_cmdlineOptions->add(generic);
+	m_fileOptions->add(engine_config);
+}
+
+bool Config_Impl::parseCommandLine(int ac, char** av) noexcept
+{
+	try {
+		po::store(po::parse_command_line(ac, av, *m_cmdlineOptions), *m_Variables);
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+		return false;
+	}
+
+	if (m_Variables->count("help")) {
+		std::cout << *m_cmdlineOptions << "\n";
+		return false;
+	}
+
+	if (m_Variables->count("version")) {
+		std::cout << getString("engine.name") << " " << getFloat("engine.version");
+		std::cout << " (" << getString("engine.build_type") << " build)";
+		std::cout << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+
+bool Config_Impl::parseFile(const fs::path& file, bool allowUnknown) noexcept
+{
+	if (! fs::exists(file)) {
+		PDE_ERROR << "Cannot find: " << file.string();
+		return false;
+	}
+
+	if (! fs::is_regular(file)) {
+		PDE_ERROR << "Not a regular file: " << file.string();
+		return false;
+	}
+
+	std::ifstream fs(file.string());
+
+
+	auto retval = false;
+
+	try {
+		po::store(
+			po::parse_config_file(fs, *m_fileOptions, allowUnknown),
+			*m_Variables
+		);
+		po::notify(*m_Variables);
+		retval = true;
+		PDE_INFO << "Successfully read config file: " << file.string();
+	}
+	catch (const std::exception& e) {
+		PDE_ERROR << "Parse error [" << file.string() << "]: " << e.what();
+	}
+
+	if (fs.is_open()) fs.close();
+	return retval;
+}
 
 }
