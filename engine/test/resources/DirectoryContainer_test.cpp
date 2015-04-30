@@ -91,4 +91,14 @@ TEST_F(test_DirectoryContainer, findsStuffInOpenedDirectory)
 	ASSERT_THAT(m_container->v_getResourceCount(), Gt(2));
 }
 
+TEST_F(test_DirectoryContainer, findsAndReturnsSizeForResource)
+{
+	m_container->v_open();
+	Resource r{"testResourceDir/file.txt"};
+
+	ASSERT_THAT(m_container->v_getRawResourceSize(&r), Gt(0));
+}
+
+
+
 }

@@ -3,6 +3,7 @@
 #include "resources/Resource.h"
 
 #include <memory>
+#include <string>
 
 namespace pdEngine
 {
@@ -34,7 +35,9 @@ public:
 	 *
 	 * @return size of the resource.
 	 */
-	virtual int v_getRawResourceSize(std::shared_ptr<Resource> resource) noexcept = 0;
+	virtual int v_getRawResourceSize(Resource *) noexcept = 0;
+	virtual inline int v_getRawResourceSize(std::shared_ptr<Resource> r) noexcept final
+	{ return v_getRawResourceSize(&*r); }
 
 	/**
 	 * @brief Reads the requested resource raw data into memory
@@ -44,7 +47,9 @@ public:
 	 *
 	 * @return Number of bytes read.
 	 */
-	virtual int v_loadRawResource(std::shared_ptr<Resource> resource, char *buffer) noexcept = 0;
+	virtual int v_loadRawResource(Resource *, char *buffer) noexcept = 0;
+	virtual inline int v_loadRawResource(std::shared_ptr<Resource> r, char *buffer) noexcept final
+	{ return v_loadRawResource(&*r, buffer); }
 
 	/**
 	 * @brief Fetch the number of resources contained in File.

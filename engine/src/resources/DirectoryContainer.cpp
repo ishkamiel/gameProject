@@ -54,17 +54,31 @@ bool DirectoryContainer::v_open(void) noexcept
 
 std::string DirectoryContainer::v_getResourceName(int i) const noexcept
 {
+	if (i >= (int) m_Resources.size()) {
+		PDE_WARN << "Trying to fetch non-existing resource index: " << i;
+		return "";
+	}
 	(void) i;
 	throw std::out_of_range("Unknown resource");
 }
 
-int DirectoryContainer::v_getRawResourceSize(std::shared_ptr<Resource> r) noexcept
+int DirectoryContainer::v_getRawResourceSize(Resource *r) noexcept
 {
-	(void) r;
-	throw std::out_of_range("Unknown resource");
+	if (r == nullptr) {
+		PDE_EXIT_FAILURE("Resource pointer is n ullptr");
+	}
+
+	assert(r != nullptr);
+	auto found = m_Resources.find(r->getName());
+
+	if (found == m_Resources.end()) {
+		PDE_WARN << "Trying to get size of non-existing resource: " << r->getName();
+		return -1;
+	}
+	return found->second.second;
 }
 
-int DirectoryContainer::v_loadRawResource(std::shared_ptr<Resource> r, char *buffer) noexcept
+int DirectoryContainer::v_loadRawResource(Resource *r, char *buffer) noexcept
 {
 	(void) r;
 	(void) buffer;

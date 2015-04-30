@@ -40,7 +40,7 @@ bool SimpleResourceFile::v_open(void) noexcept
 	return false;
 }
 
-int SimpleResourceFile::v_getRawResourceSize(std::shared_ptr<Resource> r) noexcept
+int SimpleResourceFile::v_getRawResourceSize(Resource *r) noexcept
 {
 	if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
 	if (r->getName() != resourceName) {
@@ -52,7 +52,7 @@ int SimpleResourceFile::v_getRawResourceSize(std::shared_ptr<Resource> r) noexce
 	return rawSize;
 }
 
-int SimpleResourceFile::v_loadRawResource(std::shared_ptr<Resource> r, char *buffer) noexcept
+int SimpleResourceFile::v_loadRawResource(Resource *r, char *buffer) noexcept
 {
 	if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
 	if (r->getName() != resourceName) {

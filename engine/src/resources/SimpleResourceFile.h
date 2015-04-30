@@ -30,8 +30,8 @@ public:
 	virtual bool v_open(void) noexcept override;
 	virtual int v_getResourceCount(void) const noexcept override;
 	virtual std::string v_getResourceName(int) const noexcept override;
-	virtual int v_getRawResourceSize(std::shared_ptr<Resource>) noexcept override;
-	virtual int v_loadRawResource(std::shared_ptr<Resource>, char *) noexcept override;
+	virtual int v_getRawResourceSize(Resource *) noexcept override;
+	virtual int v_loadRawResource(Resource *, char *) noexcept override;
 
 private:
 	std::string filename;
