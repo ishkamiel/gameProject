@@ -21,6 +21,7 @@ class Config_Impl : public Config
 	OptionDescription m_fileOptions;
 
 	bool m_isInitialized{false};
+	bool m_initFailed { false };
 
 public:
 	Config_Impl(void);

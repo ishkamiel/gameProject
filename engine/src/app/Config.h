@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/fwd_BoostOpts.h"
+#include "build_options.h"
 
 #include <cmath>
 #include <string>

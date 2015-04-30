@@ -18,7 +18,8 @@ namespace po = boost::program_options;
 ::testing::AssertionResult ConfigInitOk(bool ok)
 {
 	return ok ?  ::testing::AssertionSuccess()
-			: ::testing::AssertionFailure() << "Config->init has failed, probably due to path issues or missing 'engine.config'";
+			: ::testing::AssertionFailure() << "Config->init has failed, probably due to engine "
+	<< "config file [" << PDE_BUILDOPT_CONFIG_DIR << "/" <<PDE_BUILDOPT_CONFIG_FILENAME << "]";
 }
 
 class test_Config: public ::testing::Test
@@ -39,7 +40,7 @@ public:
 
 protected:
 	test_Config() {
-		setGlobalLogLevel(LogLevel::fatal);
+		setGlobalLogLevel(LogLevel::error);
 	}
 
 

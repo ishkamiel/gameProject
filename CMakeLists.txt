@@ -9,12 +9,16 @@ cmake_minimum_required (VERSION 2.8)
 ###################
 set(CMAKE_MODULE_PATH  "${CMAKE_SOURCE_DIR}/cmake"  )
 
+# lets us use version stuff in project()
+cmake_policy(SET CMP0048 NEW)
+
 # These are engine wide foncifurations
 set(PDE_BIN_DIR         "bin")
 set(PDE_LIB_DIR         "lib")
 set(PDE_DATA_DIR        "data")
 set(PDE_CONFIG_DIR      "config")
 set(PDE_INCLUDE_DIR     "include")
+set(PDE_CONFIG_FILENAME "engine.config")
 
 set(output_path ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 if (NOT DEFINED output_path)

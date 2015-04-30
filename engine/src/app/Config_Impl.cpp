@@ -26,8 +26,8 @@ Config_Impl::Config_Impl(void)
 	m_fileOptions(new boost::program_options::options_description())
 {
 	m_engineConfigfile = boost::filesystem::path(getRootPath());
-	m_engineConfigfile /= "config";
-	m_engineConfigfile /= "engine.config";
+	m_engineConfigfile /= PDE_BUILDOPT_CONFIG_DIR;
+	m_engineConfigfile /= PDE_BUILDOPT_CONFIG_FILENAME;
 
 	loadEngineConfig();
 }
@@ -41,7 +41,10 @@ bool Config_Impl::init(int argc, char **argv) noexcept
 {
 	PDE_ASSERT(!m_isInitialized, "already initialized");
 
-	if (!parseFile(m_engineConfigfile, true)) return false;
+	if (!parseFile(m_engineConfigfile, false)) {
+		m_initFailed = true;
+		return false;
+	}
 
 	m_isInitialized = true;
 
@@ -179,6 +182,8 @@ fs::path Config_Impl::getRootPath(void) const noexcept
 
 void Config_Impl::loadEngineConfig(void) noexcept
 {
+	if (!m_initFailed && !m_isInitialized) {
+		// kind of redundant, but keeps error messages cleaner
 	po::options_description generic("Generic options");
 	generic.add_options()
 		("version,v", "print version string")
@@ -186,12 +191,13 @@ void Config_Impl::loadEngineConfig(void) noexcept
 
 	po::options_description engine_config("Engine Config");
 	engine_config.add_options()
-		("engine.version", po::value<float>(), "engine verison")
+		("engine.version", po::value<std::string>(), "engine verison")
 		("engine.build_type", po::value<std::string>(), "engine build type")
 		("engine.name", po::value<std::string>(), "engine name");
 
 	m_cmdlineOptions->add(generic);
 	m_fileOptions->add(engine_config);
+}
 }
 
 bool Config_Impl::parseCommandLine(int ac, char **av) noexcept

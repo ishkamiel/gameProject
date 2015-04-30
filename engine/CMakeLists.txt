@@ -1,19 +1,20 @@
-project(pdEngine)
-
-include(GetPugixml)
+project(pdEngine VERSION 0.0.1 LANGUAGES CXX)
 
 # Some variables for cleaner setup
-set(include_dir ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(include_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(source_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(test_dir ${CMAKE_CURRENT_SOURCE_DIR}/test)
 set(resource_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 set(config_dir ${CMAKE_CURRENT_SOURCE_DIR}/config)
 
+# Fetch pugixml...
+include(GetPugixml)
+
 # Find source files to compile
 file(GLOB_RECURSE sources ${source_dir}/*.cpp)
 
 # include directories
-include_directories(${include_dir} ${source_dir}
+include_directories(${include_output_path} ${include_dir} ${source_dir}
     ${SDL2_INCLUDE_DIR}
     ${epoxy_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR})
@@ -30,8 +31,14 @@ target_link_libraries(pdEngine
     ${epoxy_LIBRARY}
     ${Boost_LIBRARIES})
 
+# configure the build_option.h header file
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/build_options.h
+    ${include_output_path}/build_options.h
+)
+
 # add target for config fiels
-configure_file(${config_dir}/engine.config ${config_output_path}/engine.config)
+configure_file(${config_dir}/engine.config ${config_output_path}/${PDE_CONFIG_FILENAME})
 
 # copy header files to include output directory
 #file(COPY ${include_dir}/ DESTINATION  ${include_output_path} FILES_MATCHING PATTERN "*.h")
