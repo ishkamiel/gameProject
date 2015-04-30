@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
@@ -16,8 +17,11 @@ enum class LogLevel : unsigned short
 	error,
 	fatal
 };
-
 void setGlobalLogLevel(LogLevel) noexcept;
+
+void printEngineBuildInfo(std::ostream &os) noexcept;
+void printStackTrace(void) noexcept;
+void printStackTrace(int sig) noexcept;
 
 }
 
@@ -28,15 +32,17 @@ void setGlobalLogLevel(LogLevel) noexcept;
 #define PDE_ERROR BOOST_LOG_TRIVIAL(error)
 #define PDE_FATAL BOOST_LOG_TRIVIAL(fatal)
 
-#define PDE_NOT_IMPLEMENTED_FATAL() \
-	PDE_FATAL << "not implemeneted [" << __FILE__ << ":" << __LINE__ << "]"; \
+#define PDE_EXIT_FAILURE(message) \
+    PDE_FATAL << message << ", at [" << __FILE__ << ":" << __LINE__ << "]"; \
+    std::cerr << message << ", at [" << __FILE__ << ":" << __LINE__ << "]"; \
+    printStackTrace(); \
 	exit(EXIT_FAILURE);
 
-#define QUOTE(x) "x"
+#define PDE_NOT_IMPLEMENTED_FATAL() PDE_EXIT_FAILURE("not implemented");
+
+// #define QUOTE(x) "x"
 #define PDE_ASSERT(check, message) \
-	if (!(check)) {\
-        PDE_FATAL << message << ", on[" << __FILE__ << ":" << __LINE__<< "]";\
-        exit(EXIT_FAILURE);}
+    if (!(check)) { PDE_EXIT_FAILURE(message);}
 
 #ifdef NDEBUG
 #undef PDE_ASSERT

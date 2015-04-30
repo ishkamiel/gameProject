@@ -1,6 +1,8 @@
 #include "utils/Logger.h"
 
-#include <cassert>
+#include "build_options.h"
+
+#include <execinfo.h>
 
 namespace pdEngine
 {
@@ -35,6 +37,29 @@ void setGlobalLogLevel(LogLevel level) noexcept
 	boost::log::core::get()->set_filter(
         boost::log::trivial::severity >= boostLevel
     );
+}
+
+void printEngineBuildInfo(std::ostream &os) noexcept
+{
+	os << PDE_BUILDOPT_ENGINE_NAME;
+	os << " v" << PDE_BUILDOPT_ENGINE_VERSION;
+	os << " (" << PDE_BUILDOPT_BUILD_TYPE << " build)" << std::endl;
+}
+
+void printStackTrace(void) noexcept
+{
+	std::cerr << "running: ";
+	printEngineBuildInfo(std::cerr);
+
+	void *array[10];
+	auto size = backtrace(array, 10);
+	backtrace_symbols_fd(array, size, STDERR_FILENO);
+}
+
+void printStackTrace(int sig) noexcept
+{
+	std::cerr << "Error: signal " << sig << std::endl;
+	printStackTrace();
 }
 
 }
