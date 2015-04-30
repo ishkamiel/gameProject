@@ -55,8 +55,9 @@ public:
 	/*! \brief Adds and parses a configuration file.
 	 *
 	 * \param filename A filename, without directory, for configuration file.
+	 * \param allowUnrecognized If false, unrecognized options will cause failure.
 	 */
-	virtual bool addConfigFile(const std::string &filename) noexcept = 0;
+	virtual bool addConfigFile(const std::string &filename, bool allowUnrecognized=true) noexcept = 0;
 
 	/*! \brief Provides access to the option descriptiors.
 	 */

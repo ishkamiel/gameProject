@@ -1,5 +1,5 @@
 #ifndef SIMPLERESOURCEFILE_H_
-#define SIMPLERESOURCEFILE_H_ 
+#define SIMPLERESOURCEFILE_H_
 
 #include "resources/Resource.h"
 
@@ -12,7 +12,7 @@
 namespace pdEngine
 {
 
-class SimpleResourceFile: public I_ResourceContainer
+class SimpleResourceFile : public I_ResourceContainer
 {
 public:
 	/**
@@ -22,7 +22,7 @@ public:
 	 *
 	 * @param std::string filename
 	 */
-	SimpleResourceFile(const std::string&);
+	SimpleResourceFile(const std::string &);
 	virtual ~SimpleResourceFile();
 
 	virtual std::string v_getName() const noexcept override;

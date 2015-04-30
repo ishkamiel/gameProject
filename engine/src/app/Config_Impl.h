@@ -32,7 +32,7 @@ public:
 	bool isInitialized(void) const noexcept
 	{ return m_isInitialized; }
 
-	bool addConfigFile(const std::string &filename) noexcept override;
+	bool addConfigFile(const std::string &filename, bool allowUnrecognized=true) noexcept override;
 
 	OptionDescription getOptionDescriptor(void) const noexcept override;
 

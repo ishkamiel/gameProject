@@ -58,20 +58,20 @@ bool Config_Impl::init(int argc, char **argv) noexcept
 auto Config_Impl::getOptionDescriptor(void) const noexcept -> OptionDescription
 {
 	if (m_isInitialized) {
-		PDE_FATAL << "Config getOptionDescriptor called after init";
-		exit(EXIT_FAILURE);
+		PDE_WARN << "Config getOptionDescriptor called after init";
+		//exit(EXIT_FAILURE);
 	}
 	return m_fileOptions;
 }
 
 
-bool Config_Impl::addConfigFile(const std::string &filename) noexcept
+bool Config_Impl::addConfigFile(const std::string &filename, bool allowUnrecognized) noexcept
 {
 	PDE_ASSERT(m_isInitialized, "not initialized");
 	auto path = getRootPath();
 	path /= "config";
 	path /= filename;
-	return parseFile(path, true);
+	return parseFile(path, allowUnrecognized);
 }
 
 

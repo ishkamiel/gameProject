@@ -92,8 +92,12 @@ if(${BUILD_TESTS})
         COMMAND rsync -rq ${resource_dir}/testResourceDir ${resource_output_path}
         VERBATIM)
 
-    # configure testing.config file
-    configure_file(${config_dir}/testing.config ${config_output_path}/testing.config)
+    # configure all config files in ${config_dir}/test
+    file(GLOB test_configs        ${config_dir}/test/*.config)
+    foreach(conf_path ${test_configs})
+        string(REGEX REPLACE "^.*/" "" conf ${conf_path})
+        configure_file(${conf_path} ${config_output_path}/${conf})
+    endforeach()
 
     # add dependancies to ensure resources are moved
     add_dependencies(test_pdEngine testResources pdEngine)
