@@ -4,7 +4,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <list>
+#include <map>
 
 namespace pdEngine
 {
@@ -13,8 +13,11 @@ namespace fs = boost::filesystem;
 
 class DirectoryContainer : public I_ResourceContainer
 {
+	using ResourceEntry = std::pair<fs::path, size_t>;
+
 	fs::path m_Path;
-	std::list<std::pair<std::string, size_t>> m_Resources;
+	std::string m_name;
+	std::map<std::string, ResourceEntry> m_Resources;
 
 public:
 	DirectoryContainer(const std::string &path);
@@ -22,11 +25,14 @@ public:
 
 	virtual std::string v_getName(void) const noexcept;
 
-	virtual bool v_open(void) override;
-	virtual int v_getResourceCount(void) const override;
-	virtual std::string v_getResourceName(int) const override;
-	virtual int v_getRawResourceSize(std::shared_ptr<Resource>) override;
-	virtual int v_loadRawResource(std::shared_ptr<Resource>, char *) override;
+	virtual bool v_open(void) noexcept override;
+	virtual int v_getResourceCount(void) const noexcept override;
+	virtual std::string v_getResourceName(int) const noexcept override;
+	virtual int v_getRawResourceSize(std::shared_ptr<Resource>) noexcept override;
+	virtual int v_loadRawResource(std::shared_ptr<Resource>, char *) noexcept override;
+
+private:
+	bool readDirectory(fs::path dir) noexcept;
 };
 
 }

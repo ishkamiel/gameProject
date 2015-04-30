@@ -27,11 +27,11 @@ public:
 
 	virtual std::string v_getName() const noexcept override;
 
-	virtual bool v_open(void) override;
-	virtual int v_getResourceCount(void) const override;
-	virtual std::string v_getResourceName(int) const override;
-	virtual int v_getRawResourceSize(std::shared_ptr<Resource>) override;
-	virtual int v_loadRawResource(std::shared_ptr<Resource>, char *) override;
+	virtual bool v_open(void) noexcept override;
+	virtual int v_getResourceCount(void) const noexcept override;
+	virtual std::string v_getResourceName(int) const noexcept override;
+	virtual int v_getRawResourceSize(std::shared_ptr<Resource>) noexcept override;
+	virtual int v_loadRawResource(std::shared_ptr<Resource>, char *) noexcept override;
 
 private:
 	std::string filename;

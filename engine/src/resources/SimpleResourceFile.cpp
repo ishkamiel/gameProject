@@ -23,7 +23,12 @@ SimpleResourceFile::~SimpleResourceFile(void)
 	}
 }
 
-bool SimpleResourceFile::v_open(void)
+std::string SimpleResourceFile::v_getName(void) const noexcept
+{
+	return filename;
+}
+
+bool SimpleResourceFile::v_open(void) noexcept
 {
 	m_File.reset(new std::ifstream(filename, std::ios::in | std::ios::binary | std::ios::ate));
 	if (m_File->is_open()) {
@@ -35,7 +40,7 @@ bool SimpleResourceFile::v_open(void)
 	return false;
 }
 
-int SimpleResourceFile::v_getRawResourceSize(std::shared_ptr<Resource> r)
+int SimpleResourceFile::v_getRawResourceSize(std::shared_ptr<Resource> r) noexcept
 {
 	if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
 	if (r->getName() != resourceName) {
@@ -47,7 +52,7 @@ int SimpleResourceFile::v_getRawResourceSize(std::shared_ptr<Resource> r)
 	return rawSize;
 }
 
-int SimpleResourceFile::v_loadRawResource(std::shared_ptr<Resource> r, char *buffer)
+int SimpleResourceFile::v_loadRawResource(std::shared_ptr<Resource> r, char *buffer) noexcept
 {
 	if (m_File == nullptr || !m_File->is_open()) throw std::logic_error("Resource not opened");
 	if (r->getName() != resourceName) {
@@ -64,13 +69,13 @@ int SimpleResourceFile::v_loadRawResource(std::shared_ptr<Resource> r, char *buf
 	return rawSize;
 }
 
-int SimpleResourceFile::v_getResourceCount(void) const
+int SimpleResourceFile::v_getResourceCount(void) const noexcept
 {
 	if (!m_File || !m_File->is_open()) throw std::logic_error("Resource not opened");
 	return 1;
 }
 
-std::string SimpleResourceFile::v_getResourceName(int num) const
+std::string SimpleResourceFile::v_getResourceName(int num) const noexcept
 {
 	if (!m_File || !m_File->is_open()) throw std::logic_error("Resource not opened");
 	if (num != 0) {
@@ -78,11 +83,6 @@ std::string SimpleResourceFile::v_getResourceName(int num) const
 	}
 
 	return resourceName;
-}
-
-std::string SimpleResourceFile::v_getName(void) const noexcept
-{
-	return filename;
 }
 
 }
