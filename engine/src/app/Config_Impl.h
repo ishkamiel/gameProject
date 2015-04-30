@@ -38,17 +38,18 @@ public:
 
 	bool hasVariable(const std::string &var) const noexcept override;
 
+	std::string getRootDirectoryPath(void) const noexcept override;
+
 	std::string getString(
 		const std::string &var, std::string defaultValue = "") const noexcept override;
 	bool getBool(const std::string &var, bool defaultValue = false) const noexcept override;
 	int getInt(const std::string &var, int defaultValue = -1) const noexcept override;
 	float getFloat(const std::string &var, float defaultValue = NAN) const noexcept override;
 
-	virtual void dump(std::ostream &os) const noexcept override;
+	void dump(std::ostream &os) const noexcept override;
 
 private:
 	boost::filesystem::path getRootPath(void) const noexcept;
-	void loadEngineConfig(void) noexcept;
 	bool parseCommandLine(int ac, char **av) noexcept;
 	bool parseFile(const boost::filesystem::path &filename, bool allowUnknown = false) noexcept;
 };

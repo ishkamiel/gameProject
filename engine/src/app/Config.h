@@ -68,6 +68,8 @@ public:
 	 */
 	virtual bool hasVariable(const std::string &var) const noexcept = 0;
 
+	virtual std::string getRootDirectoryPath(void) const noexcept = 0;
+
 	virtual std::string getString(
 		const std::string &var, std::string defaultValue = "") const noexcept = 0;
 	virtual bool getBool(const std::string &var, bool defaultValue = false) const noexcept = 0;
@@ -82,7 +84,12 @@ public:
 	virtual void set(const std::string& var, std::string val) noexcept = 0;
 	*/
 
-private:
+protected:
+	/*! \brief Registers engine specific options to the provided options_descriptions
+	 */
+	static void addEngineOptionDescriptions(
+		boost::program_options::options_description *cmdlineOpts,
+		boost::program_options::options_description *fileOpts) noexcept;
 };
 
 
