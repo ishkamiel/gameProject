@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#define TEST_CONFIG "testing.config"
+
 namespace pdEngine
 {
 
@@ -24,10 +26,7 @@ namespace po = boost::program_options;
 
 class test_Config: public ::testing::Test
 {
-public:
-
-	const std::string testing_config_file = "testing.config";
-
+protected:
 	const std::string tvar_NE = "abcdefghijklmnopqrstuvw.thereCanBeOnlyONE";
 	const std::string tvar_engine = "engine.name";
 	const std::string tval_engine = "pdEngine";
@@ -38,14 +37,10 @@ public:
 	const std::string tvar_int = "testing.integer";
 	const int tval_int = 123;
 
-protected:
-	test_Config() {
-		setGlobalLogLevel(LogLevel::error);
-	}
-
-
-	virtual void SetUp()
+	static void SetUpTestCase()
 	{
+		setGlobalLogLevel(LogLevel::trace);
+
 		auto conf = Config::get();
 
 		if (!conf->isInitialized()) {
@@ -57,10 +52,13 @@ protected:
 			conf->getOptionDescriptor()->add(testOpts);
 
 			ASSERT_TRUE(ConfigInitOk(conf->init()));
-		}
 
-		//ASSERT_TRUE(ConfigInitOk(conf->isInitialized()));
+			ASSERT_TRUE(conf->addConfigFile(TEST_CONFIG, false));
+		}
 	}
+
+	virtual void SetUp()
+	{ }
 
 	virtual void TearDown()
 	{}
@@ -84,7 +82,7 @@ TEST_F(test_Config, InitializationWorks)
 }
 */
 
-TEST_F(test_Config, SeemsToFindValues)
+TEST_F(test_Config, hasVariableSeemsToFindValues)
 {
 	auto conf = Config::get();
 
@@ -98,19 +96,11 @@ TEST_F(test_Config, GetterAndValues)
 	ASSERT_EQ(conf->getString(tvar_engine), tval_engine);
 }
 
-TEST_F(test_Config, FindsAddedConfigfile)
-{
-	auto conf = Config::get();
-
-	ASSERT_TRUE(conf->addConfigFile(testing_config_file));
-}
-
 TEST_F(test_Config, AddedConfigFindsInt)
 {
 	auto conf = Config::get();
 
 	ASSERT_EQ(conf->getInt(tvar_int), tval_int);
-	PDE_TRACE << "hmm?";
 }
 
 TEST_F(test_Config, AddedConfigFindsFloat)
