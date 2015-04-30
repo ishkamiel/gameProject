@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
+#include <memory>
+
 class pdeEnvironment : public ::testing::Environment
 {
  public:
@@ -11,7 +13,7 @@ class pdeEnvironment : public ::testing::Environment
 };
 
 int main(int argc, char** argv) {
-    ::testing::Environment* const foo_env = ::testing::AddGlobalTestEnvironment(new pdeEnvironment());
+    ::testing::AddGlobalTestEnvironment(new pdeEnvironment());
 
     testing::InitGoogleMock(&argc, argv);
 
