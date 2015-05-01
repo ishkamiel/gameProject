@@ -88,7 +88,7 @@ endif()
 # Doxygen (documentation
 # =======
 find_package(Doxygen)
-if (NOT DEFINED Doxygen_FOUND)
+if (NOT DEFINED DOXYGEN_FOUND)
     message(WARNING "Documentation disabled, please install Doxygen.")
 endif()
 
