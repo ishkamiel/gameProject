@@ -69,18 +69,28 @@ endif()
 # Load project wide dependencies #
 ##################################
 
-# Epoxy (OpenGL initialization, and stuff)
+# epoxy (OpenGL initialization, and stuff)
 # =====
 find_package(Epoxy REQUIRED)
+# this won't work for some reason, maybe TODO?
+# if (NOT DEFINED epoxy_FOUND)
+    # message(FATAL_ERROR "Cannot find required expoxy OpenGL library")
+# endif()
 
 # SDL2 (Window management, etc)
 # ====
 find_package(SDL2 REQUIRED)
+if (NOT DEFINED SDL2_FOUND)
+    message(FATAL_ERROR "Cannot find required SDL2 libraries")
+endif()
 # find_package(SDL2_ttf REQUIRED)
 
 # Doxygen (documentation
 # =======
 find_package(Doxygen)
+if (NOT DEFINED Doxygen_FOUND)
+    message(WARNING "Documentation disabled, please install Doxygen.")
+endif()
 
 # CEGUI (GUI library)
 # =====
@@ -92,6 +102,9 @@ set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 find_package(Boost COMPONENTS program_options log thread date_time filesystem system REQUIRED)
+if (NOT DEFINED Boost_FOUND)
+    message(FATAL_ERROR "Cannot find required Boost libraries")
+endif()
 #log log_setup thread date_time filesystem system
 
 ###################
