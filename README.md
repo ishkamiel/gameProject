@@ -7,11 +7,26 @@ Personal
 
 This is a personal project and as such, you probably shouldn't be here.
 
+TODO
+----
+
+- [x] Plan for project end
+- [ ] Resource directory containers
+- [ ] Resource xml loading
+- [ ] Actor factory
+- [ ] Actor placeholder compoenent (rotating cube)
+- [ ] Render something
+- [ ] Camera movement
+- [ ] Actor movement (simple movement logic)
+- [ ] Blank surfaces
+- [ ] Tiled map
+- [ ] Mouse click input
+- [ ] Tower placeholder actors
+- [ ] Change movement to account towers
+
 External libraries
 ------------------
 
-spdlog - https://github.com/gabime/spdlog
-
-Epoxy - https://github.com/anholt/libepoxy
-
-pugigml - http://pugixml.org
+- [Boost](http://www.boost.org)
+- [Epoxy](https://github.com/anholt/libepoxy)
+- [pugixml](http://pugixml.org)
