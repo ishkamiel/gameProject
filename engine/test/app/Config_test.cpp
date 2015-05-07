@@ -39,7 +39,7 @@ protected:
 
 	static void SetUpTestCase()
 	{
-		setGlobalLogLevel(LogLevel::trace);
+		//setGlobalLogLevel(LogLevel::trace);
 
 		auto conf = Config::get();
 
