@@ -31,8 +31,14 @@ void setGlobalLogLevel(LogLevel level) noexcept
 		case LogLevel::fatal:
 			boostLevel = boost::log::trivial::fatal;
 	        break;
+		case LogLevel::none:
+	        boost::log::core::get()->set_logging_enabled(false);
+	        return;
 	}
 
+	if (!boost::log::core::get()->get_logging_enabled()) {
+		boost::log::core::get()->set_logging_enabled(true);
+	}
 
 	boost::log::core::get()->set_filter(
         boost::log::trivial::severity >= boostLevel

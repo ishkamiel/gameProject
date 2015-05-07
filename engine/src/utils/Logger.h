@@ -15,7 +15,8 @@ enum class LogLevel : unsigned short
 	info,
 	warn,
 	error,
-	fatal
+	fatal,
+	none
 };
 void setGlobalLogLevel(LogLevel) noexcept;
 
