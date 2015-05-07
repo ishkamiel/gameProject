@@ -43,18 +43,18 @@ protected:
 
 		auto conf = Config::get();
 
+		po::options_description testOpts("Testing config");
+		testOpts.add_options()
+			("testing.floating", po::value<float>())
+			("testing.integer", po::value<int>());
+
+		conf->getOptionDescriptor()->add(testOpts);
+
 		if (!conf->isInitialized()) {
-			po::options_description testOpts("Testing config");
-			testOpts.add_options()
-				("testing.floating", po::value<float>())
-				("testing.integer", po::value<int>());
-
-			conf->getOptionDescriptor()->add(testOpts);
-
 			ASSERT_TRUE(ConfigInitOk(conf->init()));
-
-			ASSERT_TRUE(conf->addConfigFile(TEST_CONFIG, false));
 		}
+
+		ASSERT_TRUE(conf->addConfigFile(TEST_CONFIG, false));
 	}
 
 	virtual void SetUp()
