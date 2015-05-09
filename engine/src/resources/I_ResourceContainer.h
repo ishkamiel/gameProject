@@ -10,6 +10,10 @@ namespace pdEngine
 class I_ResourceContainer
 {
 public:
+	static const int UnknownResource = -1;
+	static const int ParameterNullPointer =  -2;
+	static const int ReadFailure = -3;
+
 	virtual ~I_ResourceContainer(void)
 	{ };
 

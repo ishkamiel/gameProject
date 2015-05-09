@@ -1,7 +1,10 @@
 #include "resources/DirectoryContainer.h"
 #include "utils/Logger.h"
+#include "utils/Memory.h"
 
 #include <climits>
+#include <fstream>
+#include <memory>
 #include <vector>
 
 namespace pdEngine
@@ -65,24 +68,68 @@ std::string DirectoryContainer::v_getResourceName(int i) const noexcept
 int DirectoryContainer::v_getRawResourceSize(Resource *r) noexcept
 {
 	if (r == nullptr) {
-		PDE_EXIT_FAILURE("Resource pointer is n ullptr");
+		PDE_ASSERT(r != nullptr, "Resource pointer is nullptr");
+		return ParameterNullPointer;
 	}
 
-	assert(r != nullptr);
 	auto found = m_Resources.find(r->getName());
 
 	if (found == m_Resources.end()) {
 		PDE_WARN << "Trying to get size of non-existing resource: " << r->getName();
-		return -1;
+		return UnknownResource;
 	}
+
+	PDE_TRACE << "Returning resource " << r->getName() << " size as " << found->second.second;
 	return found->second.second;
 }
 
 int DirectoryContainer::v_loadRawResource(Resource *r, char *buffer) noexcept
 {
-	(void) r;
-	(void) buffer;
-	throw std::out_of_range("Unknown resource");
+	if (r == nullptr) {
+		PDE_ASSERT(r != nullptr, "Resource pointer is nullptr");
+		return ParameterNullPointer;
+	}
+
+	auto found = m_Resources.find(r->getName());
+
+	if (found == m_Resources.end()) {
+		PDE_ERROR << "trying to load non-existing resource: " << r->getName();
+		return UnknownResource;
+	}
+
+	PDE_TRACE << "Loading resource " << r->getName();
+
+	auto path = found->second.first;
+	auto size = found->second.second;
+
+	try  {
+		auto file = std::shared_ptr<std::ifstream>(
+			new std::ifstream(path.string(), std::ios::in | std::ios::binary | std::ios::ate),
+			[=](std::ifstream *ptr) {
+			    if (ptr != nullptr && ptr->is_open()) {
+				    ptr->close();
+			    }
+			    safeDelete(ptr);
+			});
+
+		if (file->is_open()) {
+			PDE_ASSERT(file->tellg() == (unsigned int)size, "Filesize missmatch");
+
+			file->seekg(0, file->beg);
+			file->read(buffer, size);
+			if (!(*file)) {
+				PDE_ERROR << "Error readng " << path.string() << ", only " << file->gcount() << "bytes read";
+			}
+			else {
+				return size;
+			}
+		}
+	}
+	catch (const std::exception &e) {
+		PDE_FATAL << "Caught exception while reading file: " << e.what();
+		PDE_EXIT_FAILURE("Exiting due to unhandled exception");
+	}
+	return ReadFailure;
 }
 
 bool DirectoryContainer::readDirectory(fs::path dir) noexcept
