@@ -24,7 +24,7 @@ protected:
 
 	static void SetUpTestCase()
 	{
-		setGlobalLogLevel(LogLevel::all);
+		setGlobalLogLevel(LogLevel::none);
 
         boost::program_options::options_description desc;
         desc.add_options()
@@ -108,6 +108,21 @@ TEST_F(test_DirectoryContainer, seemsToLoadRawResource)
 	char buffer[size];
 
 	ASSERT_THAT(m_container->v_loadRawResource(&r, buffer), size);
+}
+
+TEST_F(test_DirectoryContainer, loadedResourceProperlyAccessible)
+{
+	m_container->v_open();
+	Resource r{"testResourceDir/file.txt"};
+
+	auto size = m_container->v_getRawResourceSize(&r);
+	char *buffer = new char[size+1];
+	m_container->v_loadRawResource(&r, buffer);
+
+	buffer[size] = '\0';
+	std::string expected = "line1\nline2\nline3";
+
+	ASSERT_THAT(std::string(buffer), expected);
 }
 
 
