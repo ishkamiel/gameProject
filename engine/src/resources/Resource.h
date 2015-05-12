@@ -13,6 +13,8 @@ public:
 	Resource(const std::string &name);
 	~Resource();
 
+	const std::string getContainerName(void) const noexcept;
+
 	inline const std::string &getName(void) const noexcept
 	{ return m_name; }
 };

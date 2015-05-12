@@ -31,7 +31,7 @@ unsigned int ResourceManager::getCacheSize() const noexcept
 	return m_resourceCache->getCacheSize();
 }
 
-unsigned int ResourceManager::getAllocatedCacheS() const noexcept
+unsigned int ResourceManager::getAllocatedCacheSize() const noexcept
 {
 	return m_resourceCache->getAllocated();
 }

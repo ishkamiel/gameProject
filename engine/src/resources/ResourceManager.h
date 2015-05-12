@@ -36,7 +36,7 @@ public:
 	{ return "Resource Manager"; }
 
 	unsigned int getCacheSize() const noexcept;
-	unsigned int getAllocatedCacheS() const noexcept;
+	unsigned int getAllocatedCacheSize() const noexcept;
 
 	bool addResourceFile(const std::string &filename);
 

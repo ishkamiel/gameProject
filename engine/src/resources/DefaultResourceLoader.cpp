@@ -1,6 +1,9 @@
 #include "resources/DefaultResourceLoader.h"
+#include "resources/ResourceHandle.h"
 
-#include <cassert>
+#include "utils/Logger.h"
+
+#include <cstring>
 
 namespace pdEngine
 {
@@ -24,10 +27,12 @@ unsigned int DefaultResourceLoader::v_getLoadedResourceSize(
 bool DefaultResourceLoader::v_loadResource(
 	char *buffer, unsigned int size, ResourceHandle *handle) noexcept
 {
-	(void) buffer;
-	(void) size;
-	(void) handle;
-	assert(false); // TODO implement this!
+	PDE_ASSERT(handle->getSize() == size, "handle and buffer size missmatch");
+
+	// TODO: handle memcpy errors, or do this some other way?
+	std::memcpy(buffer, handle->getBuffer(), size);
+
 	return true;
 }
+
 }

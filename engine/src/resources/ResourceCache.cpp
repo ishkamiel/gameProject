@@ -203,7 +203,14 @@ void ResourceCache::memoryHasBeenFreed(unsigned int m)
 
 ResourceContainer_sptr ResourceCache::getContainer(std::shared_ptr<Resource> r) noexcept
 {
-	// TODO implement this!!!!
+	auto containerName = r->getContainerName();
+	for (auto c : m_containers) {
+		if (c->v_getName() == containerName) {
+			return c;
+		}
+	}
+
+	PDE_WARN << "Cannot find container for " << r->getName();
 	return ResourceContainer_sptr();
 }
 
