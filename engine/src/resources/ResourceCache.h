@@ -13,6 +13,14 @@
 namespace pdEngine
 {
 
+//! A fixed size resource cache to manage resource loading
+/*!
+ * The resource cache manages loading of resources from one or more I_ResourceContainer objects.
+ * Loading is done with provided I_ResourceLoader objects. Loaded resources are returned in
+ * ResourceHandle objects that provide access to the raw memory buffer. The resource cache has a
+ * fixed size and freeing and memory allocations are tracked through the handle objects, so their
+ * timely destruction is required.
+ */
 class ResourceCache
 {
 
@@ -26,40 +34,49 @@ protected:
 	unsigned int m_allocated;
 
 public:
-	ResourceCache(const unsigned int);
+	//! Construct cache of size MB.
+	ResourceCache(const unsigned int size);
+
+	//! Destructor
+	/*! Destructing the cache does not invalidate handles, but will destroy all internal
+	 * references to handles.
+	 */
 	virtual ~ResourceCache();
 
+	//! Change cache size.
 	void setCacheSizeMB(unsigned int size);
 
+	//! Get the size maximum memory allocated by the cache.
 	unsigned int getCacheSize(void) const noexcept
 	{ return m_cacheSize; }
 
+	//! Get the currently allocated memory.
 	unsigned int getAllocated(void) const noexcept
 	{ return m_allocated; }
 
-	/**
-	 * @brief Resets resource cache. Removes all internal resource handles. Removes any added
+
+	//! Resets ResourceCache.
+	/*! Removes all internal resource handles. Removes any added
 	 * containers and loaders. Does not guarantee any resources are released, onyly that the
 	 * cache releases it's references.
 	 */
 	void reset(void) noexcept;
 
-	/**
-	 * @brief Release all internal ResourceHandles.
-	 */
+	//! Release all internal ResourceHandles.
 	void clear(void);
 
-	/**
-	 * @brief Add a resource container.
-	 */
+	//! Add a resource container.
 	bool addContainer(ResourceContainer_sptr);
 
-	/**
-	 * @brief Add a resource loader.
-	 */
+	//! Register a resource loader.
 	bool registerLoader(ResourceLoader_sptr);
 
+	//! Get handle to a resource.
+	/*! This will, if needed, cause a possibly costly load of the resource.
+	 */
 	ResourceHandle_sptr getHandle(std::shared_ptr<Resource>);
+
+	//! Preload a resource.
 	int preLoad(const std::string pattern, void (*callback)(int, bool &));
 
 protected:

@@ -73,7 +73,9 @@ TEST_F(test_DirectoryContainer, testConstructorsWithNonExisting)
 
 TEST_F(test_DirectoryContainer, containerNameCorrectlyReturned)
 {
-	ASSERT_THAT(m_container->v_getName(), Config::get()->getString(RES_CONFIG));
+	auto rName = Config::get()->getString(RES_CONFIG);
+	std::transform(rName.begin(), rName.end(), rName.begin(), ::tolower);
+	ASSERT_THAT(m_container->v_getName(), rName);
 }
 
 TEST_F(test_DirectoryContainer, seemsToOpenExistingDirectory)

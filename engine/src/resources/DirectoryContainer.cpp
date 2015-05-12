@@ -16,6 +16,7 @@ DirectoryContainer::DirectoryContainer(const std::string &path)
 	auto parent = m_Path.parent_path().string();
 	m_name = m_Path.string();
 	m_name.erase(0, parent.length() + 1);
+	std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
 }
 
 DirectoryContainer::~DirectoryContainer()

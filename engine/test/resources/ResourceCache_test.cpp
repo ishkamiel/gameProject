@@ -11,8 +11,9 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 
-#define CONFIG_FILE "DirectoryContainer_test.config"
-#define RES_CONFIG "DirectoryContainer_test.resource_path"
+#define RES_CONTAINER   "testResourceDir"
+#define RES_FILETXT     "testResourceDir/file.txt"
+#define RES_SUBDIRFILE "testResouceDir/subDirectory/subDirFile.txt"
 
 namespace pdEngine
 {
@@ -24,18 +25,7 @@ protected:
 
 	static void SetUpTestCase()
 	{
-		setGlobalLogLevel(LogLevel::none);
-
-		boost::program_options::options_description desc;
-		desc.add_options()
-			(RES_CONFIG, boost::program_options::value<std::string>());
-
-		auto conf = Config::get();
-		if (!conf->isInitialized()) ASSERT_TRUE(conf->init());
-		conf->getOptionDescriptor()->add(desc);
-
-		ASSERT_TRUE(conf->addConfigFile(CONFIG_FILE, false));
-		ASSERT_NE(conf->getString(RES_CONFIG), "");
+		setGlobalLogLevel(LogLevel::trace);
 	}
 
 	static void TearDownTestCase()
@@ -49,7 +39,7 @@ protected:
 		boost::filesystem::path path{Config::get()->getRootDirectoryPath()};
 
 		path /= Config::get()->getString("resources.root");
-		path /= Config::get()->getString(RES_CONFIG);
+		path /= RES_CONTAINER;
 
 		auto container = std::make_shared<DirectoryContainer>(path.string());
 		ASSERT_TRUE(m_resourceCache->addContainer(container));
@@ -59,9 +49,12 @@ protected:
 	{ }
 };
 
-TEST_F(test_ResourceCache, doNothing)
+TEST_F(test_ResourceCache, getHandleReturnsSomething)
 {
-	ASSERT_TRUE(true);
+	auto r = std::make_shared<Resource>(RES_FILETXT);
+	auto h = m_resourceCache->getHandle(r);
+	ASSERT_FALSE(!h);
+	PDE_TRACE << "Ookay...";
 }
 
 }

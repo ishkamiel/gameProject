@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
+#include "app/Config.h"
 #include "utils/Logger.h"
 
 #include <memory>
@@ -12,6 +13,7 @@ public:
 
 	virtual void SetUp() {
 		pdEngine::setGlobalLogLevel(pdEngine::LogLevel::none);
+		pdEngine::Config::get()->init();
 	}
 
 	virtual void TearDown() {}

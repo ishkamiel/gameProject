@@ -68,12 +68,15 @@ ResourceHandle_sptr ResourceCache::getHandle(std::shared_ptr<Resource> r)
 	ResourceHandle_sptr handle{find(r)};
 
 	if (!handle) {
+		PDE_TRACE << "Resource not found in cache, proceeding to load: " << r->getName();
 		handle = load(r);
 	}
 	else {
+		PDE_TRACE << "Resource found in cache: " << r->getName();
 		update(handle);
 	}
 
+	PDE_TRACE << "Returning handle to caller";
 	return handle;
 }
 
@@ -134,6 +137,7 @@ ResourceHandle_sptr ResourceCache::load(std::shared_ptr<Resource> resource)
 		rawPointer = loadNonRaw(container, loader, resource);
 	}
 
+	PDE_TRACE << "Creating ResourceHandle shared_ptr for " << resource->getName();
 	auto handle = std::shared_ptr<ResourceHandle>(
 		rawPointer,
 		[=](ResourceHandle *p) {
@@ -197,7 +201,7 @@ void ResourceCache::freeOneResource()
 
 void ResourceCache::memoryHasBeenFreed(unsigned int m)
 {
-	assert(m_allocated > m); // Freeing more memory than allocated
+	assert(m_allocated >= m); // Freeing more memory than allocated
 	m_allocated -= m;
 }
 
