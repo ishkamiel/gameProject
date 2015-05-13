@@ -29,7 +29,7 @@ protected:
 
 	static void SetUpTestCase()
 	{
-		setGlobalLogLevel(LogLevel::trace);
+		setGlobalLogLevel(LogLevel::none);
 	}
 
 	static void TearDownTestCase()

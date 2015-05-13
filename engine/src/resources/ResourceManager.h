@@ -38,7 +38,7 @@ public:
 	unsigned int getCacheSize() const noexcept;
 	unsigned int getAllocatedCacheSize() const noexcept;
 
-	bool addResourceFile(const std::string &filename);
+	bool addContainer(const std::string &filename);
 
 	DEPRECATED(pugi::xml_document *loadResourceXML(const std::string &resource));
 

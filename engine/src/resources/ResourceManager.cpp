@@ -1,7 +1,12 @@
 #include "resources/ResourceManager.h"
+
+#include "app/Config.h"
 #include "resources/ResourceCache.h"
 #include "resources/DefaultResourceLoader.h"
+#include "resources/DirectoryContainer.h"
 #include "utils/Logger.h"
+
+#include <boost/filesystem.hpp>
 
 #include "pugixml.hpp"
 
@@ -19,7 +24,6 @@ std::shared_ptr<ResourceManager> ResourceManager::get(void) noexcept
 
 ResourceManager::ResourceManager(void)
 {
-	//m_resourceCache = std::make_unique<ResourceCache>(100);
 	m_resourceCache = std::unique_ptr<ResourceCache>(new ResourceCache(100));
 }
 
@@ -36,20 +40,32 @@ unsigned int ResourceManager::getAllocatedCacheSize() const noexcept
 	return m_resourceCache->getAllocated();
 }
 
-bool ResourceManager::addResourceFile(const std::string &filename)
+bool ResourceManager::addContainer(const std::string &containerName)
 {
-	// TODO check file container type.
-	return true;
+	boost::filesystem::path path{Config::get()->getRootDirectoryPath()};
+	path /= Config::get()->getString("resources.root");
+	path /= containerName;
+
+	if (boost::filesystem::is_directory(path)) {
+		PDE_DEBUG << "Adding DirectoryContainer " << containerName;
+		m_resourceCache->addContainer(std::make_shared<DirectoryContainer>(path.string()));
+		return true;
+	}
+
+	PDE_ERROR << "Unable to find supported resouce container for " << containerName;
+	return false;
 }
 
 
 void ResourceManager::requestResource(const std::string &resource)
 {
+	PDE_NOT_IMPLEMENTED_FATAL();
 	// TODO
 }
 
 void ResourceManager::requestXML(const std::string &resource)
 {
+	PDE_NOT_IMPLEMENTED_FATAL();
 	// TODO
 }
 

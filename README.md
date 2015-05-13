@@ -11,8 +11,8 @@ TODO
 ----
 
 - [x] Plan for project end
-- [ ] Resource directory containers
-- [ ] Resource xml loading
+- [x] Resource directory containers
+- [x] Resource xml loading
 - [ ] Actor factory
 - [ ] Actor placeholder compoenent (rotating cube)
 - [ ] Render something
