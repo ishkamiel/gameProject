@@ -122,6 +122,7 @@ int DirectoryContainer::v_loadRawResource(Resource *r, char *buffer) noexcept
 				PDE_ERROR << "Error readng " << path.string() << ", only " << file->gcount() << "bytes read";
 			}
 			else {
+				PDE_TRACE << "Successfully read " << size << " from resource " << r->getName();
 				return size;
 			}
 		}

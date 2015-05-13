@@ -127,5 +127,19 @@ TEST_F(test_DirectoryContainer, loadedResourceProperlyAccessible)
 	ASSERT_THAT(std::string(buffer), expected);
 }
 
+TEST_F(test_DirectoryContainer, loadsResourceInSubdirectory)
+{
+	m_container->v_open();
+	Resource r{"testResourceDir/subdirectory/subdirfile.txt"};
+
+	ASSERT_THAT(m_container->v_getRawResourceSize(&r), Gt(0));
+
+	auto size = m_container->v_getRawResourceSize(&r);
+	char *buffer = new char[size];
+	m_container->v_loadRawResource(&r, buffer);
+
+	ASSERT_THAT(std::string(buffer, size),
+	            std::string("first line, aaa\nsecond line, bbb\n"));
+}
 
 }
