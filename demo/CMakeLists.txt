@@ -8,14 +8,16 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../engine/src
     )
 
-# create a binary for each source file in the bins directory
-foreach(BIN_SOURCE ${MY_BIN_SOURCES})
-    # create binary name by dropping extension
-    string(REGEX REPLACE "^.*/(.*)\\.cpp$" "\\1" bin_name ${BIN_SOURCE})
+add_executable(demo ${MY_SOURCE_FILES})
 
-    # add an executable target for binary
-    add_executable(${bin_name} ${BIN_SOURCE} ${MY_SOURCE_FILES})
+target_link_libraries(demo pdEngine)
 
-    # link target to the pdEngine library
-    target_link_libraries(${bin_name} pdEngine)
-endforeach(BIN_SOURCE)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config/demo.config ${config_output_path}/demo.config)
+
+set(resource_dir ${CMAKE_CURRENT_SOURCE_DIR}/resources)
+
+add_custom_target(demoResources ALL
+        COMMAND rsync -rq ${resource_dir}/ ${resource_output_path}/demo/
+        VERBATIM)
+
+add_dependencies(demo demoResources)

@@ -9,13 +9,17 @@
 
 #include "utils/Logger.h"
 
+#include "app/Config.h"
 #include "events/EventManager.h"
+#include "events/I_Event.h"
 #include "events/DefaultEvent.h"
+#include "input/InputManagerSDL.h"
 #include "opengl/OpenglRenderer.h"
 #include "renderer/SDLWindow.h"
 #include "resources/ResourceManager.h"
+#include "tasks/TaskManager.h"
+#include "tasks/Task.h"
 #include "utils/Timer.h"
-#include "input/InputManagerSDL.h"
 
 #include <functional>
 #include <memory>
@@ -31,6 +35,7 @@ Application::~Application() {
 bool Application::init(void) {
     initializeLogging();
 
+	v_preInit();
 	PDE_INFO << "Starting application initialization sequence...";
 
     taskManager = std::make_shared<TaskManager>();
@@ -47,6 +52,8 @@ bool Application::init(void) {
 
     initOk = true;
 	PDE_INFO << "Application successfully initialized!";
+
+	v_postInit();
     return (true);
 }
 
@@ -77,6 +84,21 @@ bool Application::start(void)
 
     shutdown();
     return true;
+}
+
+std::shared_ptr<Config> Application::getConfig() noexcept
+{
+	return Config::get();
+}
+
+std::shared_ptr<EventManager> Application::getEventManager() noexcept
+{
+	return EventManager::get();
+}
+
+std::shared_ptr<ResourceManager> Application::getResourceManager() noexcept
+{
+	return ResourceManager::get();
 }
 
 void Application::shutdown(void) 

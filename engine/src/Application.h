@@ -1,8 +1,6 @@
 #pragma once
 
-#include "tasks/TaskManager.h"
-#include "tasks/Task.h"
-#include "renderer/I_Renderer.h"	
+#include "renderer/I_Renderer.h"
 #include "renderer/I_Window.h"	
 
 #include <memory>
@@ -11,9 +9,22 @@
 namespace pdEngine {
 
 class ResourceManager;
-using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
+class TaskManager;
+class Config;
+class EventManager;
+class I_Event;
 
 class Application {
+	int updateFrequency{250};
+
+	Renderer_sptr m_Renderer;
+	Window_sptr window;
+	std::shared_ptr<TaskManager> taskManager;
+
+	bool initOk { false };
+	bool doShutdown { false };
+	bool m_LogToConsole { true };
+
 public:
     Application();
     virtual ~Application();
@@ -21,7 +32,16 @@ public:
     bool init(void);
     bool start(void);
 
+	std::shared_ptr<Config> getConfig() noexcept;
+	std::shared_ptr<EventManager> getEventManager() noexcept;
+	std::shared_ptr<ResourceManager> getResourceManager() noexcept;
+
 protected:
+	//! Runs before initialization of base systems
+	virtual void v_preInit(void) {};
+
+	//! Runs when all base systems are running
+    virtual void v_postInit(void) {};
 
 private:
     void initializeLogging(void);
@@ -31,18 +51,9 @@ private:
     void initializeRenderer(void);
 
     void shutdown(void);
-    bool onShutdown(Event_sptr e);
-    bool onRequestQuit(Event_sptr e);
+    bool onShutdown(std::shared_ptr<I_Event> e);
+    bool onRequestQuit(std::shared_ptr<I_Event> e);
 
-    int updateFrequency{250};
-
-    Renderer_sptr m_Renderer;
-    Window_sptr window;
-    TaskManager_sptr taskManager;
-
-    bool initOk{false};
-    bool doShutdown{false};
-    bool m_LogToConsole { true };
 };
 }
 
