@@ -9,10 +9,10 @@ namespace pugi { class xml_node; }
 
 namespace pdEngine
 {
-class ResourceManager;
-class EventManager;
-using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
-using EventManager_sptr = std::shared_ptr<EventManager>;
+//class ResourceManager;
+//class EventManager;
+//using ResourceManager_sptr = std::shared_ptr<ResourceManager>;
+//using EventManager_sptr = std::shared_ptr<EventManager>;
 
 using ActorComponentCreator = std::function<ActorComponent*(void)>;
 
@@ -22,14 +22,16 @@ class ActorFactory
 
 	ActorId m_lastActorId;
 	CreatorMap m_actorComponentCreators;
-	ResourceManager_sptr m_resourceManager;
-	EventManager_sptr m_eventManager;
+	//ResourceManager_sptr m_resourceManager;
+	//EventManager_sptr m_eventManager;
 
 public:
-	ActorFactory(ResourceManager_sptr, EventManager_sptr);
+	ActorFactory();
 	virtual ~ActorFactory(void);
 
 	Actor_sptr createActor(const char* actorResource) noexcept;
+
+	void addComponentCreator(const std::string& name, ActorComponentCreator creator) noexcept;
 
 protected:
 	virtual ActorComponent_sptr v_createComponent(const pugi::xml_node*) noexcept;

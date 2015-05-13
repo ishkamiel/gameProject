@@ -2,6 +2,8 @@
 
 #include <memory>
 
+namespace pugi { class xml_node; }
+
 namespace pdEngine
 {
 class Actor;
@@ -13,13 +15,13 @@ class ActorComponent
 {
     friend class ActorFactory;
 
-    class XMLData;
+	Actor_sptr m_owner;
 
 public:
     virtual ~ActorComponent(void)
     { };
 
-    virtual bool v_init(XMLData *data) = 0;
+    virtual bool v_init(const pugi::xml_node *data) noexcept = 0;
 
     virtual void v_postInit(void) noexcept
     { };
@@ -32,9 +34,6 @@ protected:
     inline void setOwner(Actor_sptr owner) noexcept { m_owner = owner; }
     inline Actor_sptr getOwner(void) const noexcept { return m_owner; }
 
-private:
-    Actor_sptr m_owner;
-    //ResourceManager_sptr m_resourceManager;
 };
 
 using ActorComponent_sptr = std::shared_ptr<ActorComponent>;

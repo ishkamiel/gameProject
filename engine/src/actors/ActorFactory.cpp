@@ -8,12 +8,16 @@
 namespace pdEngine
 {
 
-ActorFactory::ActorFactory(ResourceManager_sptr rm, EventManager_sptr em)
-: m_resourceManager(rm), m_eventManager(em)
-{}
+ActorFactory::ActorFactory()
+{ }
 
 ActorFactory::~ActorFactory(void)
-{}
+{ }
+
+void ActorFactory::addComponentCreator(const std::string &name, ActorComponentCreator creator) noexcept
+{
+	m_actorComponentCreators[name] = creator;
+}
 
 Actor_sptr ActorFactory::createActor(const char* res) noexcept
 {
@@ -60,7 +64,10 @@ ActorComponent_sptr ActorFactory::v_createComponent(const pugi::xml_node* data) 
         return ActorComponent_sptr();
     }
 
-    return ActorComponent_sptr(f->second());
+	std::shared_ptr<ActorComponent> comp (f->second());
+	comp->v_init(data);
+
+	return comp;
 }
 
 ActorId ActorFactory::getNextActorId(void) noexcept

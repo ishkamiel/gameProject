@@ -30,7 +30,7 @@ class test_ResourceManager : public ::testing::Test
 protected:
 	static void SetUpTestCase()
 	{
-		setGlobalLogLevel(LogLevel::all);
+		//setGlobalLogLevel(LogLevel::all);
 
 		auto rm = ResourceManager::get();
 		ASSERT_FALSE(!rm);
