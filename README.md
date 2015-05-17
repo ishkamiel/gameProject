@@ -48,17 +48,29 @@ format and can be build with the build system.
 
    Misc stuff.  
 
+External libraries
+------------------
 
-Current State
+- [Boost](http://www.boost.org)
+- [Epoxy](https://github.com/anholt/libepoxy)
+- [pugixml](http://pugixml.org)
+
+Prerequesites
 -------------
 
+The project relies on libepoxy for OpenGL handling, pugixml for xml parsin,
+gtest and gmock for testing and on various Boost libraries for logging,
+filesystem and config management. The build system will automatically download
+pugixml, gtest and gmock, but both Boost and libepoxy need to be installed on
+the build system.
 
 Building
 --------
 
-The project uses CMake for building. In order to build the project in the current working
-directory simply call cmake with the project directory as an argument. Starting from the project
-root the following commands builds the project in the build subdirectory:
+The project uses CMake for building. In order to build the project in the
+current working directory simply call cmake with the project directory as an
+argument. Starting from the project root the following commands builds the
+project in the build subdirectory:
 
 ````shell
 mkdir build
@@ -67,43 +79,33 @@ cmake ..
 make
 ````
 
-In order to build documentation simply issue ````make doc````. 
+The test and demo binaries should afterwards be found in the bin directory. In
+order to build documentation simply issue:
 
-Prerequesites
+````shell
+make doc
+````.
+
+Current State
 -------------
 
-The project relies on libepoxy for OpenGL handling, pugixml for xml parsin, gtest and gmock for 
-testing and on various Boost libraries for logging, filesystem and config management. 
+The following parts of the whole are kind of done:
 
-Required insta
+- EventManager implemented with tests.
+- TaskManager implemented with tests.
+- ResourceManager/Cache implemented for XML and raw files. Tested.
+- Configuration management built upon Boost::Config.
+- Simplistic logging and error management done.
+- A very duridmentary start for a rendering system and scenegraph on OpenGL.
+- A general architecture to tie these stuff together.
+- A CMake build system to manage dependencies and builds.
 
+The demo program itself currently does essentially nothing. The basic
+subsystems are properly initialized and the mainloop is entered, but there
+currently is no game in there. Input and event management is limited to proper
+shtudown on handling closing of the window (pressing the X on the window).
+While rendering is/was working at some point, the current work on the
+scenegraph and rendering is unfinished.
 
-
-Personal
---------
-
-This is a personal project and as such, you probably shouldn't be here.
-
-TODO
-----
-
-- [x] Plan for project end
-- [x] Resource directory containers
-- [x] Resource xml loading
-- [ ] Actor factory
-- [ ] Actor placeholder compoenent (rotating cube)
-- [ ] Render something
-- [ ] Camera movement
-- [ ] Actor movement (simple movement logic)
-- [ ] Blank surfaces
-- [ ] Tiled map
-- [ ] Mouse click input
-- [ ] Tower placeholder actors
-- [ ] Change movement to account towers
-
-External libraries
-------------------
-
-- [Boost](http://www.boost.org)
-- [Epoxy](https://github.com/anholt/libepoxy)
-- [pugixml](http://pugixml.org)
+While the project is in a clearly unfinished state and the game itself is
+non-existant, the implemented systems are in a quite satisfacotry state.
