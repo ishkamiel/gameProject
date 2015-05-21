@@ -2,7 +2,6 @@
 
 #include "actors/Actor.h"
 #include "events/DefaultEvent.h"
-#include "events/EventTypeID.h"
 
 namespace pdEngine
 {
