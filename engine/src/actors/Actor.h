@@ -1,14 +1,16 @@
 #pragma once
 
 #include "actors/ActorComponent.h"
+#include "events/EventTypeID.h"
+
 #include <memory>
 #include <map>
 
 namespace pdEngine
 {
-using ActorId = unsigned long;
+using ActorID = unsigned long;
 
-constexpr ActorId NullActorId = 0;
+constexpr ActorID NullActorId = 0;
 
 class Actor
 {
@@ -17,11 +19,11 @@ class Actor
     using ActorComponentMap =  std::map<ActorComponentId, ActorComponent_sptr>;
 
 private:
-    ActorId m_id;
+    ActorID m_id;
     ActorComponentMap m_components;
 
 public:
-    Actor(ActorId id);
+    Actor(ActorID id);
 
     virtual ~Actor(void);
 
@@ -33,7 +35,7 @@ public:
 
     void update(int) noexcept;
 
-    inline ActorId getID(void) const noexcept;
+    inline ActorID getID(void) const noexcept;
 
     template<typename T>
     inline std::weak_ptr<T> getComponent(ActorComponentId id) const noexcept;
@@ -50,7 +52,7 @@ using Actor_sptr = std::shared_ptr<Actor>;
  * Implementations
  */
 
-inline ActorId Actor::getID(void) const noexcept
+inline ActorID Actor::getID(void) const noexcept
 { return m_id; }
 
 template<typename T>

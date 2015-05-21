@@ -36,6 +36,7 @@ public:
     void onUpdate(int deltaMs) noexcept override;
 
     void queueEvent(const Event_sptr) noexcept override;
+    void queueEvent(I_Event *event) noexcept override;
     void queueEvent(const EventTypeID) noexcept override;
 
     ListenerHandle_sptr addListener(const EventTypeID&, EventListener) noexcept override;
