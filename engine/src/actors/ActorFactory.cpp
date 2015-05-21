@@ -1,7 +1,11 @@
 #include "actors/ActorFactory.h"
 
-#include "utils/Logger.h"
+#include "actors/ActorDestroyedEvent.h"
+#include "actors/ActorCreatedEvent.h"
+#include "events/EventManager.h"
 #include "resources/ResourceManager.h"
+#include "utils/Logger.h"
+#include "utils/Memory.h"
 
 #include <pugixml.hpp>
 
@@ -29,7 +33,12 @@ Actor_sptr ActorFactory::createActor(const char* res) noexcept
         return Actor_sptr();
     }
 
-    Actor_sptr actor = std::make_shared<Actor>(getNextActorId());
+	Actor_sptr actor = std::shared_ptr<Actor>(
+		new Actor(getNextActorId()),
+		[](Actor* p) {
+		    EventManager::get()->queueEvent(new ActorDestroyedEvent(p->m_id));
+		    safeDelete(p);
+		});
 
     if (!actor->init())
     {
@@ -51,6 +60,7 @@ Actor_sptr ActorFactory::createActor(const char* res) noexcept
     }
 
     actor->postInit();
+	EventManager::get()->queueEvent(new ActorCreatedEvent(actor));
     return actor;
 }
 
@@ -70,7 +80,7 @@ ActorComponent_sptr ActorFactory::v_createComponent(const pugi::xml_node* data) 
 	return comp;
 }
 
-ActorId ActorFactory::getNextActorId(void) noexcept
+ActorID ActorFactory::getNextActorId(void) noexcept
 {
   return m_lastActorId++;
 }

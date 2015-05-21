@@ -6,7 +6,8 @@
 namespace pdEngine 
 {
 
-SceneNode::SceneNode (ActorId actorID,
+SceneNode::SceneNode (
+    ActorID actorID,
             std::string name,
             RenderPass renderPass,
             const Color &diffuseColor,
@@ -23,7 +24,8 @@ SceneNode::SceneNode (ActorId actorID,
 {
     (void)diffuseColor;
 }
-SceneNode::SceneNode (ActorId id,
+SceneNode::SceneNode (
+    ActorID id,
                       std::string name,
                       RenderPass rp,
                       const Color &c,
@@ -166,7 +168,7 @@ bool SceneNode::v_AddChild(std::shared_ptr<I_SceneNode> child)
     return true;
 }
 
-bool SceneNode::v_RemoveChild(ActorId id)
+bool SceneNode::v_RemoveChild(ActorID id)
 {
     auto i = m_Children.begin();
     auto end = m_Children.end();
