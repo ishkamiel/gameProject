@@ -27,6 +27,7 @@ public:
      * @brief Queue event for processing on next update.
      */
     virtual void queueEvent(const Event_sptr) noexcept = 0;
+    virtual void queueEvent(I_Event *event) noexcept = 0;
     DEPRECATED(virtual void queueEvent(const EventTypeID) noexcept) = 0;
 
     /**

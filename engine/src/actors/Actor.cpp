@@ -3,7 +3,7 @@
 namespace pdEngine
 {
 
-Actor::Actor(ActorId id)
+Actor::Actor(ActorID id)
 : m_id(id)
 {
 

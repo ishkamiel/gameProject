@@ -21,8 +21,8 @@ class SceneNode : public I_SceneNode
     using SceneNodeList = std::vector<SceneNode_sptr>;
 
 public:
-    SceneNode (ActorId, std::string , RenderPass , const Color&, const Matrix4&);
-    SceneNode (ActorId, std::string , RenderPass , const Color&, const Matrix4&, const Matrix4&);
+    SceneNode (ActorID, std::string , RenderPass , const Color&, const Matrix4&);
+    SceneNode (ActorID, std::string , RenderPass , const Color&, const Matrix4&, const Matrix4&);
     virtual ~SceneNode();
 
     virtual void v_setTransform(const Matrix4& toWrold, const Matrix4& fromWorld) noexcept override;
@@ -40,7 +40,7 @@ public:
     virtual bool v_RenderChildren(Scene* scene) override;
 
     virtual bool v_AddChild(std::shared_ptr<I_SceneNode>) override;
-    virtual bool v_RemoveChild(ActorId id) override;
+    virtual bool v_RemoveChild(ActorID id) override;
 
     virtual inline void setAlpha(const float alpha);
     inline void setPosition(const Vector3 &pos);
@@ -50,7 +50,7 @@ public:
     Vector3 getDirection(const Vector3 &pos) const;
     virtual const Vector3 getPosition() const override;
 
-    virtual inline const ActorId& getActorID() const override;
+    virtual inline const ActorID & getActorID() const override;
     virtual inline const Matrix4& getToWorld() const override;
     virtual inline const Matrix4& getFromWorld() const override;
     virtual inline const char* getName() const override;
@@ -63,7 +63,7 @@ public:
 protected:
 
 protected:
-    ActorId m_ActorID;
+    ActorID m_ActorID;
     std::string m_Name;
     float m_Radius;
     RenderPass m_RenderPass;
@@ -92,7 +92,7 @@ void SceneNode::setMaterial(const Material &mat)
     m_Material = mat; 
 }
 
-auto SceneNode::getActorID() const -> const ActorId&
+auto SceneNode::getActorID() const -> const ActorID &
 { 
     return m_ActorID; 
 }

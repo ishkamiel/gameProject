@@ -116,6 +116,11 @@ void EventManagerImpl::queueEvent(const Event_sptr eventPtr) noexcept
     eventQueueIn.push(eventPtr);
 }
 
+void EventManagerImpl::queueEvent(I_Event *event) noexcept
+{
+	queueEvent(std::shared_ptr<I_Event>(event));
+}
+
 ListenerHandle_sptr EventManagerImpl::addListener(
     const EventTypeID& eventID, EventListener listener) noexcept
 {

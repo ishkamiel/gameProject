@@ -34,10 +34,10 @@ public:
     bool onLostDevice(void);
     bool onUpdate(int);
 
-    std::shared_ptr<I_SceneNode> findActor(ActorId);
+    std::shared_ptr<I_SceneNode> findActor(ActorID);
 
-    bool addChild(ActorId, std::shared_ptr<I_SceneNode>);
-    bool removeAChild(ActorId);
+    bool addChild(ActorID, std::shared_ptr<I_SceneNode>);
+    bool removeAChild(ActorID);
 
     void setCamera(CameraNode_sptr) ;
     const CameraNode_sptr getCamera(void) const;
@@ -61,7 +61,7 @@ protected:
     std::stack<Matrix4> m_TranlsationMatrices;
     /* Alpha? */
 
-    std::map<ActorId, SceneNode_sptr> m_ActorMap;
+    std::map<ActorID, SceneNode_sptr> m_ActorMap;
 
     LightManager_sptr m_LightManager;
 

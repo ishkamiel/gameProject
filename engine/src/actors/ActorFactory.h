@@ -2,6 +2,7 @@
 
 #include "actors/Actor.h"
 #include "actors/ActorComponent.h"
+#include "events/EventTypeID.h"
 #include <functional>
 #include <map>
 
@@ -16,11 +17,12 @@ namespace pdEngine
 
 using ActorComponentCreator = std::function<ActorComponent*(void)>;
 
+
 class ActorFactory
 {
 	using CreatorMap = std::map<std::string, ActorComponentCreator>;
 
-	ActorId m_lastActorId;
+	ActorID m_lastActorId;
 	CreatorMap m_actorComponentCreators;
 	//ResourceManager_sptr m_resourceManager;
 	//EventManager_sptr m_eventManager;
@@ -37,7 +39,7 @@ protected:
 	virtual ActorComponent_sptr v_createComponent(const pugi::xml_node*) noexcept;
 
 private:
-	ActorId getNextActorId(void) noexcept;
+	ActorID getNextActorId(void) noexcept;
 };
 
 }
