@@ -1,6 +1,10 @@
 gameProject
 ===========
 
+This is very much a personal project motivated, not by the destination, but by
+the journey. In othe words, it is unlikely this will ever result in a game, but
+there might be some insights to gain (that is, at least for me).
+
 Goals
 -----
 
@@ -65,7 +69,7 @@ filesystem and config management. The build system will automatically download
 pugixml, gtest and gmock, but both Boost and libepoxy need to be installed on
 the build system.
 
-For ubuntu the prerequsites can be installed like so:
+For Ubuntu the prerequsites can be installed like so:
 
 ````shell
 apt-get install libboost-log-dev libboost-program-options-dev libboost-filesystem-dev libepoxy-dev
@@ -97,7 +101,7 @@ make doc
 Current State
 -------------
 
-The following parts of the whole are kind of done:
+The following parts of the whole are kind of, almost, done:
 
 - EventManager implemented with tests.
 - TaskManager implemented with tests.
@@ -108,9 +112,8 @@ The following parts of the whole are kind of done:
 - A general architecture to tie this stuff together.
 - A CMake build system to manage dependencies and builds.
 
-The demo program itself currently does essentially nothing, and will not
-actually build. The basic subsystems are properly initialized and the mainloop
-is entered, but there currently is no game in there. Input and event management
-is limited to proper shtudown on handling closing of the window (pressing the X
-on the window).  While rendering is/was working at some point, the current work
-on the scenegraph and rendering is unfinished.
+The demo program itself currently does essentially nothing, and will not even
+build due to the state of the graphics systems. The enigne and accompanying
+test do however build. Mainloop, events, resources and input also mostly work,
+but without a wokring demo they have little to do. (Maybe I should have used
+Ogre3d anyways, eh?)
