@@ -5,6 +5,18 @@ This is very much a personal project motivated, not by the destination, but by
 the journey. In othe words, it is unlikely this will ever result in a game, but
 there might be some insights to gain (that is, at least for me).
 
+Licensing
+---------
+
+Eventhough this is a public repository I have elected to ommit any explicit
+licensing, as such default copyright laws apply (as per the [Github licensing
+article](https://help.github.com/articles/open-source-licensing/)). If this
+project reaches some kind of maturity, or some code proves to be reusable
+elsewhere, I will revisit this issue. (Also would need to look at licensing of
+CMake FindStuff code I have reused, and possibly others. Any such cases should
+already be clearly annoted or else evidently be imported as external
+libraries.)
+
 Goals
 -----
 
